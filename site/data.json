@@ -1,5 +1,51 @@
 {
-  "sysinfo": null,
+  "sysinfo": {
+    "hostname": "P6-I7G50",
+    "os": {
+      "name": "Microsoft Windows 11 Home Insider Preview",
+      "version": "10.0.26220",
+      "build": "26220",
+      "arch": "64 ビット"
+    },
+    "cpu": {
+      "name": "12th Gen Intel(R) Core(TM) i7-12650H",
+      "cores": 10,
+      "logical_procs": 16,
+      "max_clock_mhz": 2300
+    },
+    "gpu": {},
+    "memory": {
+      "total_gb": 32,
+      "dimm_count": 2,
+      "dimms": [
+        {
+          "capacity_gb": 16,
+          "speed_mhz": 3200,
+          "type": 26
+        },
+        {
+          "capacity_gb": 16,
+          "speed_mhz": 3200,
+          "type": 26
+        }
+      ]
+    },
+    "storage": [
+      {
+        "model": "NVMe ALEG-850-1TCS",
+        "size_gb": 953.9,
+        "interface": "SCSI",
+        "letters": "D:"
+      },
+      {
+        "model": "NVMe KIOXIA-EXCERIA G2 SSD",
+        "size_gb": 1863,
+        "interface": "SCSI",
+        "letters": "C:"
+      }
+    ],
+    "collected": "2026-03-10T01:08:31.1331159+09:00"
+  },
   "experiments": {
     "vibe_local_load_qwen3_1.7b": {
       "drives": {
@@ -32,10 +78,18 @@
           "runs": 3,
           "generated": "2026-03-09T18:40:27.9101000+09:00",
           "runner_started_s": 2.91
+        },
+        "D": {
+          "drive": "D",
+          "median_s": 17.634,
+          "runs": 3,
+          "generated": "2026-03-10T01:10:40.5132746+09:00",
+          "runner_started_s": 4.89
         }
       },
       "drive_order": [
-        "C"
+        "C",
+        "D"
       ],
       "model": "qwen3:8b"
     },
@@ -86,5 +140,5 @@
       "model": "qwen3:8b"
     }
   },
-  "updated": "2026-03-10T00:54:54.595807"
+  "updated": "2026-03-10T01:15:29.231087"
 }

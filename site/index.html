@@ -45,6 +45,8 @@
 <section>
   <div class="container">
     <h2 class="section-title">テスト環境</h2>
+
+    <h3 style="margin-bottom:16px; font-size:1.2rem;">本実験環境（予定）</h3>
     <div class="spec-grid">
       <div class="spec-card">
         <div class="label">CPU</div>
@@ -54,7 +56,7 @@
       <div class="spec-card">
         <div class="label">GPU</div>
         <div class="value">NVIDIA RTX PRO 6000 Blackwell MAX-Q</div>
-        <div class="label" style="margin-top:4px">VRAM 96 GB</div>
+        <div class="label" style="margin-top:4px">VRAM 96 GB GDDR7</div>
       </div>
       <div class="spec-card">
         <div class="label">RAM</div>
@@ -64,6 +66,43 @@
       <div class="spec-card">
         <div class="label">OS</div>
         <div class="value">Windows 11 PRO</div>
+      </div>
+    </div>
+
+    <h3 style="margin-top:40px; margin-bottom:16px; font-size:1.2rem;">予備調査環境</h3>
+    <p style="margin-bottom:12px; color: var(--text-secondary); font-size:0.9rem;">
+      スクリプト検証・仮説構築のために使用した環境。本実験の参考値として掲載。
+    </p>
+    <div class="spec-grid">
+      <div class="spec-card">
+        <div class="label">マシン</div>
+        <div class="value"><a href="https://www.mouse-jp.co.jp/store/g/ggtune-p6i7g50bkabcw102dec/" target="_blank" rel="noopener">G-Tune P6-I7G50BK-A</a></div>
+        <div class="label" style="margin-top:4px">マウスコンピューター / 124,800円</div>
+      </div>
+      <div class="spec-card">
+        <div class="label">CPU</div>
+        <div class="value">Intel Core i7-12650H</div>
+        <div class="label" style="margin-top:4px">10コア / 16スレッド / 最大4.7GHz</div>
+      </div>
+      <div class="spec-card">
+        <div class="label">GPU</div>
+        <div class="value">NVIDIA GeForce RTX 4050 Laptop</div>
+        <div class="label" style="margin-top:4px">VRAM 6 GB GDDR6</div>
+      </div>
+      <div class="spec-card">
+        <div class="label">RAM</div>
+        <div class="value">DDR4-3200 32 GB</div>
+        <div class="label" style="margin-top:4px">16 GB &times; 2 デュアルチャネル</div>
+      </div>
+      <div class="spec-card">
+        <div class="label">ストレージ</div>
+        <div class="value">C: ALEG-850 1TB / D: KIOXIA EXCERIA G2 2TB</div>
+        <div class="label" style="margin-top:4px">いずれも NVMe Gen4</div>
+      </div>
+      <div class="spec-card">
+        <div class="label">OS</div>
+        <div class="value">Windows 11 Home</div>
+        <div class="label" style="margin-top:4px">Build 26220</div>
       </div>
     </div>
   </div>
@@ -361,24 +400,116 @@ claude</code></pre>
   <div class="container">
     <h2 class="section-title">予備調査からの仮説</h2>
     <p style="margin-bottom:16px; color: var(--text-secondary); font-size: 0.95rem;">
-      G-Tune P6-I7G50 (RTX 4050 Laptop / 32GB DDR4) での予備計測データに基づく仮説。本実験 (RTX PRO 6000 / 192GB DDR5) で検証予定。
+      G-Tune P6-I7G50 (RTX 4050 Laptop / 32GB DDR4 / NVMe Gen4 &times;2) での予備計測データに基づく仮説。<br>
+      本実験 (RTX PRO 6000 96GB / 192GB DDR5 / Samsung 9100 PRO Gen5 NVMe) で検証予定。
     </p>
+
     <div class="exp-grid">
       <div class="exp-card">
         <h3>仮説 1: モデルロードはストレージ I/O バウンド</h3>
-        <p>qwen3:1.7b のモデルロード時間は D: (KIOXIA) が 7.5s、C: (ALEG-850) が 10.9s。OS ドライブ (C:) はバックグラウンド I/O の競合でロード速度が低下する可能性がある。</p>
-        <div class="exp-hypothesis">本実験では Gen5 NVMe vs SATA SSD vs HDD で桁違いの差が出ると予測。</div>
+        <p>
+          qwen3:1.7b (1.4GB) のモデルロード時間は D: (KIOXIA) が <strong>7.5秒</strong>、C: (ALEG-850, OS ドライブ) が <strong>10.9秒</strong>。
+          OS ドライブはバックグラウンド I/O（Windows Update、検索インデックス、アンチウイルス等）と競合するため、専用ドライブの方が安定して高速です。
+        </p>
+        <p style="margin-top:8px;">
+          <strong>解説:</strong> LLM のモデルファイルは数 GB〜数十 GB の巨大なバイナリです。
+          モデルロードとは、このファイルをストレージから GPU メモリ（VRAM）に転送する処理で、
+          ストレージの<strong>シーケンシャルリード速度</strong>が直接影響します。
+          Gen5 NVMe (約 14,500 MB/s) なら 5GB のモデルを理論上 <strong>0.3秒</strong> で読み出せますが、
+          HDD (約 180 MB/s) では <strong>28秒</strong> かかります。
+        </p>
+        <div class="exp-hypothesis">
+          本実験では Gen5 NVMe vs SATA SSD vs HDD で桁違いの差が出ると予測。<br>
+          Samsung 9100 PRO は Gen5 NVMe の中でもトップクラスの読み出し性能を持ち、
+          AI モデルの起動時間を最小化できる最適なストレージです。
+        </div>
       </div>
+
       <div class="exp-card">
         <h3>仮説 2: 推論速度はストレージに依存しない</h3>
-        <p>コード生成速度は C: が 23.45 tok/s、D: が 19.38 tok/s。モデルが VRAM にロード済みであれば、推論は GPU/メモリバウンドでありストレージ速度は無関係。ドライブ間の差は OS 負荷やメモリ帯域の影響。</p>
-        <div class="exp-hypothesis">本実験では全ドライブで推論速度がほぼ同一になると予測。</div>
+        <p>
+          コード生成速度は C: が <strong>23.45 tok/s</strong>、D: が <strong>19.38 tok/s</strong>。
+          モデルが VRAM にロード済みであれば、推論（トークン生成）は GPU 演算能力とメモリ帯域に依存し、
+          ストレージ速度は無関係になるはずです。
+          予備調査でのドライブ間の差（約 17%）は、OS の負荷変動やメモリ帯域の差によるものと推定されます。
+        </p>
+        <p style="margin-top:8px;">
+          <strong>解説:</strong> 推論（inference）とは、ロード済みのモデルを使って実際にテキストや画像を生成する処理です。
+          この段階ではデータは既に VRAM 上にあるため、ストレージへのアクセスは発生しません。
+          <strong>tok/s</strong>（tokens per second）は 1 秒あたりの生成トークン数で、推論速度の標準的な指標です。
+        </p>
+        <div class="exp-hypothesis">
+          本実験では全ドライブで推論速度がほぼ同一になると予測。<br>
+          これは逆に、ストレージの影響がモデルロード時に集中することを意味し、
+          高速ストレージの価値は「待ち時間の短縮」に直結します。
+          Samsung 9100 PRO を使えば、AI ツールの起動やモデル切り替えのたびに数十秒〜数分の短縮が期待できます。
+        </div>
       </div>
+
       <div class="exp-card">
         <h3>仮説 3: VRAM 不足時はストレージがスワップのボトルネック</h3>
-        <p>qwen3:8b (5.2GB) は RTX 4050 (6GB VRAM) でギリギリ動作。VRAM 不足でモデルの一部がシステムメモリに退避する場合、ストレージ速度がスワップ性能に直結し推論速度にも影響する可能性がある。</p>
-        <div class="exp-hypothesis">96GB VRAM 環境では発生しないが、一般的なゲーミング PC では重要な知見。</div>
+        <p>
+          qwen3:8b (5.2GB) は RTX 4050 (6GB VRAM) でギリギリ動作。
+          VRAM に収まりきらないモデルの一部がシステムメモリや仮想メモリ（ページファイル）に退避される場合、
+          推論中にもストレージアクセスが発生し、ストレージ速度が推論速度にも影響する可能性があります。
+        </p>
+        <p style="margin-top:8px;">
+          <strong>解説:</strong> <strong>VRAM</strong> は GPU 専用の高速メモリです。モデルが VRAM に収まらない場合、
+          OS はシステムメモリ（RAM）や<strong>ページファイル</strong>（ストレージ上の仮想メモリ）を使って不足分を補います。
+          この「スワップ」が頻繁に発生すると、ストレージの速度が推論性能のボトルネックになります。
+          近年の AI モデルは大型化が進んでおり（70B パラメータモデルは 40GB 以上）、
+          VRAM 不足は多くのユーザーにとって現実的な問題です。
+        </p>
+        <div class="exp-hypothesis">
+          96GB VRAM の本実験環境では発生しにくいが、一般的なゲーミング PC（8〜16GB VRAM）では重要な知見。<br>
+          VRAM 不足時こそ Samsung 9100 PRO のような高速 NVMe SSD が真価を発揮します。
+          HDD でスワップが発生すると推論速度が数十分の一に低下する可能性があります。
+        </div>
       </div>
+    </div>
+
+    <!-- Samsung 視点 -->
+    <div class="exp-card" style="margin-top:24px; border-left: 4px solid #0969da;">
+      <h3>Samsung 9100 PRO が AI ワークロードに最適な理由</h3>
+      <p>
+        予備調査の結果は、同じ NVMe Gen4 ドライブ間でもモデルロード時間に <strong>最大 1.5 倍の差</strong> が出ることを示しています。
+        Gen4 同士でこの差が出るのであれば、<strong>Gen5 (14,500 MB/s) vs SATA SSD (560 MB/s) vs HDD (180 MB/s)</strong> の比較では
+        さらに圧倒的な差が予測されます。
+      </p>
+      <p style="margin-top:8px;">
+        AI ワークフローでは 1 日に何度もモデルの切り替えや再起動が発生します。
+        画像生成では Checkpoint + LoRA + VAE で 10GB 超、動画生成では 20GB 超のモデルをロードします。
+        <strong>1 回あたり数十秒の短縮が、1 日の作業で数十分〜数時間の時間節約</strong>につながります。
+      </p>
+      <p style="margin-top:8px;">
+        Samsung 9100 PRO は PCIe Gen5 の帯域幅をフル活用し、シーケンシャルリード <strong>14,500 MB/s</strong>、
+        8TB の大容量で複数の AI モデルを 1 台に集約可能。
+        AI クリエイターにとって「待たない AI 環境」を実現する最適なストレージです。
+      </p>
+    </div>
+
+    <!-- 用語集 -->
+    <div style="margin-top:32px;">
+      <h3 style="font-size:1.1rem; margin-bottom:16px;">用語集</h3>
+      <table class="storage-table">
+        <thead>
+          <tr><th style="width:200px;">用語</th><th>解説</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>NVMe Gen5</strong></td><td>PCIe 5.0 接続の SSD 規格。最大転送速度は約 14,500 MB/s（Gen4 の約 2 倍、SATA の約 26 倍）。</td></tr>
+          <tr><td><strong>シーケンシャルリード</strong></td><td>連続したデータを読み出す速度。AI モデルのような巨大ファイルの読み込みに直結。</td></tr>
+          <tr><td><strong>VRAM</strong></td><td>GPU 専用のビデオメモリ。AI モデルの推論にはモデル全体を VRAM に展開する必要がある。</td></tr>
+          <tr><td><strong>コールドスタート</strong></td><td>モデルがメモリに存在しない状態からの起動。ストレージからの読み込みが必要。</td></tr>
+          <tr><td><strong>ウォームスタート</strong></td><td>モデルが既にメモリにロードされた状態。ストレージアクセスは不要。</td></tr>
+          <tr><td><strong>tok/s (tokens per second)</strong></td><td>LLM の推論速度指標。1 秒あたりに生成されるトークン（単語の断片）の数。</td></tr>
+          <tr><td><strong>I/O バウンド</strong></td><td>ストレージの読み書き速度が処理全体のボトルネックになっている状態。</td></tr>
+          <tr><td><strong>GPU バウンド</strong></td><td>GPU の演算能力がボトルネックになっている状態。ストレージ速度は影響しない。</td></tr>
+          <tr><td><strong>ページファイル / スワップ</strong></td><td>メモリ不足時に OS がストレージ上に確保する仮想メモリ領域。高速 SSD ほど影響が軽微。</td></tr>
+          <tr><td><strong>LLM</strong></td><td>Large Language Model（大規模言語モデル）。ChatGPT、Qwen、Llama 等のテキスト生成 AI。</td></tr>
+          <tr><td><strong>Ollama</strong></td><td>ローカル PC で LLM を実行するためのオープンソースツール。モデル管理・推論 API を提供。</td></tr>
+          <tr><td><strong>ComfyUI</strong></td><td>画像・動画生成 AI のワークフロー構築ツール。ノードベースで柔軟なパイプラインを構成可能。</td></tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </section>
