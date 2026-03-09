@@ -105,6 +105,10 @@ WORKFLOW_INLINE = {
 
 TEST_PROMPTS = [
     {
+        "id": "ssd_lightning",
+        "prompt": "A high-speed SSD hard drive glowing with electric energy, surrounded by dramatic lightning bolts, serving as the AI core, product photography, cinematic lighting, ultra detailed 8k",
+    },
+    {
         "id": "landscape",
         "prompt": "A professional photograph of a mountain landscape at sunset, golden hour lighting, dramatic clouds, 8k ultra detailed",
     },

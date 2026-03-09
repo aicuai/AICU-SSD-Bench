@@ -751,4 +751,24 @@ if (Test-Path $summaryFile) {
     }
 }
 
+# ══════════════════════════════════════════════════════
+# Phase 10: HTML レポート生成
+# ══════════════════════════════════════════════════════
+Write-Host "`n[Phase 10] Generating HTML reports..." -ForegroundColor Yellow
+$reportScript = Join-Path $ScriptsDir "generate_report.py"
+if (Test-Path $reportScript) {
+    try {
+        $reportDir = Join-Path $ResultsDir "reports"
+        & $pyCmd $reportScript --results-dir $ResultsDir --output-dir $reportDir --data-json (Join-Path $RootDir "site\data.json")
+        Write-Host "  HTML reports generated: $reportDir" -ForegroundColor Green
+    } catch {
+        Log-Error "report" "$_"
+    }
+} else {
+    Write-Host "  SKIP: $reportScript not found" -ForegroundColor DarkYellow
+}
+
 Write-Host "`nDone! View results at https://bench.aicu.jp" -ForegroundColor Cyan
+
+# 結果フォルダを開く
+explorer $ResultsDir

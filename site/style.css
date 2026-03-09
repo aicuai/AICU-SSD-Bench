@@ -2,7 +2,7 @@
 
 :root {
   --bg-primary: #ffffff;
-  --bg-secondary: #f6f8fa;
+  --bg-secondary: #ffffff;
   --bg-card: #ffffff;
   --text-primary: #1f2328;
   --text-secondary: #656d76;
@@ -296,7 +296,7 @@ section:nth-child(even) { background: var(--bg-secondary); }
 }
 .chart-bar-wrap {
   flex-grow: 1;
-  background: #f0f3f6;
+  background: #f0f0f0;
   border-radius: 6px;
   overflow: hidden;
   min-height: 36px;
