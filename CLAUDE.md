@@ -219,10 +219,10 @@ LP は `data.json` を fetch して計測結果テーブルを動的に表示す
 
 | ドライブ | デバイス | 速度 |
 |---------|---------|------|
-| D: | Samsung 9100 PRO 8TB (Gen5 NVMe) | ~14,500 MB/s |
+| D: | Samsung 9100 PRO 8TB (Gen5 NVMe) | ~14,800 MB/s |
 | E: | Samsung 870 QVO 8TB (SATA SSD) | ~560 MB/s |
 | F: | HDD 8TB | ~180 MB/s |
-| G: | 9100 PRO 8TB (ICY DOCK リムーバブル) | ~14,500 MB/s |
+| G: | 9100 PRO 8TB (ICY DOCK リムーバブル) | ~14,800 MB/s |
 
 ---
 

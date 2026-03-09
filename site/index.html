@@ -127,7 +127,7 @@
           <tr>
             <td>D: Samsung 9100 PRO 8 TB</td>
             <td>PCIe Gen5 NVMe</td>
-            <td>~14,500 MB/s <span class="speed-bar" style="width:100%"></span></td>
+            <td>~14,800 MB/s <span class="speed-bar" style="width:100%"></span></td>
           </tr>
           <tr>
             <td>E: Samsung 870 QVO 8 TB</td>
@@ -142,7 +142,7 @@
           <tr>
             <td>G: 9100 PRO 8 TB (ICY DOCK)</td>
             <td>PCIe Gen5 NVMe リムーバブル</td>
-            <td>~14,500 MB/s <span class="speed-bar" style="width:100%"></span></td>
+            <td>~14,800 MB/s <span class="speed-bar" style="width:100%"></span></td>
           </tr>
         </tbody>
       </table>
@@ -675,7 +675,7 @@ cat results\bench_summary.json</code></pre>
           <strong>解説:</strong> LLM のモデルファイルは数 GB〜数十 GB の巨大なバイナリです。
           モデルロードとは、このファイルをストレージから GPU メモリ（VRAM）に転送する処理で、
           ストレージの<strong>シーケンシャルリード速度</strong>が直接影響します。
-          Gen5 NVMe (約 14,500 MB/s) なら 5GB のモデルを理論上 <strong>0.3秒</strong> で読み出せますが、
+          Gen5 NVMe (約 14,800 MB/s) なら 5GB のモデルを理論上 <strong>0.3秒</strong> で読み出せますが、
           HDD (約 180 MB/s) では <strong>28秒</strong> かかります。
         </p>
         <div class="exp-hypothesis">
@@ -733,7 +733,7 @@ cat results\bench_summary.json</code></pre>
       <h3>Samsung 9100 PRO が AI ワークロードに最適な理由</h3>
       <p>
         予備調査の結果は、同じ NVMe Gen4 ドライブ間でもモデルロード時間に <strong>最大 1.5 倍の差</strong> が出ることを示しています。
-        Gen4 同士でこの差が出るのであれば、<strong>Gen5 (14,500 MB/s) vs SATA SSD (560 MB/s) vs HDD (180 MB/s)</strong> の比較では
+        Gen4 同士でこの差が出るのであれば、<strong>Gen5 (14,800 MB/s) vs SATA SSD (560 MB/s) vs HDD (180 MB/s)</strong> の比較では
         さらに圧倒的な差が予測されます。
       </p>
       <p style="margin-top:8px;">
@@ -742,10 +742,97 @@ cat results\bench_summary.json</code></pre>
         <strong>1 回あたり数十秒の短縮が、1 日の作業で数十分〜数時間の時間節約</strong>につながります。
       </p>
       <p style="margin-top:8px;">
-        Samsung 9100 PRO は PCIe Gen5 の帯域幅をフル活用し、シーケンシャルリード <strong>14,500 MB/s</strong>、
+        Samsung 9100 PRO は PCIe Gen5 の帯域幅をフル活用し、シーケンシャルリード <strong>14,800 MB/s</strong>、
         8TB の大容量で複数の AI モデルを 1 台に集約可能。
         AI クリエイターにとって「待たない AI 環境」を実現する最適なストレージです。
       </p>
+    </div>
+
+    <!-- 9100 PRO 公式スペック検証 -->
+    <div style="margin-top:32px;">
+      <h3 style="font-size:1.15rem; margin-bottom:16px;">Samsung 9100 PRO <a href="https://semiconductor.samsung.com/jp/consumer-storage/internal-ssd/9100-pro/" target="_blank" rel="noopener" style="font-size:0.85rem;">公式ページ</a> の主張を検証</h3>
+      <p style="margin-bottom:16px; color:var(--text-secondary); font-size:0.9rem;">
+        公式サイトに記載されている売り文句を、本ベンチマークの知見と照らし合わせて検証します。
+      </p>
+      <table class="storage-table">
+        <thead>
+          <tr><th style="width:30%;">公式の主張</th><th style="width:12%;">評価</th><th>解説</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>最大 14,800/13,400 MB/s</strong><br>シーケンシャル読み出し/書き込み</td>
+            <td style="color:#1a7f37;"><strong>正しい</strong></td>
+            <td>
+              CrystalDiskMark 等の直接 NVMe コマンド計測での値であり、カタログスペックとして正確。
+              ただし OS のファイルシステム経由（AI アプリが使う通常の API）では、この値には到達しません。
+              予備調査では Gen4 NVMe（カタログ 3,500 MB/s）で実効 800〜1,300 MB/s でした。
+              <strong>Gen5 でも実効速度はカタログ値の 30〜50% 程度</strong>と予測されますが、それでも Gen4 の実効速度を大きく上回ります。
+            </td>
+          </tr>
+          <tr>
+            <td><strong>990 PRO の 2 倍高速</strong></td>
+            <td style="color:#1a7f37;"><strong>概ね正しい</strong></td>
+            <td>
+              PCIe Gen4→Gen5 で理論帯域幅は 2 倍（約 7,000→14,000 MB/s）。
+              カタログスペック比較では正確です。
+              実効速度が線形に 2 倍になるかは、CPU/チップセットの PCIe レーン構成やコントローラ性能にも依存しますが、
+              <strong>大幅な向上は確実</strong>です。本実験で実測検証予定。
+            </td>
+          </tr>
+          <tr>
+            <td><strong>最大 2,200K/2,600K IOPS</strong><br>ランダム読み出し/書き込み</td>
+            <td style="color:#bf5700;"><strong>正しいが<br>AI では副次的</strong></td>
+            <td>
+              ランダム IOPS は多数の小ファイルを並列処理する能力を示す指標。
+              AI モデルファイルは <strong>数 GB の巨大な連続データ</strong>であり、ロード時はシーケンシャルリードが支配的です。
+              ランダム IOPS が効くのは、学習データセット（数百万枚の画像ファイル等）の読み込みや、
+              ComfyUI のノード定義・設定ファイルの並列読み込み等の場面。
+              <strong>モデルロード時間の短縮にはシーケンシャル速度の方が直接的に効きます。</strong>
+            </td>
+          </tr>
+          <tr>
+            <td><strong>AI アプリケーションに即時ロード</strong></td>
+            <td style="color:#bf5700;"><strong>方向性は正しい<br>「即時」は誇張</strong></td>
+            <td>
+              モデルロードは I/O バウンドであり、高速ストレージは確実に効果があります。
+              理論上、5GB モデルのリードは Gen5 で <strong>約 0.3 秒</strong>（14,800 MB/s 時）。
+              しかし実効速度を考慮すると <strong>1〜3 秒</strong> が現実的です。
+              Gen4 では 4〜10 秒、HDD では 28 秒以上かかるため、体感差は確実に大きい。
+              <strong>「即時」ではないが「劇的に速い」は正確です。</strong>
+            </td>
+          </tr>
+          <tr>
+            <td><strong>電力効率 49% 向上</strong><br>990 PRO 比</td>
+            <td style="color:#1a7f37;"><strong>妥当</strong></td>
+            <td>
+              公式データ: 990 PRO = 1,221 MB/s/W → 9100 PRO = 1,822 MB/s/W（2TB モデル）。
+              5nm コントローラにより、速度が 2 倍になっても消費電力は抑制。
+              <strong>ノート PC やスモールフォームファクタ PC では発熱と消費電力の抑制は実用上非常に重要</strong>です。
+              本実験で nvidia-smi による電力計測と合わせて検証予定。
+            </td>
+          </tr>
+          <tr>
+            <td><strong>8TB 大容量</strong></td>
+            <td style="color:#1a7f37;"><strong>事実</strong></td>
+            <td>
+              AI モデルの巨大化が進む中、大容量は実用上の大きなメリット。
+              LLM 70B パラメータモデル（約 40GB）を 200 個、
+              Stable Diffusion の Checkpoint（2〜7GB）なら 1,000 個以上格納可能。
+              <strong>モデルの削除・再ダウンロードの手間が減り、切り替えコストがゼロに近づきます。</strong>
+            </td>
+          </tr>
+          <tr>
+            <td><strong>高度な熱制御</strong><br>サーマルスロットリング抑制</td>
+            <td style="color:#0969da;"><strong>本実験で検証</strong></td>
+            <td>
+              長時間の AI ワークロード（連続した画像/動画生成、大量のモデル切り替え）で
+              サーマルスロットリング（熱による速度低下）が発生しないかは重要な検証ポイント。
+              <strong>本実験のベンチマークスイートは 30 分〜1 時間の連続負荷を想定しており、
+              熱制御の効果を実データで確認予定です。</strong>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
 
     <!-- 用語集 -->
@@ -756,7 +843,7 @@ cat results\bench_summary.json</code></pre>
           <tr><th style="width:200px;">用語</th><th>解説</th></tr>
         </thead>
         <tbody>
-          <tr><td><strong>NVMe Gen5</strong></td><td>PCIe 5.0 接続の SSD 規格。最大転送速度は約 14,500 MB/s（Gen4 の約 2 倍、SATA の約 26 倍）。</td></tr>
+          <tr><td><strong>NVMe Gen5</strong></td><td>PCIe 5.0 接続の SSD 規格。最大転送速度は約 14,800 MB/s（Gen4 の約 2 倍、SATA の約 26 倍）。</td></tr>
           <tr><td><strong>シーケンシャルリード</strong></td><td>連続したデータを読み出す速度。AI モデルのような巨大ファイルの読み込みに直結。</td></tr>
           <tr><td><strong>VRAM</strong></td><td>GPU 専用のビデオメモリ。AI モデルの推論にはモデル全体を VRAM に展開する必要がある。</td></tr>
           <tr><td><strong>コールドスタート</strong></td><td>モデルがメモリに存在しない状態からの起動。ストレージからの読み込みが必要。</td></tr>
@@ -800,7 +887,7 @@ cat results\bench_summary.json</code></pre>
         <div class="link-desc">テスト対象 Gen5 NVMe SSD &mdash; AI ワークロードに最適な大容量高速ストレージ</div>
       </li>
       <li>
-        <a href="https://www.samsung.com/semiconductor/minisite/ssd/product/consumer/9100pro/" target="_blank" rel="noopener">Samsung 9100 PRO (公式)</a>
+        <a href="https://semiconductor.samsung.com/jp/consumer-storage/internal-ssd/9100-pro/" target="_blank" rel="noopener">Samsung 9100 PRO (公式)</a>
         <div class="link-desc">製品仕様・技術情報</div>
       </li>
     </ul>
