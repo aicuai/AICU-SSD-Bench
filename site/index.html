@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ai-storage-bench | AI ワークロード × ストレージ速度ベンチマーク</title>
+  <meta name="description" content="ストレージ速度が AI ワークロードに与える影響を定量評価。Samsung 9100 PRO (Gen5 NVMe) を含む 4 ドライブで再現可能なオープンソースベンチマーク。">
+  <meta property="og:title" content="ai-storage-bench">
+  <meta property="og:description" content="AI ワークロードにおけるストレージ速度影響の定量評価">
+  <meta property="og:url" content="https://bench.aicu.jp">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="ja_JP">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- Hero -->
+<header class="hero">
+  <div class="container">
+    <h1>ai-storage-bench</h1>
+    <p class="subtitle">AI ワークロードにおけるストレージ速度影響の定量評価</p>
+    <p class="tagline">Impress AKIBA PC Hotline! 取材協力ベンチマーク<br>Samsung 9100 PRO (Gen5 NVMe) &times; AI ワークロード</p>
+    <span class="badge">MIT License</span>
+    <br>
+    <a href="https://github.com/aicuai/aicu-bench" class="cta" target="_blank" rel="noopener">GitHub でソースを見る</a>
+  </div>
+</header>
+
+<main>
+
+<!-- 概要 -->
+<section>
+  <div class="container">
+    <h2 class="section-title">概要</h2>
+    <p>
+      ストレージ速度（PCIe Gen5 NVMe / SATA SSD / HDD）が
+      AI ワークロードのパフォーマンスにどう影響するかを
+      <strong>再現可能なオープンソーススクリプト</strong>で計測・公開します。
+    </p>
+  </div>
+</section>
+
+<!-- テスト環境 -->
+<section>
+  <div class="container">
+    <h2 class="section-title">テスト環境</h2>
+    <div class="spec-grid">
+      <div class="spec-card">
+        <div class="label">CPU</div>
+        <div class="value">AMD Ryzen Threadripper PRO 7975WX</div>
+        <div class="label" style="margin-top:4px">32コア / 64スレッド</div>
+      </div>
+      <div class="spec-card">
+        <div class="label">GPU</div>
+        <div class="value">NVIDIA RTX PRO 6000 Blackwell MAX-Q</div>
+        <div class="label" style="margin-top:4px">VRAM 96 GB</div>
+      </div>
+      <div class="spec-card">
+        <div class="label">RAM</div>
+        <div class="value">DDR5-4800 192 GB</div>
+        <div class="label" style="margin-top:4px">32 GB &times; 6</div>
+      </div>
+      <div class="spec-card">
+        <div class="label">OS</div>
+        <div class="value">Windows 11 PRO</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- テスト対象ストレージ -->
+<section>
+  <div class="container">
+    <h2 class="section-title">テスト対象ストレージ</h2>
+    <div style="overflow-x:auto">
+      <table class="storage-table">
+        <thead>
+          <tr>
+            <th>ドライブ</th>
+            <th>種別</th>
+            <th>代表速度</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>D: Samsung 9100 PRO 8 TB</td>
+            <td>PCIe Gen5 NVMe</td>
+            <td>~14,500 MB/s <span class="speed-bar" style="width:100%"></span></td>
+          </tr>
+          <tr>
+            <td>E: Samsung 870 QVO 8 TB</td>
+            <td>SATA SSD</td>
+            <td>~560 MB/s <span class="speed-bar" style="width:4%"></span></td>
+          </tr>
+          <tr>
+            <td>F: HDD 8 TB</td>
+            <td>SATA HDD</td>
+            <td>~180 MB/s <span class="speed-bar" style="width:1.2%"></span></td>
+          </tr>
+          <tr>
+            <td>G: 9100 PRO 8 TB (ICY DOCK)</td>
+            <td>PCIe Gen5 NVMe リムーバブル</td>
+            <td>~14,500 MB/s <span class="speed-bar" style="width:100%"></span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- 実験構成 -->
+<section>
+  <div class="container">
+    <h2 class="section-title">実験構成</h2>
+    <div class="exp-grid">
+
+      <div class="exp-card">
+        <div class="exp-icon">&gt;_</div>
+        <h3>vibe-local-bench</h3>
+        <div class="exp-tool">Ollama + qwen3:8b</div>
+        <p>ローカル LLM のモデルロード時間とコード生成時間を計測。5.2 GB モデルの読み込みでストレージ速度差を定量化します。</p>
+        <div class="exp-hypothesis">Gen5 では即座に起動。HDD では待機が体感に直結。</div>
+      </div>
+
+      <div class="exp-card">
+        <div class="exp-icon">&#128444;</div>
+        <h3>comfyui-imggen-bench</h3>
+        <div class="exp-tool">ComfyUI + z-image-turbo</div>
+        <p>Turbo 系モデルによる高速画像生成を計測。コールドスタート（モデルロード込み）とウォームスタートで、ストレージ速度の影響を分離して定量化します。</p>
+        <div class="exp-hypothesis">コールドスタートでストレージ速度差が顕著。ウォーム時は GPU 依存。</div>
+      </div>
+
+      <div class="exp-card">
+        <div class="exp-icon">&#127916;</div>
+        <h3>comfyui-ltx-bench</h3>
+        <div class="exp-tool">ComfyUI + LTX-Video 2.3</div>
+        <p>AI 動画生成のトータル時間を計測。8〜12 GB のモデル + T5 エンコーダーのロードにおけるストレージ速度の影響を検証します。LTX-Video 専用ノードに対応。</p>
+        <div class="exp-hypothesis">モデルロードでストレージ速度差が直結。推論中は影響軽微。</div>
+      </div>
+
+      <div class="exp-card">
+        <div class="exp-icon">&#127908;</div>
+        <h3>qwen3tts-bench</h3>
+        <div class="exp-tool">Qwen3-TTS</div>
+        <p>音声合成の初動時間（Time-to-First-Audio）と MP3 バッチ生成速度を計測。ストレージ速度が初動レイテンシに与える影響を可視化します。</p>
+        <div class="exp-hypothesis">初動時間でストレージ速度の影響を可視化。合成中は影響軽微。</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- クイックスタート -->
+<section>
+  <div class="container">
+    <h2 class="section-title">クイックスタート</h2>
+    <pre class="code-block"><code>git clone https://github.com/aicuai/aicu-bench
+cd aicu-bench
+
+# 全実験一括実行
+.\scripts\run_all_benchmarks.ps1 -Runs 3
+</code></pre>
+  </div>
+</section>
+
+<!-- Claude Code -->
+<section>
+  <div class="container">
+    <h2 class="section-title">Claude Code でセットアップ</h2>
+    <p>
+      トラブルシューティングや初期の実験環境のセットアップを高速に進めるため、
+      <a href="https://j.aicu.ai/_Claude" target="_blank" rel="noopener"><strong>Claude Code</strong></a>
+      を使って行います。無料で利用できますので、準備いただけますと幸いです。
+    </p>
+    <p style="margin-top:12px; color: var(--text-secondary);">
+      本リポジトリの <code>CLAUDE.md</code> を読み込ませるだけで、環境構築からベンチマーク実行、結果分析まで AI が支援します。
+    </p>
+    <pre class="code-block"><code># Claude Code を起動（CLAUDE.md を自動読み込み）
+claude</code></pre>
+  </div>
+</section>
+
+<!-- 関連リンク -->
+<section>
+  <div class="container">
+    <h2 class="section-title">関連リンク</h2>
+    <ul class="links-list">
+      <li>
+        <a href="https://akiba-pc.watch.impress.co.jp/" target="_blank" rel="noopener">Impress AKIBA PC Hotline!</a>
+        <div class="link-desc">取材協力メディア</div>
+      </li>
+      <li>
+        <a href="https://forest.watch.impress.co.jp/docs/serial/aistream/2090895.html" target="_blank" rel="noopener">vibe-local でオフライン AI コーディング体験</a>
+        <div class="link-desc">窓の杜 AI Stream 連載</div>
+      </li>
+      <li>
+        <a href="https://github.com/ochyai/vibe-local" target="_blank" rel="noopener">vibe-local (ochyai)</a>
+        <div class="link-desc">落合陽一氏によるオフライン AI コーディング環境</div>
+      </li>
+      <li>
+        <a href="https://aicu.ai" target="_blank" rel="noopener">AICU Inc.</a>
+        <div class="link-desc">プロジェクト運営</div>
+      </li>
+      <li>
+        <a href="https://www.samsung.com/semiconductor/minisite/ssd/product/consumer/9100pro/" target="_blank" rel="noopener">Samsung 9100 PRO</a>
+        <div class="link-desc">テスト対象 Gen5 NVMe SSD</div>
+      </li>
+    </ul>
+  </div>
+</section>
+
+</main>
+
+<!-- Footer -->
+<footer>
+  <div class="container">
+    <p>&copy; 2025 AICU Inc. &mdash; MIT License</p>
+    <div class="footer-links">
+      <a href="https://github.com/aicuai/aicu-bench" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://aicu.ai" target="_blank" rel="noopener">AICU Inc.</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
