@@ -206,11 +206,11 @@ claude</code></pre>
   };
   var DRIVE_COLORS = ['#2f81f7','#f0883e','#da3633','#3fb950','#a371f7','#79c0ff','#d2a8ff','#ffa657'];
   var DRIVE_META = {
-    C: { name: 'ALEG-850 (NVMe)',            color: '#a371f7', type: 'NVMe Gen4' },
-    D: { name: '9100 PRO (Gen5 NVMe)',       color: '#2f81f7', type: 'Gen5 NVMe' },
-    E: { name: '870 QVO (SATA SSD)',         color: '#f0883e', type: 'SATA SSD' },
-    F: { name: 'HDD 8TB',                   color: '#da3633', type: 'SATA HDD' },
-    G: { name: '9100 PRO ICY DOCK (Gen5)',   color: '#3fb950', type: 'Gen5 NVMe' }
+    C: { name: 'ALEG-850 (NVMe)',            color: '#8250df', type: 'NVMe Gen4' },
+    D: { name: '9100 PRO (Gen5 NVMe)',       color: '#0969da', type: 'Gen5 NVMe' },
+    E: { name: '870 QVO (SATA SSD)',         color: '#bf5700', type: 'SATA SSD' },
+    F: { name: 'HDD 8TB',                   color: '#cf222e', type: 'SATA HDD' },
+    G: { name: '9100 PRO ICY DOCK (Gen5)',   color: '#1a7f37', type: 'Gen5 NVMe' }
   };
 
   function fmtVal(v, decimals) {
@@ -355,6 +355,33 @@ claude</code></pre>
   });
 })();
 </script>
+
+<!-- 予備調査からの仮説 -->
+<section>
+  <div class="container">
+    <h2 class="section-title">予備調査からの仮説</h2>
+    <p style="margin-bottom:16px; color: var(--text-secondary); font-size: 0.95rem;">
+      G-Tune P6-I7G50 (RTX 4050 Laptop / 32GB DDR4) での予備計測データに基づく仮説。本実験 (RTX PRO 6000 / 192GB DDR5) で検証予定。
+    </p>
+    <div class="exp-grid">
+      <div class="exp-card">
+        <h3>仮説 1: モデルロードはストレージ I/O バウンド</h3>
+        <p>qwen3:1.7b のモデルロード時間は D: (KIOXIA) が 7.5s、C: (ALEG-850) が 10.9s。OS ドライブ (C:) はバックグラウンド I/O の競合でロード速度が低下する可能性がある。</p>
+        <div class="exp-hypothesis">本実験では Gen5 NVMe vs SATA SSD vs HDD で桁違いの差が出ると予測。</div>
+      </div>
+      <div class="exp-card">
+        <h3>仮説 2: 推論速度はストレージに依存しない</h3>
+        <p>コード生成速度は C: が 23.45 tok/s、D: が 19.38 tok/s。モデルが VRAM にロード済みであれば、推論は GPU/メモリバウンドでありストレージ速度は無関係。ドライブ間の差は OS 負荷やメモリ帯域の影響。</p>
+        <div class="exp-hypothesis">本実験では全ドライブで推論速度がほぼ同一になると予測。</div>
+      </div>
+      <div class="exp-card">
+        <h3>仮説 3: VRAM 不足時はストレージがスワップのボトルネック</h3>
+        <p>qwen3:8b (5.2GB) は RTX 4050 (6GB VRAM) でギリギリ動作。VRAM 不足でモデルの一部がシステムメモリに退避する場合、ストレージ速度がスワップ性能に直結し推論速度にも影響する可能性がある。</p>
+        <div class="exp-hypothesis">96GB VRAM 環境では発生しないが、一般的なゲーミング PC では重要な知見。</div>
+      </div>
+    </div>
+  </div>
+</section>
 
 <!-- 関連リンク -->
 <section>

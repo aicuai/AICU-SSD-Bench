@@ -1,15 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap');
 
 :root {
-  --bg-primary: #0d1117;
-  --bg-secondary: #161b22;
-  --bg-card: #1c2128;
-  --text-primary: #e6edf3;
-  --text-secondary: #8b949e;
-  --accent: #2f81f7;
-  --accent-hover: #58a6ff;
+  --bg-primary: #ffffff;
+  --bg-secondary: #f6f8fa;
+  --bg-card: #ffffff;
+  --text-primary: #1f2328;
+  --text-secondary: #656d76;
+  --accent: #0969da;
+  --accent-hover: #0550ae;
   --accent-gradient: linear-gradient(135deg, #1428a0, #00b4d8);
-  --border: #30363d;
+  --border: #d0d7de;
   --font: 'Noto Sans JP', system-ui, -apple-system, sans-serif;
   --max-w: 1100px;
   --radius: 12px;
@@ -104,6 +104,7 @@ section:nth-child(even) { background: var(--bg-secondary); }
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 24px;
+  box-shadow: 0 1px 3px rgba(31,35,40,0.04);
 }
 .spec-card .label {
   font-size: 0.8rem;
@@ -240,6 +241,7 @@ section:nth-child(even) { background: var(--bg-secondary); }
   border-radius: var(--radius);
   padding: 28px;
   margin-bottom: 20px;
+  box-shadow: 0 1px 3px rgba(31,35,40,0.04);
 }
 .chart-header {
   display: flex;
@@ -276,7 +278,7 @@ section:nth-child(even) { background: var(--bg-secondary); }
   gap: 12px;
 }
 .chart-row--best .chart-drive {
-  color: #3fb950;
+  color: #1a7f37;
   font-weight: 700;
 }
 .chart-label {
@@ -294,7 +296,7 @@ section:nth-child(even) { background: var(--bg-secondary); }
 }
 .chart-bar-wrap {
   flex-grow: 1;
-  background: rgba(255,255,255,0.04);
+  background: #f0f3f6;
   border-radius: 6px;
   overflow: hidden;
   min-height: 36px;
@@ -329,7 +331,7 @@ section:nth-child(even) { background: var(--bg-secondary); }
   margin-bottom: 14px;
 }
 .chart-sub .chart-label {
-  min-width: 60px;
+  min-width: 200px;
 }
 
 .chart-updated {
@@ -354,7 +356,7 @@ footer {
   color: var(--text-secondary);
   font-size: 0.85rem;
 }
-footer a { color: var(--text-secondary); }
+footer a { color: var(--text-secondary); text-decoration: underline; }
 footer a:hover { color: var(--accent); }
 footer .footer-links { margin-top: 8px; }
 footer .footer-links a + a { margin-left: 20px; }
