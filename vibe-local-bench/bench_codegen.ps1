@@ -23,13 +23,21 @@ param(
 
     [int]$Port = 11435,
 
-    [string]$OutputDir = "$PSScriptRoot\..\results\vibe-local-bench"
+    [string]$OutputDir
 )
 
 $ErrorActionPreference = "Stop"
-$ModelName = "qwen3:8b"
 $OllamaHost = "http://localhost:$Port"
 $BenchOllamaPid = $null
+
+# テスト対象モデル（大→小。メモリ不足時に小さいモデルにフォールバック）
+$ModelNames = @("qwen3:8b", "qwen3:1.7b")
+
+# OutputDir のデフォルト解決（$PSScriptRoot が空の場合に対応）
+if (-not $OutputDir) {
+    $scriptDir = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent (Resolve-Path $MyInvocation.MyCommand.Path) }
+    $OutputDir = Join-Path (Split-Path $scriptDir -Parent) "results\vibe-local-bench"
+}
 
 $Prompt = @"
 じゃんけんゲームを HTML + JavaScript で作成してください。
@@ -186,48 +194,83 @@ function Measure-CodeGen {
     return $result
 }
 
+# デフォルト Ollama のモデルを解放してメモリを確保
+Write-Host "Freeing memory from default Ollama..." -ForegroundColor Gray
+foreach ($m in $ModelNames) {
+    try {
+        $body = @{ model = $m; keep_alive = 0 } | ConvertTo-Json
+        Invoke-RestMethod -Uri "http://localhost:11434/api/generate" -Method Post -Body $body -ContentType "application/json" -ErrorAction SilentlyContinue | Out-Null
+    } catch {}
+}
+Start-Sleep -Seconds 3
+
 # メイン
 Write-Host "`n=== vibe-local-bench: Code Generation Benchmark ===" -ForegroundColor Yellow
-Write-Host "Drive: $Drive | Model: $ModelName | Runs: $Runs | Port: $Port`n"
+Write-Host "Drive: $Drive | Models: $($ModelNames -join ', ') | Runs: $Runs | Port: $Port`n"
 
-try {
-    # ベンチ用 Ollama を別ポートで起動
-    Start-BenchOllama
+foreach ($ModelName in $ModelNames) {
+    $modelTag = $ModelName -replace ':', '_'
+    $outFile = Join-Path $OutputDir "codegen_${Drive}_${modelTag}.json"
 
-    # モデル事前ロード
-    Write-Host "Pre-loading model..." -ForegroundColor Gray
-    $body = @{ model = $ModelName; prompt = "test"; stream = $false } | ConvertTo-Json
-    Invoke-RestMethod -Uri "$OllamaHost/api/generate" -Method Post -Body $body -ContentType "application/json" -TimeoutSec 300 | Out-Null
-
-    $results = @()
-    for ($i = 1; $i -le $Runs; $i++) {
-        $result = Measure-CodeGen -RunNumber $i
-        $results += $result
+    # 中断再開: 既存結果があればスキップ
+    if (Test-Path $outFile) {
+        $existing = Get-Content $outFile -Raw | ConvertFrom-Json
+        if ($existing.results.Count -ge $Runs -and ($existing.results | Where-Object { $_.success }).Count -gt 0) {
+            Write-Host "SKIP: $outFile already exists with $($existing.results.Count) runs" -ForegroundColor DarkYellow
+            continue
+        }
     }
 
-    $times = $results | Where-Object { $_.success } | ForEach-Object { $_.gen_time_s } | Sort-Object
-    $median = if ($times.Count -gt 0) {
-        $mid = [math]::Floor($times.Count / 2)
-        if ($times.Count % 2 -eq 0) { ($times[$mid - 1] + $times[$mid]) / 2 } else { $times[$mid] }
-    } else { $null }
+    Write-Host "`n--- Model: $ModelName ---" -ForegroundColor Cyan
 
-    $summary = [ordered]@{
-        experiment = "vibe-local-bench"
-        test       = "codegen"
-        drive      = $Drive
-        model      = $ModelName
-        runs       = $Runs
-        port       = $Port
-        median_s   = $median
-        results    = $results
-        generated  = (Get-Date -Format "o")
+    try {
+        # ベンチ用 Ollama を起動
+        Start-BenchOllama
+
+        # モデル事前ロード
+        Write-Host "Pre-loading model..." -ForegroundColor Gray
+        $body = @{ model = $ModelName; prompt = "test"; stream = $false } | ConvertTo-Json
+        try {
+            Invoke-RestMethod -Uri "$OllamaHost/api/generate" -Method Post -Body $body -ContentType "application/json" -TimeoutSec 300 | Out-Null
+        } catch {
+            Write-Host "  Pre-load failed: $_ (skipping model)" -ForegroundColor Red
+            continue
+        }
+
+        $results = @()
+        for ($i = 1; $i -le $Runs; $i++) {
+            $result = Measure-CodeGen -RunNumber $i
+            $results += $result
+
+            # 途中結果を保存
+            $times = $results | Where-Object { $_.success } | ForEach-Object { $_.gen_time_s } | Sort-Object
+            $median = if ($times.Count -gt 0) {
+                $mid = [math]::Floor($times.Count / 2)
+                if ($times.Count % 2 -eq 0) { ($times[$mid - 1] + $times[$mid]) / 2 } else { $times[$mid] }
+            } else { $null }
+
+            $summary = [ordered]@{
+                experiment = "vibe-local-bench"
+                test       = "codegen"
+                drive      = $Drive
+                model      = $ModelName
+                runs       = $i
+                runs_total = $Runs
+                port       = $Port
+                median_s   = $median
+                results    = $results
+                generated  = (Get-Date -Format "o")
+            }
+            $summary | ConvertTo-Json -Depth 5 | Set-Content -Path $outFile -Encoding UTF8
+        }
+
+        Write-Host "`n[$ModelName] Median codegen time: ${median}s" -ForegroundColor Yellow
+        Write-Host "Results saved: $outFile"
+    } catch {
+        Write-Host "ERROR running $ModelName : $_" -ForegroundColor Red
+    } finally {
+        Stop-BenchOllama
     }
-
-    $outFile = Join-Path $OutputDir "codegen_${Drive}.json"
-    $summary | ConvertTo-Json -Depth 5 | Set-Content -Path $outFile -Encoding UTF8
-    Write-Host "`nMedian codegen time: ${median}s" -ForegroundColor Yellow
-    Write-Host "Results saved: $outFile`n"
-} finally {
-    # ベンチ用 Ollama を確実に停止
-    Stop-BenchOllama
 }
+
+Write-Host "`n=== Code Generation Benchmark Complete ===" -ForegroundColor Green

@@ -194,14 +194,20 @@ claude</code></pre>
 <script>
 (function(){
   var LABELS = {
-    vibe_local_load:   { name: 'Ollama モデルロード時間', unit: '秒', lower: true, icon: '>_' },
-    vibe_local_codegen:{ name: 'コード生成時間',          unit: '秒', lower: true, icon: '>_' },
+    vibe_local_load:              { name: 'Ollama モデルロード時間', unit: '秒', lower: true, icon: '>_' },
+    vibe_local_load_qwen3_8b:     { name: 'モデルロード (qwen3:8b)', unit: '秒', lower: true, icon: '>_' },
+    vibe_local_load_qwen3_1_7b:   { name: 'モデルロード (qwen3:1.7b)', unit: '秒', lower: true, icon: '>_' },
+    vibe_local_codegen:           { name: 'コード生成時間', unit: '秒', lower: true, icon: '>_' },
+    vibe_local_codegen_qwen3_8b:  { name: 'コード生成 (qwen3:8b)', unit: '秒', lower: true, icon: '>_' },
+    vibe_local_codegen_qwen3_1_7b:{ name: 'コード生成 (qwen3:1.7b)', unit: '秒', lower: true, icon: '>_' },
     comfyui_imggen:    { name: '画像生成 (z-image-turbo)',unit: '秒', lower: true, icon: '\uD83D\uDDBC' },
     comfyui_ltx:       { name: '動画生成 (LTX-Video)',    unit: '秒', lower: true, icon: '\uD83C\uDFAC' },
     qwen3tts:          { name: 'TTS 初動時間',            unit: '秒', lower: true, icon: '\uD83C\uDF99' }
   };
+  var DRIVE_COLORS = ['#2f81f7','#f0883e','#da3633','#3fb950','#a371f7','#79c0ff','#d2a8ff','#ffa657'];
   var DRIVE_META = {
-    D: { name: '9100 PRO (Gen5 NVMe)',      color: '#2f81f7', type: 'Gen5 NVMe' },
+    C: { name: 'ALEG-850 (NVMe)',            color: '#a371f7', type: 'NVMe Gen4' },
+    D: { name: '9100 PRO (Gen5 NVMe)',       color: '#2f81f7', type: 'Gen5 NVMe' },
     E: { name: '870 QVO (SATA SSD)',         color: '#f0883e', type: 'SATA SSD' },
     F: { name: 'HDD 8TB',                   color: '#da3633', type: 'SATA HDD' },
     G: { name: '9100 PRO ICY DOCK (Gen5)',   color: '#3fb950', type: 'Gen5 NVMe' }
@@ -214,7 +220,7 @@ claude</code></pre>
   }
 
   function renderChart(key, exp) {
-    var meta = LABELS[key] || { name: key, unit: '秒', lower: true, icon: '' };
+    var meta = LABELS[key] || { name: (exp.model ? key.replace(/_/g,' ') + ' (' + exp.model + ')' : key), unit: '秒', lower: true, icon: '>_' };
     var order = exp.drive_order || Object.keys(exp.drives);
     var vals = [];
     for (var i = 0; i < order.length; i++) {
@@ -238,7 +244,7 @@ claude</code></pre>
 
     for (var j = 0; j < vals.length; j++) {
       var item = vals[j];
-      var dm = DRIVE_META[item.drive] || { name: item.drive, color: '#8b949e', type: '' };
+      var dm = DRIVE_META[item.drive] || { name: item.drive, color: DRIVE_COLORS[j % DRIVE_COLORS.length], type: '' };
       var pct = maxVal > 0 ? (item.val / maxVal * 100) : 0;
       var isBest = (meta.lower && item.val === minVal) || (!meta.lower && item.val === maxVal);
       var speedup = '';
@@ -316,18 +322,28 @@ claude</code></pre>
       return;
     }
 
+    // データに含まれるドライブだけ凡例に表示
+    var usedDrives = {};
+    for (var ek in data.experiments) {
+      var eo = data.experiments[ek].drive_order || Object.keys(data.experiments[ek].drives);
+      for (var di = 0; di < eo.length; di++) usedDrives[eo[di]] = true;
+    }
     var html = '<div class="chart-legend">';
-    for (var d in DRIVE_META) {
-      html += '<span class="legend-item"><span class="legend-dot" style="background:' + DRIVE_META[d].color + '"></span>' + d + ': ' + DRIVE_META[d].type + '</span>';
+    for (var d in usedDrives) {
+      var dm0 = DRIVE_META[d] || { color: DRIVE_COLORS[Object.keys(usedDrives).indexOf(d) % DRIVE_COLORS.length], type: d };
+      html += '<span class="legend-item"><span class="legend-dot" style="background:' + dm0.color + '"></span>' + d + ': ' + dm0.type + '</span>';
     }
     html += '</div>';
 
-    var expOrder = ['vibe_local_load','vibe_local_codegen','comfyui_imggen','comfyui_ltx','qwen3tts'];
-    for (var i = 0; i < expOrder.length; i++) {
-      var k = expOrder[i];
-      if (data.experiments[k]) {
-        html += renderChart(k, data.experiments[k]);
-      }
+    // 表示順: 定義済みの順 → それ以外はアルファベット順
+    var prefOrder = ['vibe_local_load','vibe_local_load_qwen3_8b','vibe_local_load_qwen3_1_7b',
+      'vibe_local_codegen','vibe_local_codegen_qwen3_8b','vibe_local_codegen_qwen3_1_7b',
+      'comfyui_imggen','comfyui_ltx','qwen3tts'];
+    var allKeys = Object.keys(data.experiments);
+    var ordered = prefOrder.filter(function(k){ return allKeys.indexOf(k) >= 0; });
+    allKeys.forEach(function(k){ if (ordered.indexOf(k) < 0) ordered.push(k); });
+    for (var i = 0; i < ordered.length; i++) {
+      html += renderChart(ordered[i], data.experiments[ordered[i]]);
     }
 
     if (data.updated) {
