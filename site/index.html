@@ -227,14 +227,29 @@
           736&times;1128 / 28 steps / DPM++ 2M SDE Karras / CFG 5。
           コールドスタートでストレージ速度差が顕著。ウォーム時は GPU 依存。
         </div>
+        <div style="margin-top:8px; font-size:0.85rem; color:var(--text-secondary);">
+          <strong>起動パラメータ条件:</strong> <code>--highvram</code> / <code>--lowvram</code> / デフォルトの 3 条件 &times; 3 回計測。
+          VRAM 管理方式の違いがモデルロード時間とストレージ I/O パターンに与える影響を分離。
+        </div>
       </div>
 
       <div class="exp-card">
         <div class="exp-icon">&#127916;</div>
-        <h3>comfyui-ltx-bench</h3>
-        <div class="exp-tool">ComfyUI + LTX-Video 2.3</div>
-        <p>AI 動画生成のトータル時間を計測。8〜12 GB のモデル + T5 エンコーダーのロードにおけるストレージ速度の影響を検証します。LTX-Video 専用ノードに対応。</p>
-        <div class="exp-hypothesis">モデルロードでストレージ速度差が直結。推論中は影響軽微。</div>
+        <h3>comfyui-video-bench</h3>
+        <div class="exp-tool">ComfyUI + LTX-Video 2.3 / Wan 2.2 14B</div>
+        <p>
+          AI 動画生成のトータル時間を計測。<strong>LTX 2.3</strong> (22B FP8, ~29GB) と
+          <strong>Wan 2.2</strong> (14B Dual-UNET, ~34GB) の 2 モデルで検証。
+          巨大モデルのロード・オフロードを繰り返すパイプラインで、ストレージ速度の影響が最も顕著に表れる実験。
+        </p>
+        <div class="exp-hypothesis">
+          モデルロードでストレージ速度差が直結。Wan 2.2 は High/Low Noise の 2 つの UNET を
+          切り替えてロードするため、モデルスイッチングのベンチマークとしても機能。
+        </div>
+        <div style="margin-top:8px; font-size:0.85rem; color:var(--text-secondary);">
+          <strong>必要容量:</strong> LTX 2.3 = ~39GB / Wan 2.2 = ~36GB（モデル + テキストエンコーダー + VAE + LoRA）。
+          順次ダウンロード・テスト・削除の流れで実施。
+        </div>
       </div>
 
       <div class="exp-card">
@@ -245,6 +260,41 @@
         <div class="exp-hypothesis">初動時間でストレージ速度の影響を可視化。合成中は影響軽微。</div>
       </div>
 
+    </div>
+
+    <!-- ComfyUI 起動パラメータの影響 -->
+    <div class="exp-card" style="margin-top:20px; border-left: 4px solid #8250df;">
+      <h3>ComfyUI 起動パラメータとストレージ I/O の関係</h3>
+      <p>
+        ComfyUI の VRAM 管理方式はモデルのロード・オフロード挙動に大きく影響し、
+        ストレージ I/O パターンが変化します。本ベンチマークでは以下の 3 条件で計測。
+      </p>
+      <table class="storage-table" style="margin-top:12px;">
+        <thead>
+          <tr><th>パラメータ</th><th>挙動</th><th>ストレージへの影響</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>--highvram</code></td>
+            <td>モデルを VRAM に常駐。切り替え時もアンロードしない</td>
+            <td>初回ロード後はストレージアクセス最小。VRAM 大容量環境向け</td>
+          </tr>
+          <tr>
+            <td>デフォルト</td>
+            <td>VRAM 不足時に自動的にモデルをオフロード</td>
+            <td>モデル切り替え時にストレージからの再ロードが発生</td>
+          </tr>
+          <tr>
+            <td><code>--lowvram</code></td>
+            <td>積極的に VRAM を解放。処理ステップごとにモデルを移動</td>
+            <td>ストレージ I/O が最も頻繁。低 VRAM 環境でのストレージ速度の重要性を可視化</td>
+          </tr>
+        </tbody>
+      </table>
+      <p style="margin-top:12px; font-size:0.9rem; color:var(--text-secondary);">
+        <strong>96GB VRAM 環境 (RTX PRO 6000)</strong> では <code>--highvram</code> で全モデルを常駐可能。
+        <strong>6〜16GB VRAM 環境</strong>では <code>--lowvram</code> が必須で、ストレージ速度が体感に直結する。
+      </p>
     </div>
   </div>
 </section>
@@ -320,20 +370,22 @@
 
       <div class="exp-card" style="border-left: 4px solid #1a7f37;">
         <div class="exp-icon">&#x1F504;</div>
-        <h3>モデル頻繁切り替えストレステスト</h3>
+        <h3>モデル切り替え &amp; 初回ロードベンチマーク</h3>
         <p>
           実際の AI 開発では、用途に応じてモデルを何度も切り替えます。
-          <strong>10〜20 回連続でモデルのアンロード→ロードを繰り返す</strong>ストレステストを実施し、
-          温度上昇による性能劣化（サーマルスロットリング）の有無を検証します。
+          <strong>10〜20 回連続でモデルのアンロード→ロードを繰り返す</strong>ストレステストに加え、
+          <strong>異なるドライブ間でのモデル切り替え</strong>（例: D: → E: → D:）も計測。
         </p>
         <p style="margin-top:8px;">
-          各サイクルのロード時間を記録し、1 回目と 20 回目でどの程度の差が出るかを計測。
+          <strong>初回ロード</strong>（コールドスタート）と <strong>2 回目以降</strong>（OS キャッシュヒット時）の差、
+          さらに<strong>ドライブ切り替え時のキャッシュ無効化</strong>による影響を分離します。
           GPU 温度モニタリングのデータと照合し、
           <strong>熱がロード性能に与える影響</strong>を定量化します。
         </p>
         <div class="exp-hypothesis">
-          HDD では機械部品の発熱、SATA SSD ではコントローラ温度上昇で
-          後半のサイクルが遅くなると予測。Gen5 NVMe の熱制御性能が差を生む場面。
+          初回ロードとキャッシュヒット時で最大 2〜3 倍の差が出ると予測。
+          ドライブ切り替え時は確実にコールドスタートとなるため、ストレージ速度の差が最も顕著に表れる。
+          Samsung 9100 PRO の高速読み出しが最も効く場面。
         </div>
       </div>
     </div>
@@ -383,12 +435,15 @@ JavaScript pagina...
       </div>
       <div class="exp-card">
         <div class="exp-icon">&#127916;</div>
-        <h3>動画生成 (LTX-Video)</h3>
+        <h3>動画生成 (LTX 2.3 / Wan 2.2)</h3>
         <p style="font-size:0.85rem; color:var(--text-secondary); margin-bottom:8px;">
-          ComfyUI + LTX-Video 2.3 による AI 動画生成。8〜12GB のモデルをロードして推論。
+          ComfyUI + <strong>LTX-Video 2.3</strong> (22B FP8, ~29GB) と <strong>Wan 2.2</strong> (14B Dual-UNET, ~34GB) による AI 動画生成。
+          複数の巨大モデルをロード・オフロードする過程でストレージ速度が最も効くパイプライン。
         </p>
         <div style="background:#f6f8fa; border:1px solid var(--border); border-radius:8px; padding:40px; text-align:center; color:var(--text-secondary); font-size:0.85rem;">
-          動画クリップ (数秒) / LTX-Video 2.3<br>
+          動画クリップ (数秒) / LTX-Video 2.3 &amp; Wan 2.2 14B<br>
+          Wan 2.2: High/Low Noise UNET 切り替え + 4-step LoRA 高速化<br>
+          LTX 2.3: Low-res sampling &rarr; Latent Upscale &rarr; High-res sampling<br>
           <span style="font-size:0.8rem;">&#x1F4CB; 本実験実行後にサンプル動画を掲載予定</span>
         </div>
       </div>
@@ -703,6 +758,80 @@ cat results\bench_summary.json</code></pre>
   });
 })();
 </script>
+
+<!-- 予備調査: 容量要件と実行可能性 -->
+<section>
+  <div class="container">
+    <h2 class="section-title">予備調査: 各実験の必要ディスク容量</h2>
+    <p style="margin-bottom:16px; color: var(--text-secondary); font-size: 0.95rem;">
+      G-Tune P6-I7G50 (RTX 4050 6GB / 32GB RAM / NVMe Gen4 1TB) で各実験の必要容量を調査。<br>
+      <strong>ComfyUI 起動パラメータ:</strong> <code>--lowvram</code> / <code>--highvram</code> / デフォルトの 3 条件で計測予定。
+    </p>
+
+    <div style="overflow-x:auto">
+      <table class="storage-table">
+        <thead>
+          <tr>
+            <th>実験</th>
+            <th>主要モデル</th>
+            <th>合計容量</th>
+            <th>予備調査結果</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>vibe-local-bench</strong><br>Ollama LLM</td>
+            <td>qwen3:8b (5.2GB) + qwen3:1.7b (1.4GB)</td>
+            <td>~7 GB</td>
+            <td style="color:#1a7f37;"><strong>完了</strong> - C:/D: 両ドライブで計測済み</td>
+          </tr>
+          <tr>
+            <td><strong>comfyui-imggen</strong><br>AiCuty SDXL</td>
+            <td>Animagine XL 4.0 (7GB) + LoRA&times;2 + RealESRGAN</td>
+            <td>~9 GB</td>
+            <td style="color:#cf222e;"><strong>N/A</strong> - VRAM 6GB + ページファイル不足 (OS error 1455)</td>
+          </tr>
+          <tr>
+            <td><strong>comfyui-video</strong><br>Wan 2.2 14B</td>
+            <td>Dual UNET FP8 (14GB&times;2) + UMT5 + VAE + LoRA</td>
+            <td>~36 GB</td>
+            <td style="color:#cf222e;"><strong>N/A</strong> - ディスク容量不足 (1TB NVMe)</td>
+          </tr>
+          <tr>
+            <td><strong>comfyui-video</strong><br>LTX 2.3 22B</td>
+            <td>LTX-2.3-22B FP8 (29GB) + Gemma 3 12B + Upscaler</td>
+            <td>~39 GB</td>
+            <td style="color:#cf222e;"><strong>N/A</strong> - ディスク容量不足 (1TB NVMe)</td>
+          </tr>
+          <tr>
+            <td><strong>qwen3tts-bench</strong><br>TTS</td>
+            <td>Qwen3-TTS (est. 8GB via Ollama)</td>
+            <td>~9 GB</td>
+            <td style="color:#cf222e;"><strong>N/A</strong> - ディスク容量不足</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="exp-card" style="margin-top:20px; border-left: 4px solid #bf5700;">
+      <h3>予備調査の知見: なぜノート PC では動かなかったか</h3>
+      <p>
+        <strong>VRAM の壁:</strong> SDXL (6.46GB) は RTX 4050 の 6GB VRAM に収まらず、ページファイルへのスワップが必要。
+        しかしデフォルトのページファイルサイズでは不足し、OS error 1455 で失敗。
+        <code>--lowvram</code> モードでも同様の結果。これは <strong>6GB VRAM でのSDXL運用の限界</strong>を示すデータ。
+      </p>
+      <p style="margin-top:8px;">
+        <strong>ディスク容量の壁:</strong> 動画生成モデルは 1 実験あたり 36〜39GB を要求。
+        1TB NVMe では OS + 開発環境 + AI モデルの共存が困難。
+        <strong>本実験環境の 8TB Samsung 9100 PRO なら全モデルを同時に保持可能</strong>で、
+        モデル切り替え時の再ダウンロードが不要になる。
+      </p>
+      <p style="margin-top:8px;">
+        <strong>全実験の合計必要容量: ~97GB</strong>（順次実行時の最小必要容量: ~51GB）
+      </p>
+    </div>
+  </div>
+</section>
 
 <!-- テストサイズによる変動の考察 -->
 <section>

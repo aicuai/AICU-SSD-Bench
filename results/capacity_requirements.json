@@ -1,0 +1,113 @@
+{
+  "title": "Experiment Capacity Requirements - Preliminary Investigation",
+  "machine": "P6-I7G50",
+  "gpu": "RTX 4050 Laptop 6GB VRAM",
+  "ram_gb": 32,
+  "storage": {
+    "C": {"model": "KIOXIA EXCERIA G2 1TB (Gen3 NVMe)", "total_gb": 1863, "free_gb": 122},
+    "D": {"model": "ADATA LEGEND 850 1TB (Gen4 NVMe)", "total_gb": 952, "free_gb": 2.1}
+  },
+  "experiments": [
+    {
+      "id": 1,
+      "name": "vibe-local-bench (Ollama model load & codegen)",
+      "models": [
+        {"name": "qwen3:8b", "size_gb": 5.2, "format": "GGUF", "source": "ollama"},
+        {"name": "qwen3:1.7b", "size_gb": 1.4, "format": "GGUF", "source": "ollama"}
+      ],
+      "total_model_gb": 6.6,
+      "additional_gb": 0.5,
+      "total_required_gb": 7.1,
+      "status_on_this_machine": "completed",
+      "notes": "Previously run successfully on D: and C: drives"
+    },
+    {
+      "id": 2,
+      "name": "comfyui-imggen-bench (SDXL image generation)",
+      "sub_experiments": [
+        {
+          "name": "SDXL Base 1.0",
+          "models": [
+            {"name": "sd_xl_base_1.0.safetensors", "size_gb": 6.46, "format": "safetensors", "source": "huggingface"}
+          ],
+          "total_model_gb": 6.46,
+          "additional_gb": 2.0,
+          "total_required_gb": 8.5,
+          "comfyui_install_gb": 12.0,
+          "status_on_this_machine": "N/A (OS error 1455 - pagefile too small)",
+          "notes": "6.46GB model exceeds 6GB VRAM, pagefile overflow failed on 32GB RAM laptop"
+        },
+        {
+          "name": "AiCuty SDXL (Animagine XL 4.0 + LoRAs)",
+          "models": [
+            {"name": "animagine-xl-4.0-opt.safetensors", "size_gb": 7.0, "format": "safetensors", "source": "huggingface"},
+            {"name": "Niji_anime_illustrious.safetensors", "size_gb": 0.18, "format": "safetensors", "source": "civitai"},
+            {"name": "eyecolle_xl_code191.safetensors", "size_gb": 0.036, "format": "safetensors", "source": "civitai"},
+            {"name": "RealESRGAN_x4plus_anime_6B.pth", "size_gb": 0.017, "format": "pth", "source": "huggingface"}
+          ],
+          "total_model_gb": 7.23,
+          "additional_gb": 2.0,
+          "total_required_gb": 9.2,
+          "comfyui_install_gb": 12.0,
+          "status_on_this_machine": "N/A (insufficient VRAM + disk space for Animagine)",
+          "notes": "Larger than SDXL base, same pagefile issue expected"
+        }
+      ]
+    },
+    {
+      "id": "3a",
+      "name": "comfyui-video-bench (Wan 2.2 14B text-to-video)",
+      "models": [
+        {"name": "wan2.2_t2v_high_noise_14B_fp8_scaled.safetensors", "size_gb": 14.0, "format": "safetensors", "source": "huggingface"},
+        {"name": "wan2.2_t2v_low_noise_14B_fp8_scaled.safetensors", "size_gb": 14.0, "format": "safetensors", "source": "huggingface"},
+        {"name": "umt5_xxl_fp8_e4m3fn_scaled.safetensors", "size_gb": 4.9, "format": "safetensors", "source": "huggingface"},
+        {"name": "wan_2.1_vae.safetensors", "size_gb": 0.2, "format": "safetensors", "source": "huggingface"},
+        {"name": "wan2.2_t2v_14B_4step_lora.safetensors", "size_gb": 0.5, "format": "safetensors", "source": "huggingface"},
+        {"name": "wan2.2_t2v_480p_14B_4step_lora.safetensors", "size_gb": 0.5, "format": "safetensors", "source": "huggingface"}
+      ],
+      "total_model_gb": 34.1,
+      "additional_gb": 2.0,
+      "total_required_gb": 36.1,
+      "comfyui_install_gb": 12.0,
+      "status_on_this_machine": "N/A (insufficient disk space - need 36GB, have 2.1GB free)",
+      "notes": "Dual UNET architecture requires 2x14GB FP8 models. Even clearing all other models would only free ~14GB total."
+    },
+    {
+      "id": "3b",
+      "name": "comfyui-video-bench (LTX 2.3 text-to-video)",
+      "models": [
+        {"name": "ltx-2.3-22b-dev-fp8.safetensors", "size_gb": 29.0, "format": "safetensors", "source": "huggingface"},
+        {"name": "gemma_3_12B_it_fp4_mixed.safetensors", "size_gb": 6.0, "format": "safetensors", "source": "huggingface"},
+        {"name": "ltx-2.3-spatial-upscaler-x2-1.0.safetensors", "size_gb": 1.5, "format": "safetensors", "source": "huggingface"},
+        {"name": "ltx-2.3-22b-distilled-lora-384.safetensors", "size_gb": 0.3, "format": "safetensors", "source": "huggingface"}
+      ],
+      "total_model_gb": 36.8,
+      "additional_gb": 2.0,
+      "total_required_gb": 38.8,
+      "comfyui_install_gb": 12.0,
+      "status_on_this_machine": "N/A (insufficient disk space - need 39GB, have 2.1GB free)",
+      "notes": "Single large model (29GB FP8). Requires more space than Wan 2.2."
+    },
+    {
+      "id": 4,
+      "name": "qwen3tts-bench (Qwen3-TTS speech synthesis)",
+      "models": [
+        {"name": "qwen3-tts (via Ollama)", "size_gb": 8.0, "format": "GGUF", "source": "ollama", "note": "estimated, model not yet released on Ollama"}
+      ],
+      "total_model_gb": 8.0,
+      "additional_gb": 0.5,
+      "total_required_gb": 8.5,
+      "status_on_this_machine": "N/A (insufficient disk space + model availability TBD)",
+      "notes": "Qwen3-TTS may not be available via Ollama yet. Size estimated from similar models."
+    }
+  ],
+  "summary": {
+    "total_all_experiments_gb": 97.0,
+    "minimum_for_sequential_gb": 51.0,
+    "note": "Sequential approach: run Wan 2.2 (36GB) -> delete -> run LTX 2.3 (39GB). Minimum disk: ~51GB free (largest single experiment + ComfyUI install)",
+    "comfyui_base_install_gb": 12.0,
+    "recommendation": "Workstation with 2TB+ NVMe recommended for full benchmark suite"
+  },
+  "investigation_date": "2026-03-10",
+  "generated_by": "aicu-bench capacity investigation"
+}

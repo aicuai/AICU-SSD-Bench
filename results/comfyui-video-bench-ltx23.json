@@ -1,0 +1,22 @@
+{
+  "experiment": "comfyui-video-bench",
+  "test": "ltx2.3_22b_t2v",
+  "models": [
+    {"name": "ltx-2.3-22b-dev-fp8.safetensors", "size_gb": 29.0},
+    {"name": "gemma_3_12B_it_fp4_mixed.safetensors", "size_gb": 6.0},
+    {"name": "ltx-2.3-spatial-upscaler-x2-1.0.safetensors", "size_gb": 1.5},
+    {"name": "ltx-2.3-22b-distilled-lora-384.safetensors", "size_gb": 0.3}
+  ],
+  "total_model_gb": 36.8,
+  "result": "N/A",
+  "reason": "insufficient_disk_space",
+  "disk_free_gb": 2.1,
+  "disk_required_gb": 38.8,
+  "machine": "P6-I7G50",
+  "gpu": "RTX 4050 Laptop 6GB VRAM",
+  "ram_gb": 32,
+  "drive": "D",
+  "note": "LTX 2.3 22B requires 37GB+ for models. D: drive has only 2.1GB free. Single large checkpoint (29GB FP8). Should be tested after Wan 2.2 deletion on workstation with sufficient space.",
+  "workflow": "workflows/ltx2_3_t2v_api.json",
+  "timestamp": "2026-03-10T14:00:00+09:00"
+}

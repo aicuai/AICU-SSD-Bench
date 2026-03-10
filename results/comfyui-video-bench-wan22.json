@@ -1,0 +1,24 @@
+{
+  "experiment": "comfyui-video-bench",
+  "test": "wan2.2_14B_t2v",
+  "models": [
+    {"name": "wan2.2_t2v_high_noise_14B_fp8_scaled.safetensors", "size_gb": 14.0},
+    {"name": "wan2.2_t2v_low_noise_14B_fp8_scaled.safetensors", "size_gb": 14.0},
+    {"name": "umt5_xxl_fp8_e4m3fn_scaled.safetensors", "size_gb": 4.9},
+    {"name": "wan_2.1_vae.safetensors", "size_gb": 0.2},
+    {"name": "wan2.2_t2v_14B_4step_lora.safetensors", "size_gb": 0.5},
+    {"name": "wan2.2_t2v_480p_14B_4step_lora.safetensors", "size_gb": 0.5}
+  ],
+  "total_model_gb": 34.1,
+  "result": "N/A",
+  "reason": "insufficient_disk_space",
+  "disk_free_gb": 2.1,
+  "disk_required_gb": 36.1,
+  "machine": "P6-I7G50",
+  "gpu": "RTX 4050 Laptop 6GB VRAM",
+  "ram_gb": 32,
+  "drive": "D",
+  "note": "Wan 2.2 14B requires 34GB+ for models alone. D: drive has only 2.1GB free. Dual UNET architecture (high_noise + low_noise) doubles the main model size. Sequential test plan: download -> test -> delete -> next model.",
+  "workflow": "workflows/wan2_2_14B_t2v_api.json",
+  "timestamp": "2026-03-10T14:00:00+09:00"
+}

@@ -1,0 +1,19 @@
+{
+  "experiment": "comfyui-imggen-bench",
+  "test": "sdxl_base_lowvram",
+  "model": "sd_xl_base_1.0.safetensors",
+  "model_size_gb": 6.46,
+  "result": "N/A",
+  "error": "pagefile too small (OS error 1455)",
+  "comfyui_version": "0.16.4",
+  "comfyui_args": [
+    "--lowvram",
+    "--disable-cuda-malloc"
+  ],
+  "machine": "P6-I7G50",
+  "gpu": "RTX 4050 Laptop 6GB VRAM",
+  "ram_gb": 32,
+  "drive": "D",
+  "note": "OS error 1455: 6.46GB safetensors model cannot be loaded on 32GB RAM + 6GB VRAM even with --lowvram. Pagefile overflow. Same result as previous attempt without --lowvram.",
+  "timestamp": "2026-03-10T14:00:00+09:00"
+}

@@ -1,0 +1,18 @@
+{
+  "experiment": "qwen3tts-bench",
+  "test": "tts_synthesis",
+  "models": [
+    {"name": "qwen3-tts (Ollama)", "size_gb": 8.0, "note": "estimated"}
+  ],
+  "total_model_gb": 8.0,
+  "result": "N/A",
+  "reason": "insufficient_disk_space",
+  "disk_free_gb": 2.1,
+  "disk_required_gb": 8.5,
+  "machine": "P6-I7G50",
+  "gpu": "RTX 4050 Laptop 6GB VRAM",
+  "ram_gb": 32,
+  "drive": "D",
+  "note": "Qwen3-TTS requires ~8GB via Ollama. D: drive has only 2.1GB free. Model availability via Ollama to be confirmed.",
+  "timestamp": "2026-03-10T14:00:00+09:00"
+}
