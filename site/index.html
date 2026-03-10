@@ -140,7 +140,7 @@
             <td>PCIe <strong>Gen4</strong>x4</td>
             <td>5,000 MB/s</td>
             <td>1,049&ndash;1,340 MB/s</td>
-            <td>Gen4 コントローラ搭載。ただし空き容量 3% で SLC キャッシュ枯渇の可能性。</td>
+            <td>Gen4 コントローラ搭載。カタログ値と実測の差は OS やファイルシステムの影響。</td>
           </tr>
         </tbody>
       </table>
@@ -835,7 +835,7 @@ cat results\bench_summary.json</code></pre>
       </div>
 
       <div class="exp-card">
-        <h3>仮説 2: 推論速度はストレージに依存しない</h3>
+        <h3>仮説 2: 推論速度はストレージに依存しない？</h3>
         <p>
           コード生成速度は C: が <strong>23.45 tok/s</strong>、D: が <strong>19.38 tok/s</strong>。
           モデルが VRAM にロード済みであれば、推論（トークン生成）は GPU 演算能力とメモリ帯域に依存し、
@@ -930,13 +930,13 @@ cat results\bench_summary.json</code></pre>
           </tr>
           <tr>
             <td><strong>最大 2,200K/2,600K IOPS</strong><br>ランダム読み出し/書き込み</td>
-            <td style="color:#bf5700;"><strong>正しいが<br>AI では副次的</strong></td>
+            <td style="color:#0969da;"><strong>本実験で検証</strong></td>
             <td>
               ランダム IOPS は多数の小ファイルを並列処理する能力を示す指標。
-              AI モデルファイルは <strong>数 GB の巨大な連続データ</strong>であり、ロード時はシーケンシャルリードが支配的です。
-              ランダム IOPS が効くのは、学習データセット（数百万枚の画像ファイル等）の読み込みや、
-              ComfyUI のノード定義・設定ファイルの並列読み込み等の場面。
-              <strong>モデルロード時間の短縮にはシーケンシャル速度の方が直接的に効きます。</strong>
+              AI モデルファイルは <strong>数 GB の巨大な連続データ</strong>であり、ロード時はシーケンシャルリードが支配的と思われますが、
+              ComfyUI のノード定義・設定ファイルの並列読み込みや、学習データセット（数百万枚の画像ファイル等）の読み込みなど、
+              ランダム IOPS が効く場面もあり得ます。
+              <strong>実際の AI ワークフローでどちらが支配的かを本実験で検証します。</strong>
             </td>
           </tr>
           <tr>
