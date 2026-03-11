@@ -1,0 +1,55 @@
+﻿{
+    "experiment":  "disk-speed-bench",
+    "test":  "sequential",
+    "drive":  "E",
+    "disk_info":  {
+                      "model":  "Samsung SSD 870 QVO 8TB",
+                      "serial":  "S5SSNG0N400014F",
+                      "unique_id":  "500253F870400141",
+                      "bus_type":  "SATA",
+                      "firmware":  "SVQ02B6Q"
+                  },
+    "size_mb":  1024,
+    "runs":  3,
+    "write_median_mbs":  433.5,
+    "read_median_mbs":  7355.4,
+    "results":  [
+                    {
+                        "run":  1,
+                        "write_mbs":  429.7,
+                        "write_time_s":  2.383,
+                        "write_ok":  true,
+                        "read_mbs":  7181.2,
+                        "read_time_s":  0.143,
+                        "read_ok":  true,
+                        "size_mb":  1024,
+                        "buffer_mb":  4,
+                        "timestamp":  "2026-03-11T18:37:58.7289598+09:00"
+                    },
+                    {
+                        "run":  2,
+                        "write_mbs":  434.3,
+                        "write_time_s":  2.358,
+                        "write_ok":  true,
+                        "read_mbs":  7355.4,
+                        "read_time_s":  0.139,
+                        "read_ok":  true,
+                        "size_mb":  1024,
+                        "buffer_mb":  4,
+                        "timestamp":  "2026-03-11T18:38:01.8056920+09:00"
+                    },
+                    {
+                        "run":  3,
+                        "write_mbs":  433.5,
+                        "write_time_s":  2.362,
+                        "write_ok":  true,
+                        "read_mbs":  7416.1,
+                        "read_time_s":  0.138,
+                        "read_ok":  true,
+                        "size_mb":  1024,
+                        "buffer_mb":  4,
+                        "timestamp":  "2026-03-11T18:38:04.8970275+09:00"
+                    }
+                ],
+    "generated":  "2026-03-11T18:38:05.9955068+09:00"
+}

@@ -5,7 +5,11 @@
 
 $script:benchDir = Split-Path (Split-Path $PSScriptRoot -Parent) -Parent
 if (-not $Runs)   { $Runs = 3 }
+# -Drives "D,E,F,G" (単一文字列) を配列に変換
 if (-not $Drives) { $Drives = @("D", "E", "F", "G") }
+if ($Drives.Count -eq 1 -and $Drives[0] -match ",") {
+    $Drives = $Drives[0] -split ","
+}
 if (-not $Port)   { $Port = 8188 }
 
 function Stop-AllOllama {

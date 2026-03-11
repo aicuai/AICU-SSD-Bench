@@ -1,0 +1,55 @@
+﻿{
+    "experiment":  "disk-speed-bench",
+    "test":  "sequential",
+    "drive":  "F",
+    "disk_info":  {
+                      "model":  "TOSHIBA MG10ADA800E",
+                      "serial":  "5580A0NUSD2L",
+                      "unique_id":  "500003E90CB02E44",
+                      "bus_type":  "SATA",
+                      "firmware":  "4302"
+                  },
+    "size_mb":  1024,
+    "runs":  3,
+    "write_median_mbs":  250.3,
+    "read_median_mbs":  7137.7,
+    "results":  [
+                    {
+                        "run":  1,
+                        "write_mbs":  250.3,
+                        "write_time_s":  4.09,
+                        "write_ok":  true,
+                        "read_mbs":  7050.7,
+                        "read_time_s":  0.145,
+                        "read_ok":  true,
+                        "size_mb":  1024,
+                        "buffer_mb":  4,
+                        "timestamp":  "2026-03-11T18:38:11.1237196+09:00"
+                    },
+                    {
+                        "run":  2,
+                        "write_mbs":  260.4,
+                        "write_time_s":  3.932,
+                        "write_ok":  true,
+                        "read_mbs":  7197.2,
+                        "read_time_s":  0.142,
+                        "read_ok":  true,
+                        "size_mb":  1024,
+                        "buffer_mb":  4,
+                        "timestamp":  "2026-03-11T18:38:15.8015517+09:00"
+                    },
+                    {
+                        "run":  3,
+                        "write_mbs":  242.7,
+                        "write_time_s":  4.218,
+                        "write_ok":  true,
+                        "read_mbs":  7137.7,
+                        "read_time_s":  0.143,
+                        "read_ok":  true,
+                        "size_mb":  1024,
+                        "buffer_mb":  4,
+                        "timestamp":  "2026-03-11T18:38:20.7451199+09:00"
+                    }
+                ],
+    "generated":  "2026-03-11T18:38:21.8442492+09:00"
+}
