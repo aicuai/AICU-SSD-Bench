@@ -1,0 +1,115 @@
+﻿Hier is een overzicht van belangrijke aspecten van HTML en JavaScript, samen met een voorbeeld van een HTML-document met JavaScript:
+
+---
+
+### **1. HTML-structuur**  
+Een HTML-document bestaat uit de volgende delen:
+
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Titel van het document</title>
+    <!-- CSS-voorbeeld -->
+    <style>
+      body { font-family: Arial; }
+      h1 { color: blue; }
+    </style>
+  </head>
+  <body>
+    <!-- Inhoud van het document -->
+    <h1>Voornaam</h1>
+    <p>Deze tekst is in het HTML-document.</p>
+    <button onclick="zoek()">Zoek</button>
+    <script>
+      function zoek() {
+        alert("Je hebt de knop geklikt!");
+      }
+    </script>
+  </body>
+</html>
+```
+
+---
+
+### **2. HTML-elementen**  
+Voorbeelden van HTML-elementen:
+
+| Element | Beschrijving |
+|--------|--------------|
+| `<h1>` | Groeënde hoofdtekst (hoofdstuk) |
+| `<p>` | Normale tekst |
+| `<ul>` | Lijst met punten |
+| `<li>` | Een lijstitem |
+| `<div>` | Een gebied (zoeksleutel voor structuur) |
+| `<span>` | Een klein gebied (zoeksleutel voor styling) |
+
+---
+
+### **3. CSS (Cascading Style Sheets)**  
+CSS wordt toegepast via `<style>` of extern bestanden. Voorbeeld:
+
+```css
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f0f0f0;
+}
+
+h1 {
+  color: #333;
+}
+```
+
+---
+
+### **4. JavaScript**  
+JavaScript is een scripting-taal die wordt gebruikt om interactiviteit toe te voegen. Voorbeeld:
+
+```javascript
+document.addEventListener("DOMContentLoaded", function() {
+  var button = document.querySelector("button");
+  button.addEventListener("click", function() {
+    alert("Je hebt de knop geklikt!");
+  });
+});
+```
+
+---
+
+### **5. Voorbeeld van een HTML-document met JavaScript**  
+Hier is een volledig HTML-document met interactiviteit:
+
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Interactief HTML</title>
+    <style>
+      body { font-family: Arial; background: #eee; }
+      h1 { color: blue; }
+    </style>
+  </head>
+  <body>
+    <h1>Welkom!</h1>
+    <p>Klik op de knop hieronder.</p>
+    <button onclick="zoek()">Zoek</button>
+
+    <script>
+      function zoek() {
+        alert("Je hebt de knop geklikt!");
+      }
+    </script>
+  </body>
+</html>
+```
+
+---
+
+### **Tip:**  
+- Gebruik **semantische HTML-elementen** (`<header>`, `<nav>`, `<main>`, `<footer>`) voor betrouwbaarheid en SEO.
+- Gebruik **CSS-classes** voor hergebruik (bijv. `class="container"`).
+- Gebruik **JavaScript** om gebruikersinterface (UI) te versterken (bijv. animaties, formulieren).
+
+Als je specifieke vraag hebt (bijv. "hoe werkt de DOM?", "hoe maak je een animatie?"), neem dan aan! 🌟

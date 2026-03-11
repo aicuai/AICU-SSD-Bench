@@ -1,0 +1,159 @@
+﻿Hier is een voorbeeld van een HTML + JavaScript-voorbeeld met de secties die je hebt genoemd, inclusief een responsive menu en CSS-stijlen:
+
+---
+
+### 🔹 **1. HTML-structuur**  
+Gebruik semantische tags voor betrouwbare structuur en SEO.
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Webpage</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>My Website</h1>
+        <nav>
+            <button id="menu-toggle">☰</button>
+            <ul id="nav-menu">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">Over ons</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="home">
+            <h2>Home</h2>
+            <p>Welkom op mijn website!</p>
+        </section>
+        <section id="about">
+            <h2>Over ons</h2>
+            <p>Ik ben een website met een focus op responsive design en JavaScript.</p>
+        </section>
+        <section id="contact">
+            <h2>Contact</h2>
+            <p>Stuur een e-mail naar info@website.com.</p>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2023 My Website</p>
+    </footer>
+</body>
+</html>
+```
+
+---
+
+### 🔹 **2. Responsive Design (via CSS)**  
+Gebruik media queries en flexbox voor mobiele toegankelijkheid.
+
+```css
+/* styles.css */
+:root {
+    --primary-color: #333;
+    --accent-color: #f1c40f;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+}
+
+header {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 1em;
+    text-align: center;
+}
+
+nav {
+    display: flex;
+    justify-content: center;
+    gap: 1em;
+    position: relative;
+}
+
+nav button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5em;
+    padding: 0.5em;
+    cursor: pointer;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    position: absolute;
+    top: 100%;
+    width: 100%;
+    background: var(--primary-color);
+    color: white;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+}
+
+nav ul li {
+    margin: 0.5em 0;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: white;
+}
+
+@media (max-width: 600px) {
+    nav ul {
+        display: block;
+    }
+    nav button {
+        display: none;
+    }
+}
+```
+
+---
+
+### 🔹 **3. JavaScript (voor menu-toggle)**  
+Voeg interactiviteit toe met JavaScript.
+
+```javascript
+// script.js
+document.getElementById('menu-toggle').addEventListener('click', function () {
+    var navMenu = document.getElementById('nav-menu');
+    navMenu.classList.toggle('show');
+});
+```
+
+---
+
+### 🔹 **4. Uitleg van de code**  
+- **HTML**: Structuur met header, nav-menu, en main-content.  
+- **CSS**:  
+  - `media queries` voor mobiele toegankelijkheid.  
+  - `flexbox` en `position: absolute` voor dynamische layout.  
+- **JavaScript**:  
+  - `event listener` voor het openen/verbergen van het menu.
+
+---
+
+### 🔹 **5. Aanbevolen tips**  
+- Gebruik `<!DOCTYPE html>` voor correcte rendering.  
+- Voeg `@import url('styles.css');` in de `<head>` voor een eenvoudige stijl.  
+- Test op verschillende screens (desktop, mobiel) met een browser zoals Chrome of Firefox.
+
+---
+
+Als je wilt, kan ik de volledige code (HTML + CSS + JavaScript) in één bestand opmaken of een extra sectie toevoegen (bijv. een "About" of "Contact" sectie).

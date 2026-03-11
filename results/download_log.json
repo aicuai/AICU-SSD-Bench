@@ -1,0 +1,25 @@
+﻿{
+    "drive":  "D",
+    "comfyui":  "D:\\ComfyUI",
+    "downloads":  [
+                      {
+                          "name":  "HF: T5-XXL FP16",
+                          "category":  "huggingface",
+                          "elapsed_s":  82.85,
+                          "success":  true,
+                          "error":  null,
+                          "timestamp":  "2026-03-10T15:05:21.4932927+09:00"
+                      },
+                      {
+                          "name":  "HF: RealESRGAN x4plus Anime 6B",
+                          "category":  "huggingface",
+                          "elapsed_s":  0.84,
+                          "success":  true,
+                          "error":  null,
+                          "timestamp":  "2026-03-10T15:05:22.3434808+09:00"
+                      }
+                  ],
+    "total_s":  83.69,
+    "failed":  0,
+    "generated":  "2026-03-10T15:05:22.3556057+09:00"
+}

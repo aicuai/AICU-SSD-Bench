@@ -1,0 +1,86 @@
+﻿Here's a simple example of a webpage combining **HTML**, **CSS**, and **JavaScript**. This example includes a basic structure with a heading, paragraph, and a button that changes text when clicked.
+
+---
+
+### ✅ **1. HTML Structure**
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Simple Webpage</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Welcome to My Webpage</h1>
+    <p>This is a simple paragraph.</p>
+    <button id="changeText">Click Me!</button>
+
+    <script src="script.js"></script>
+</body>
+</html>
+```
+
+---
+
+### ✅ **2. CSS Styling**
+Save the following in `styles.css`:
+```css
+body {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    background-color: #f0f0f0;
+}
+
+h1 {
+    color: #333;
+}
+
+p {
+    color: #555;
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+```
+
+---
+
+### ✅ **3. JavaScript Function**
+Save the following in `script.js`:
+```javascript
+document.getElementById('changeText').addEventListener('click', function() {
+    this.textContent = 'Button Clicked!';
+});
+```
+
+---
+
+### 🧪 **How to Use**
+1. **Save files**:  
+   - `index.html` (contains HTML, CSS, JS)  
+   - `styles.css` (contains CSS)  
+   - `script.js` (contains JavaScript)  
+
+2. **Open in Browser**:  
+   - Right-click → "Open Link in New Tab"  
+   - The button will change text when clicked.
+
+---
+
+### 📌 Key Concepts
+- **HTML**: Structure of the webpage (headers, paragraphs, buttons).  
+- **CSS**: Styling (colors, fonts, layout).  
+- **JavaScript**: Interactivity (button click event).  
+
+Let me know if you want to expand this (e.g., add forms, animations, or advanced features)! 🌟

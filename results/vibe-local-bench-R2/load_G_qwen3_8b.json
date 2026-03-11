@@ -1,0 +1,103 @@
+﻿{
+    "experiment":  "vibe-local-bench",
+    "test":  "model_load",
+    "drive":  "G",
+    "model":  "qwen3:8b",
+    "runs":  3,
+    "runs_total":  3,
+    "port":  11435,
+    "median_s":  2.553,
+    "results":  [
+                    {
+                        "experiment":  "vibe-local-bench",
+                        "test":  "model_load",
+                        "drive":  "G",
+                        "run":  1,
+                        "model":  "qwen3:8b",
+                        "load_time_s":  2.553,
+                        "success":  true,
+                        "ollama_internal":  {
+                                                "gpu_layers":  "37/37",
+                                                "model_weights":  "333.8 MiB",
+                                                "total_memory":  "10.7 GiB",
+                                                "runner_started_s":  1.57
+                                            },
+                        "gpu_before":  {
+                                           "vram_used_mb":  1095,
+                                           "temp_c":  63,
+                                           "power_w":  87.29,
+                                           "gpu_name":  "NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition",
+                                           "vram_total_mb":  97887
+                                       },
+                        "gpu_after":  {
+                                          "vram_used_mb":  12406,
+                                          "temp_c":  67,
+                                          "power_w":  205.42,
+                                          "gpu_name":  "NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition",
+                                          "vram_total_mb":  97887
+                                      },
+                        "timestamp":  "2026-03-10T22:30:24.0671562+09:00"
+                    },
+                    {
+                        "experiment":  "vibe-local-bench",
+                        "test":  "model_load",
+                        "drive":  "G",
+                        "run":  2,
+                        "model":  "qwen3:8b",
+                        "load_time_s":  2.803,
+                        "success":  true,
+                        "ollama_internal":  {
+                                                "model_weights":  "333.8 MiB",
+                                                "gpu_layers":  "37/37",
+                                                "total_memory":  "10.7 GiB",
+                                                "runner_started_s":  1.57
+                                            },
+                        "gpu_before":  {
+                                           "vram_used_mb":  12378,
+                                           "temp_c":  63,
+                                           "power_w":  86.13,
+                                           "gpu_name":  "NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition",
+                                           "vram_total_mb":  97887
+                                       },
+                        "gpu_after":  {
+                                          "vram_used_mb":  23643,
+                                          "temp_c":  68,
+                                          "power_w":  247.6,
+                                          "gpu_name":  "NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition",
+                                          "vram_total_mb":  97887
+                                      },
+                        "timestamp":  "2026-03-10T22:30:41.0622996+09:00"
+                    },
+                    {
+                        "experiment":  "vibe-local-bench",
+                        "test":  "model_load",
+                        "drive":  "G",
+                        "run":  3,
+                        "model":  "qwen3:8b",
+                        "load_time_s":  2.547,
+                        "success":  true,
+                        "ollama_internal":  {
+                                                "gpu_layers":  "37/37",
+                                                "model_weights":  "333.8 MiB",
+                                                "total_memory":  "10.7 GiB",
+                                                "runner_started_s":  1.57
+                                            },
+                        "gpu_before":  {
+                                           "vram_used_mb":  23660,
+                                           "temp_c":  64,
+                                           "power_w":  87.65,
+                                           "gpu_name":  "NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition",
+                                           "vram_total_mb":  97887
+                                       },
+                        "gpu_after":  {
+                                          "vram_used_mb":  34924,
+                                          "temp_c":  68,
+                                          "power_w":  173.3,
+                                          "gpu_name":  "NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition",
+                                          "vram_total_mb":  97887
+                                      },
+                        "timestamp":  "2026-03-10T22:30:57.7671763+09:00"
+                    }
+                ],
+    "generated":  "2026-03-10T22:30:57.7690408+09:00"
+}

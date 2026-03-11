@@ -1,0 +1,146 @@
+﻿Hier is een overzicht van de basis van HTML en JavaScript, met voorbeelden en toelichting:
+
+---
+
+### **1. Structuur van een HTML-document**
+Een HTML-document bestaat uit drie hoofdonderdelen:
+
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>My Webpage</title>
+    <link rel="stylesheet" href="styles.css"> <!-- CSS aanmaken -->
+  </head>
+  <body>
+    <h1>My Webpage</h1>
+    <p>Geen JavaScript hier, maar een HTML-element.</p>
+    <script src="script.js"></script> <!-- JavaScript aanmaken -->
+  </body>
+</html>
+```
+
+---
+
+### **2. HTML-tags**
+Voordat je JavaScript toevoegt, moet je HTML-tags gebruiken om de inhoud te structureren:
+
+- **`<h1>`** tot **`<h6>`**: Titel van het document (h1 is de grootste, h6 de kleinste).
+- **`<p>`**: Paragraaf.
+- **`<ul>`** en **`<li>`**: Lijstitems.
+- **`<a>`**: Links.
+- **`<img>`**: Afbeeldingen.
+- **`<form>`**: Formulier.
+
+**Voorbeeld:**
+```html
+<h1>Meestgezochte Websites</h1>
+<ul>
+  <li><a href="#">Google</a></li>
+  <li><a href="#">Wikipedia</a></li>
+</ul>
+```
+
+---
+
+### **3. JavaScript (vanaf HTML)**
+JavaScript maakt websites interaktief. Je kunt het in een `<script>`-tag plaatsen of een extern bestand gebruiken.
+
+**Voorbeeld: Een knop die een alert weergeeft**
+```html
+<button onclick="alert('Hallo!')">Klik hier</button>
+```
+
+**JavaScript code (in script.js):**
+```javascript
+function greet() {
+  alert('Hallo! Je hebt JavaScript gebruikt!');
+}
+```
+
+---
+
+### **4. CSS (Styling)**
+CSS wordt in een `<style>`-tag of een externe bestand toegevoegd.
+
+**Voorbeeld: Stil de paragraaf in blauw:**
+```html
+<p style="color: blue;">Zo zie je de stijl!</p>
+```
+
+**Externe CSS (styles.css):**
+```css
+p {
+  color: blue;
+}
+```
+
+---
+
+### **5. Gebruik van HTML + JavaScript**
+Je kunt HTML-elementen met JavaScript aanmaken of wijzigen:
+
+**Voorbeeld: Een knop die een tekst wijzigt**
+```html
+<button id="myButton">Klik hier</button>
+<p id="greeting">Hallo!</p>
+
+<script>
+  document.getElementById("myButton").addEventListener("click", function() {
+    document.getElementById("greeting").textContent = "Goedemiddag!";
+  });
+</script>
+```
+
+---
+
+### **6. Overzicht**
+| Element | Functie |
+|--------|---------|
+| `<html>` | Grotere container |
+| `<head>` | Titel, CSS, JavaScript |
+| `<body>` | Inhoud van de pagina |
+| `<h1>`-`<h6>` | Titels |
+| `<p>` | Paragraaf |
+| `<ul>`/`<li>` | Lijst |
+| `<a>` | Links |
+| `<img>` | Afbeeldingen |
+| `<form>` | Formulier |
+| `<script>` | JavaScript |
+| `<style>` | CSS |
+
+---
+
+### **7. Tips**
+- Gebruik **`<meta>`** voor beschrijving of viewport.
+- Gebruik **`<link rel="stylesheet">`** voor externe CSS.
+- Gebruik **`<script>`** in `<body>` of een externe bestand.
+
+---
+
+### **Voorbeeld: Compleet HTML-voorbeeld**
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Geen JavaScript</title>
+    <style>
+      body {
+        font-family: Arial;
+      }
+      h1 {
+        color: red;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Meestgezochte Websites</h1>
+    <p>Geen JavaScript hier, maar een HTML-element.</p>
+    <button onclick="alert('Hallo!')">Klik hier</button>
+  </body>
+</html>
+```
+
+---
+
+Laat me weten als je specifieke functies (zoals formularieven, animaties) wilt aanbrengen! 🌟

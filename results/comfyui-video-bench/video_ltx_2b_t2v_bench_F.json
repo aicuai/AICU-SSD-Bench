@@ -1,0 +1,143 @@
+{
+  "experiment": "comfyui-video-bench",
+  "test": "ltx_2b_t2v_bench",
+  "drive": "F",
+  "runs": 3,
+  "median_s": 7.333,
+  "workflow_file": "C:\\Users\\ASK-P8\\Documents\\GitHub\\aicu-bench\\workflows\\ltx_2b_t2v_bench.json",
+  "comfyui_info": {
+    "system_stats": {
+      "system": {
+        "os": "win32",
+        "ram_total": 205463932928,
+        "ram_free": 187974238208,
+        "comfyui_version": "0.16.4",
+        "required_frontend_version": "1.39.19",
+        "installed_templates_version": "0.9.18",
+        "required_templates_version": "0.9.18",
+        "python_version": "3.13.12 (tags/v3.13.12:1cbe481, Feb  3 2026, 18:22:25) [MSC v.1944 64 bit (AMD64)]",
+        "pytorch_version": "2.10.0+cu128",
+        "embedded_python": false,
+        "argv": [
+          "main.py",
+          "--listen",
+          "0.0.0.0",
+          "--port",
+          "8188"
+        ]
+      },
+      "devices": [
+        {
+          "name": "cuda:0 NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition : cudaMallocAsync",
+          "type": "cuda",
+          "index": 0,
+          "vram_total": 102641500160,
+          "vram_free": 100713627648,
+          "torch_vram_total": 0,
+          "torch_vram_free": 0
+        }
+      ]
+    },
+    "node_info": {
+      "total_nodes": 648,
+      "ltx_nodes": [
+        "ModelMergeLTXV",
+        "LTXVLatentUpsampler",
+        "LTXVAudioVAELoader",
+        "LTXVAudioVAEEncode",
+        "LTXVAudioVAEDecode",
+        "LTXVEmptyLatentAudio",
+        "LTXAVTextEncoderLoader",
+        "EmptyLTXVLatentVideo",
+        "LTXVImgToVideo",
+        "LTXVImgToVideoInplace",
+        "ModelSamplingLTXV",
+        "LTXVConditioning",
+        "LTXVScheduler",
+        "LTXVAddGuide",
+        "LTXVPreprocess",
+        "LTXVCropGuides",
+        "LTXVConcatAVLatent",
+        "LTXVSeparateAVLatent",
+        "TextGenerateLTX2Prompt",
+        "LtxvApiTextToVideo",
+        "LtxvApiImageToVideo"
+      ]
+    }
+  },
+  "results": [
+    {
+      "experiment": "comfyui-ltx-bench",
+      "test": "video_generation",
+      "workflow_type": "ltx_2b_t2v_bench",
+      "drive": "F",
+      "run": 1,
+      "total_time_s": 60.876,
+      "success": true,
+      "gpu_before": {
+        "gpu_name": "NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition",
+        "vram_used_mb": 1632,
+        "vram_total_mb": 97887,
+        "temp_c": 56,
+        "power_w": 79.0
+      },
+      "gpu_after": {
+        "gpu_name": "NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition",
+        "vram_used_mb": 15814,
+        "vram_total_mb": 97887,
+        "temp_c": 53,
+        "power_w": 55.6
+      },
+      "timestamp": "2026-03-11T09:09:44.034869"
+    },
+    {
+      "experiment": "comfyui-ltx-bench",
+      "test": "video_generation",
+      "workflow_type": "ltx_2b_t2v_bench",
+      "drive": "F",
+      "run": 2,
+      "total_time_s": 7.318,
+      "success": true,
+      "gpu_before": {
+        "gpu_name": "NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition",
+        "vram_used_mb": 1798,
+        "vram_total_mb": 97887,
+        "temp_c": 52,
+        "power_w": 25.58
+      },
+      "gpu_after": {
+        "gpu_name": "NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition",
+        "vram_used_mb": 15814,
+        "vram_total_mb": 97887,
+        "temp_c": 54,
+        "power_w": 68.35
+      },
+      "timestamp": "2026-03-11T09:09:54.449316"
+    },
+    {
+      "experiment": "comfyui-ltx-bench",
+      "test": "video_generation",
+      "workflow_type": "ltx_2b_t2v_bench",
+      "drive": "F",
+      "run": 3,
+      "total_time_s": 7.333,
+      "success": true,
+      "gpu_before": {
+        "gpu_name": "NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition",
+        "vram_used_mb": 1798,
+        "vram_total_mb": 97887,
+        "temp_c": 53,
+        "power_w": 43.6
+      },
+      "gpu_after": {
+        "gpu_name": "NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition",
+        "vram_used_mb": 15814,
+        "vram_total_mb": 97887,
+        "temp_c": 54,
+        "power_w": 73.39
+      },
+      "timestamp": "2026-03-11T09:10:04.884468"
+    }
+  ],
+  "generated": "2026-03-11T09:10:04.884522"
+}

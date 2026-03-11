@@ -1,0 +1,125 @@
+{
+  "experiment": "comfyui-imggen-bench",
+  "test": "sdxl",
+  "drive": "E",
+  "runs": 3,
+  "cold_start_median_s": 7.146,
+  "warm_start_median_s": 0.041,
+  "workflow_file": "C:\\Users\\ASK-P8\\Documents\\GitHub\\aicu-bench\\workflows\\sdxl.json",
+  "comfyui_info": {
+    "system": {
+      "os": "win32",
+      "ram_total": 205463932928,
+      "ram_free": 188988407808,
+      "comfyui_version": "0.16.4",
+      "required_frontend_version": "1.39.19",
+      "installed_templates_version": "0.9.18",
+      "required_templates_version": "0.9.18",
+      "python_version": "3.13.12 (tags/v3.13.12:1cbe481, Feb  3 2026, 18:22:25) [MSC v.1944 64 bit (AMD64)]",
+      "pytorch_version": "2.10.0+cu128",
+      "embedded_python": false,
+      "argv": [
+        "main.py",
+        "--listen",
+        "0.0.0.0",
+        "--port",
+        "8188"
+      ]
+    },
+    "devices": [
+      {
+        "name": "cuda:0 NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition : cudaMallocAsync",
+        "type": "cuda",
+        "index": 0,
+        "vram_total": 102641500160,
+        "vram_free": 100713627648,
+        "torch_vram_total": 0,
+        "torch_vram_free": 0
+      }
+    ]
+  },
+  "results": [
+    {
+      "run": 1,
+      "cold_start_s": 10.236,
+      "warm_start_s": 0.041,
+      "gpu_before": {
+        "gpu_name": "NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition",
+        "vram_used_mb": 1741,
+        "vram_total_mb": 97887,
+        "temp_c": 66,
+        "power_w": 91.64
+      },
+      "gpu_after_cold": {
+        "gpu_name": "NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition",
+        "vram_used_mb": 8490,
+        "vram_total_mb": 97887,
+        "temp_c": 68,
+        "power_w": 118.96
+      },
+      "gpu_after_warm": {
+        "gpu_name": "NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition",
+        "vram_used_mb": 8490,
+        "vram_total_mb": 97887,
+        "temp_c": 68,
+        "power_w": 118.96
+      },
+      "timestamp": "2026-03-11T00:43:35.936015"
+    },
+    {
+      "run": 2,
+      "cold_start_s": 7.146,
+      "warm_start_s": 0.041,
+      "gpu_before": {
+        "gpu_name": "NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition",
+        "vram_used_mb": 1850,
+        "vram_total_mb": 97887,
+        "temp_c": 67,
+        "power_w": 93.66
+      },
+      "gpu_after_cold": {
+        "gpu_name": "NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition",
+        "vram_used_mb": 8490,
+        "vram_total_mb": 97887,
+        "temp_c": 69,
+        "power_w": 155.88
+      },
+      "gpu_after_warm": {
+        "gpu_name": "NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition",
+        "vram_used_mb": 8490,
+        "vram_total_mb": 97887,
+        "temp_c": 69,
+        "power_w": 155.88
+      },
+      "timestamp": "2026-03-11T00:43:45.281658"
+    },
+    {
+      "run": 3,
+      "cold_start_s": 7.093,
+      "warm_start_s": 0.04,
+      "gpu_before": {
+        "gpu_name": "NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition",
+        "vram_used_mb": 1866,
+        "vram_total_mb": 97887,
+        "temp_c": 68,
+        "power_w": 95.12
+      },
+      "gpu_after_cold": {
+        "gpu_name": "NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition",
+        "vram_used_mb": 8480,
+        "vram_total_mb": 97887,
+        "temp_c": 70,
+        "power_w": 119.75
+      },
+      "gpu_after_warm": {
+        "gpu_name": "NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition",
+        "vram_used_mb": 8490,
+        "vram_total_mb": 97887,
+        "temp_c": 70,
+        "power_w": 119.75
+      },
+      "timestamp": "2026-03-11T00:43:54.576196"
+    }
+  ],
+  "generated": "2026-03-11T00:43:54.576214"
+}

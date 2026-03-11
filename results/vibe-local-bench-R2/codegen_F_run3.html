@@ -1,0 +1,112 @@
+﻿Hier is een eenvoudige HTML + JavaScript voorbeeld met CSS, dat een knop maakt die tekst verandert wanneer je de knop klikt.
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HTML + JavaScript Voorbeeld</title>
+    <style>
+        #myButton {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #myButton:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>HTML + JavaScript Voorbeeld</h1>
+    <button id="myButton">Klik op mij!</button>
+
+    <script>
+        document.getElementById("myButton").addEventListener("click", function() {
+            this.textContent = "Klik!"; // Verander de tekst van de knop
+        });
+    </script>
+
+</body>
+</html>
+```
+
+### Omschrijving van de delen:
+1. **Doctype en html**:  
+   ```html
+   <!DOCTYPE html>
+   <html lang="en">
+   ```
+   - `<!DOCTYPE html>` defineert het type van het document.
+   - `<html>` is de hoofdtag voor het HTML-document.
+
+2. **Head**:  
+   ```html
+   <head>
+       <meta charset="UTF-8">
+       <title>...</title>
+       <style>...</style>
+   </head>
+   ```
+   - `<meta charset="UTF-8">` zorgt voor correcte opslag van teksten.
+   - `<title>` geeft het titel van het document.
+   - `<style>` bevat de CSS-code voor de stijl van de knop.
+
+3. **Body**:  
+   ```html
+   <body>
+       <h1>...</h1>
+       <button id="myButton">...</button>
+       <script>...</script>
+   </body>
+   ```
+   - `<h1>` is een headervoorbeeld.
+   - `<button>` is de knop die gebruikt wordt.
+   - `<script>` bevat de JavaScript-code.
+
+4. **JavaScript**:  
+   ```javascript
+   document.getElementById("myButton").addEventListener("click", function() {
+       this.textContent = "Klik!";
+   });
+   ```
+   - `document.getElementById("myButton")` haalt de knop op.
+   - `addEventListener("click", ...)` zorgt voor een gebeurtenis (klik) op de knop.
+   - `this.textContent = "Klik!"` verandert de tekst van de knop naar "Klik!".
+
+5. **CSS**:  
+   ```css
+   #myButton {
+       padding: 10px 20px;
+       font-size: 16px;
+       background-color: #4CAF50;
+       color: white;
+       border: none;
+       border-radius: 5px;
+       cursor: pointer;
+   }
+   #myButton:hover {
+       background-color: #45a049;
+   }
+   ```
+   - `padding`, `font-size`, `background-color` en `border` zorgen voor een scherp en gebruikersvriendelijk gehele knop.
+   - `hover` styling zorgt voor een verandering van kleur wanneer de knop wordt overzien.
+
+---
+
+### Wat gebeurt er als je de knop klikt?
+- De tekst van de knop wordt van `"Klik op mij!"` naar `"Klik!"` geveerd.
+
+---
+
+### Hoe kun je dit uitbreiden?
+- Voeg meer knoppen toe of een animatie toe.
+- Gebruik `addEventListener` voor meer interacties (zoals drukken of scrollen).
+- Gebruik `localStorage` of `fetch` voor dynamische inhoud.
+
+Wil je een meer complexe voorbeeld? Laat het weten! 🌟

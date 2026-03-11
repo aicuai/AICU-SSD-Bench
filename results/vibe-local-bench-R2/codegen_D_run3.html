@@ -1,0 +1,133 @@
+﻿Here's a complete example of a basic HTML document with **HTML structure**, **CSS styling**, and **JavaScript functionality**. This includes a responsive layout, a button to change the background color, and a footer.
+
+---
+
+### ✅ **HTML + JavaScript Example**
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Simple Web Page</title>
+    <style>
+        /* CSS for styling */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f3f3f3;
+        }
+
+        header {
+            background-color: #333;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        main {
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .section {
+            background-color: #fff;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+        }
+
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            margin-top: 20px;
+        }
+
+        /* Responsive design */
+        @media (max-width: 600px) {
+            header {
+                padding: 10px;
+            }
+
+            .section {
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Welcome to My Web Page</h1>
+    </header>
+
+    <main>
+        <section class="section">
+            <h2>About Me</h2>
+            <p>This is a simple web page created with HTML and JavaScript. It includes a header, main content, and a footer.</p>
+        </section>
+
+        <section class="section">
+            <h2>Features</h2>
+            <ul>
+                <li>Responsive design</li>
+                <li>JavaScript for background color change</li>
+                <li>Header, main content, and footer</li>
+            </ul>
+        </section>
+
+        <section class="section">
+            <h2>Buttons</h2>
+            <button onclick="changeBackground()">Change Background Color</button>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2023 My Web Page</p>
+    </footer>
+
+    <script>
+        // JavaScript to change background color
+        function changeBackground() {
+            const body = document.body;
+            body.style.backgroundColor = 
+                body.style.backgroundColor === 'red' ? 'blue' : 'red';
+        }
+    </script>
+</body>
+</html>
+```
+
+---
+
+### 🔍 **Key Features Explained**
+
+1. **HTML Structure**:
+   - `<header>`, `<main>`, `<footer>`: Define the layout.
+   - `<section class="section">`: Groups content for styling.
+
+2. **CSS Styling**:
+   - Responsive design using **media queries** (e.g., for smaller screens).
+   - Background colors, padding, and borders for visual hierarchy.
+
+3. **JavaScript Functionality**:
+   - `changeBackground()`: Changes the background color of the body when the button is clicked.
+
+---
+
+### 🔄 **How It Works**
+- **Button Click**: Triggers `changeBackground()` to toggle `red` and `blue` colors.
+- **Responsive Design**: The layout adjusts on smaller screens (e.g., mobile devices).
+
+---
+
+### 📝 **Tips**
+- **Add a CSS File**: For larger projects, external CSS is better.
+- **Add JavaScript Events**: Use `addEventListener` for interactivity.
+- **Test on Different Devices**: Use browser developer tools to simulate mobile and desktop views.
+
+Let me know if you want to expand this with animations, forms, or advanced features! 🌟

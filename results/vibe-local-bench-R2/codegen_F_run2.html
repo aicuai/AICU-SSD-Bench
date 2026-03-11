@@ -1,0 +1,117 @@
+﻿Hier is een overzicht van de belangrijkste aspecten van **HTML** en **JavaScript**, gevolgd door een simpel **voorbeeld** van hoe ze samen kunnen worden gebruikt.
+
+---
+
+### 1. **HTML (HyperText Markup Language)**
+HTML is de basis van webpagina's. Het maakt de structuur van een pagina en bevat tags die het contenten begeleiden.
+
+**Voorbeeld van HTML-structuur:**
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My First Web Page</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Welkom op mijn website!</h1>
+    <p>Je kunt hier je tekst plaatsen.</p>
+    <button onclick="myFunction()">Klik op mij</button>
+</body>
+</html>
+```
+
+---
+
+### 2. **JavaScript (JS)**
+JavaScript is een scripting-taal die je kunt gebruiken om interactivity in webpagina's toe te voegen. Het werkt in het browserwindow en kan bijvoorbeeld tekst wijzigen of animaties maken.
+
+**Basisklassen van JavaScript:**
+- **Variables**: `let`, `const`
+- **Functions**: `function myFunction() { ... }`
+- **Events**: `onclick`, `onload`
+- **Arrays**: `let list = [1, 2, 3];`
+
+**Voorbeeld van een functie:**
+```javascript
+function myFunction() {
+    alert("Je hebt geklikt!");
+}
+```
+
+---
+
+### 3. **CSS (Cascading Style Sheets)**
+CSS wordt gebruikt om de uitstraling van een pagina te bepalen. Het wordt meestal in een `.css`-bestand geplaatst en wordt via `<link>` in HTML geïmporteerd.
+
+**Voorbeeld van CSS:**
+```css
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+}
+
+h1 {
+    color: #333;
+}
+```
+
+---
+
+### 4. **Samenvatting van de drie technologieën**
+- **HTML** maakt de structuur van de pagina.
+- **JavaScript** maakt de interactivity.
+- **CSS** maakt de uitstraling van de pagina.
+
+---
+
+### 5. **Samenvattend voorbeeld: een interaktieve website**
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Interaktieve Website</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+        h1 {
+            color: #333;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <h1>Welkom!</h1>
+    <p>Je kunt hier je tekst plaatsen.</p>
+    <button onclick="changeText()">Klik op mij</button>
+
+    <script>
+        function changeText() {
+            document.querySelector('h1').textContent = "Je hebt geklikt!";
+        }
+    </script>
+</body>
+</html>
+```
+
+---
+
+### 6. **Tips**
+- Gebruik **`<code>`-taggen** om codeblokken te markeren (bijv. `<code>function myFunction()</code>`).
+- Gebruik een **code-editor** zoals VS Code of Sublime Text voor het schrijven van JavaScript en CSS.
+- Test je code in een browser (bijv. Google Chrome) om te zien hoe het werkt.
+
+---
+
+Als je meer specifieke vragen hebt (bijv. hoe je een animatie maakt of een formulier toevoegt), laat het weten! 🌐💻

@@ -1,0 +1,120 @@
+﻿Here's a structured guide to creating a basic webpage using **HTML + JavaScript** with **CSS styling**. This example includes a simple interactive page with a heading, button, and inline CSS.
+
+---
+
+### ✅ **1. Basic HTML Structure**
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Simple Webpage</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Welcome to My Website</h1>
+    <p>This is a simple paragraph.</p>
+    <button onclick="changeText()">Click Me!</button>
+    <script src="script.js"></script>
+</body>
+</html>
+```
+
+---
+
+### ✅ **2. JavaScript Basics**
+```javascript
+// script.js
+function changeText() {
+    document.querySelector('h1').textContent = 'You clicked the button!';
+}
+```
+
+---
+
+### ✅ **3. CSS Styling (Inline)**  
+```css
+/* styles.css */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+}
+
+h1 {
+    color: #333;
+    margin: 20px;
+}
+
+p {
+    color: #666;
+    margin: 10px;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+```
+
+---
+
+### ✅ **4. Combined Example (Full HTML File)**
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Simple Webpage</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+        h1 {
+            color: #333;
+            margin: 20px;
+        }
+        p {
+            color: #666;
+            margin: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Welcome to My Website</h1>
+    <p>This is a simple paragraph.</p>
+    <button onclick="changeText()">Click Me!</button>
+    <script src="script.js"></script>
+</body>
+</html>
+```
+
+---
+
+### ✅ **5. Key Concepts**
+- **HTML**: Structure of the page (head, body, elements like `h1`, `p`, `button`).
+- **JavaScript**: Adds interactivity (e.g., changing text on button click).
+- **CSS**: Styles the page (colors, fonts, layout).
+- **Combination**: All three (HTML, CSS, JS) work together to create a functional webpage.
+
+---
+
+### 📌 Tips
+- Use **semicolons** in JavaScript for syntax.
+- Use **`querySelector`** for targeting elements.
+- For better practices, use **external CSS files** (e.g., `styles.css`) instead of inline CSS.
+
+Let me know if you want to add features like forms, animations, or responsive design! 🌐

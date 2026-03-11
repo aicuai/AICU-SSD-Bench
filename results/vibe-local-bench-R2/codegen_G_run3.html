@@ -1,0 +1,90 @@
+﻿Hier is een eenvoudige voorbeeld van een HTML + JavaScript-website met CSS-stylings. Dit is een basisproject dat toont hoe je HTML, JavaScript en CSS kunt combineren voor een interactieve pagina.
+
+---
+
+### 🌐 **1. HTML (Structure)**
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HTML + JavaScript Voorbeeld</title>
+    <link rel="stylesheet" href="style.css"> <!-- CSS in een aparte file -->
+</head>
+<body>
+    <h1>Gezien via HTML + JavaScript</h1>
+    <button id="clickMe">Klik op mij!</button>
+    <p id="message">Hallo! Dit is een interactieve tekst.</p>
+
+    <script src="script.js"></script> <!-- JavaScript in een aparte file -->
+</body>
+</html>
+```
+
+---
+
+### 🧩 **2. CSS (Stylings)**
+```css
+/* style.css */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    text-align: center;
+    padding: 50px;
+}
+
+h1 {
+    color: #333;
+}
+
+button {
+    padding: 15px 30px;
+    font-size: 18px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#message {
+    margin-top: 20px;
+    font-size: 18px;
+    color: #555;
+}
+```
+
+---
+
+### 🛠 **3. JavaScript (Interactief)**
+```javascript
+// script.js
+document.getElementById("clickMe").addEventListener("click", function() {
+    document.getElementById("message").textContent = "Bedankt voor het klikken! 🎉";
+});
+```
+
+---
+
+### 📌 **Toelichting**
+- **HTML** structuur: `<h1>`, `<button>`, `<p>` zorgen voor de inhoud en interactie.
+- **CSS** stijl: maakt de pagina leesbaar en bepaalt de uitvoering van de HTML.
+- **JavaScript** maakt de pagina interactief: wanneer de gebruiker het knopje klikt, wijzigt de tekst van de `<p>`-tag.
+
+---
+
+### 🧪 **Natuurlijk testen**
+1. Schakel de `script.js` en `style.css` in je project.
+2. Open de HTML-bestand in een browser.
+3. Klik op het knopje en zorg dat de tekst van de `<p>`-tag wijzigt.
+
+---
+
+### 📌 **Tips**
+- **Semantische HTML**: Gebruik `<header>`, `<nav>`, `<main>`, `<footer>` voor betekenisvolle structuur.
+- **Voorbeeld**: Gebruik `<input type="text">` voor invoer, en `<form>` voor formulieren.
+- **Eventuele fouten**: Controleer de HTML-ID's en JavaScript-IDs in de browser (via `console.log`).
+
+---
+
+Als je een specifieke project wilt maken (zoals een contactformulier, een calculator, of een website met animatie), geef dan aan en ik kan je helpen met die! 🌟

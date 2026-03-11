@@ -1,0 +1,149 @@
+﻿Hier is een overzicht van de stappen en concepten die je kunt onderwerpen in een HTML + JavaScript project, met een focus op de opgegeven punten:
+
+---
+
+### 1. **HTML Structuur**
+HTML is de basis van een webpagina. Hieronder zijn enkele belangrijke elementen:
+
+#### a. **Hoofdtekst (Head)**
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Page</title>
+    <link rel="stylesheet" href="styles.css"> <!-- CSS aanmaken -->
+</head>
+<body>
+    <h1>My Page</h1>
+    <p>Welkom op mijn pagina!</p>
+    <ul>
+        <li>Item 1</li>
+        <li>Item 2</li>
+    </ul>
+</body>
+</html>
+```
+
+#### b. **Blokken (Blocks)**
+- `<div>`, `<section>`, `<article>`: gebruikt om inhoud te bundelen.
+- `<header>`, `<footer>`: voor header en footer van de pagina.
+
+#### c. **Lijsten (Lists)**
+- `<ul>` (unordered list) en `<ol>` (ordered list).
+- `<li>`: lijstitems.
+
+---
+
+### 2. **JavaScript Syntax**
+JavaScript maakt de website interaktief. Hier zijn enkele basisconcepten:
+
+#### a. **Aanmaken van een functie**
+```javascript
+function greet(name) {
+    alert("Hallo, " + name + "!"); // Alert voor test
+}
+```
+
+#### b. **Onclick-gebeurtenissen**
+```html
+<button onclick="greet('Alice')">Klik op mij</button>
+```
+
+#### c. **Voorbeelden**
+- **Vraagstelling**:
+  ```javascript
+  function askQuestion() {
+      alert("Wat is je naam?");
+  }
+  ```
+- **Voorbeeld van een knop**:
+  ```html
+  <button onclick="showMessage()">Klik hier</button>
+  <script>
+      function showMessage() {
+          alert("Welkom!");
+      }
+  </script>
+  ```
+
+---
+
+### 3. **CSS Styling**
+CSS maakt de inhoud van HTML elementen visueel.
+
+#### a. **Styling van elementen**
+```css
+h1 {
+    color: blue;
+    font-size: 24px;
+}
+```
+
+#### b. **Responsive Design**
+```css
+@media (max-width: 600px) {
+    h1 {
+        font-size: 18px;
+    }
+}
+```
+
+#### c. **Stijlen van elementen**
+- **Selectors**: `div`, `p`, `.my-class`
+- **Properties**: `background-color`, `border`, `padding`
+
+---
+
+### 4. **Voorbeelden van HTML + JavaScript**
+#### a. **Een knop die een alert weergeeft**
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>JavaScript Alert</title>
+    <script>
+        function showAlert() {
+            alert("Hello from JavaScript!");
+        }
+    </script>
+</head>
+<body>
+    <button onclick="showAlert()">Klik hier</button>
+</body>
+</html>
+```
+
+#### b. **Een formulier**
+```html
+<form onsubmit="return handleForm()">
+    <input type="text" placeholder="Naam" required>
+    <button type="submit">Verzenden</button>
+</form>
+
+<script>
+    function handleForm(e) {
+        e.preventDefault(); // Voorkom default verwerking van het formulier
+        alert("Formulier verzonden!");
+        return true; // Geef het formulier weer
+    }
+</script>
+```
+
+---
+
+### 5. **Tips en Voorschriften**
+- **Semantische HTML**: Gebruik `<nav>`, `<main>`, `<section>` voor betrouwbaarheid.
+- **Validatie**: Controleer je code met [W3C Validator](https://validator.w3.org/).
+- **CSS-frames**: Gebruik `class` en `id` voor toegang tot elementen.
+- **JavaScript-afzondering**: Zorg voor een `script`-tag of `async/defer` voor betrouwbaarheid.
+
+---
+
+### 6. **Mogelijke Problemen**
+- **Fouten in HTML**: Missende `</html>` of `</div>`.
+- **JavaScript-fouten**: Niet opgeloste `ReferenceError` of `TypeError`.
+- **CSS-fouten**: Foutieve selectoren of eigenschappen.
+
+---
+
+Als je een specifieke vraag hebt (bijv. hoe je een knop maakt of een formulier), laat het weten! 🌟

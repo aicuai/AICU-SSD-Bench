@@ -1,0 +1,103 @@
+﻿Hier is een voorbeeld van een basiswebpagina met HTML en JavaScript, inclusief CSS-styling. Dit is een eenvoudige pagina met een header, een sectie en een knop die tekst wijkt.
+
+---
+
+### **1. HTML (Structure)**
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Basiskunst HTML + JavaScript</title>
+    <link rel="stylesheet" href="styles.css"> <!-- CSS wordt hier gedeeld -->
+</head>
+<body>
+    <h1>My First Webpage</h1>
+    <p>Deze pagina is gemaakt met HTML en JavaScript.</p>
+    <button onclick="changeText()">Klik hier!</button>
+
+    <script src="script.js"></script> <!-- JavaScript wordt hier gedeeld -->
+</body>
+</html>
+```
+
+---
+
+### **2. CSS (Styling)**
+```css
+/* styles.css */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    padding: 20px;
+}
+
+h1 {
+    color: #333;
+}
+
+p {
+    color: #555;
+}
+
+button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #218838;
+}
+```
+
+---
+
+### **3. JavaScript (Interactiviteit)**
+```javascript
+// script.js
+function changeText() {
+    document.querySelector('p').textContent = "Je hebt een knop geklikt!";
+}
+```
+
+---
+
+### **4. Samenvatting van Topics**
+1. **HTML**  
+   - Structuur van een webpagina (head, body, tags).  
+   - Voorbeelden: `<h1>`, `<p>`, `<button>`, `<div>`.  
+
+2. **JavaScript**  
+   - Interactieve functies (zoals wijzigen van tekst, afvinken van knoppen).  
+   - Voorbeelden: `onclick`, `addEventListener`.  
+
+3. **CSS**  
+   - Stijlgegevens (zoals kleuren, afbeeldingen, layout).  
+   - Voorbeelden: `background-color`, `font-family`, `padding`.  
+
+4. **Responsive Design**  
+   - Gebruik `media queries` om de pagina aan te passen aan verschillende schermen.  
+
+5. **Best Practices**  
+   - Gebruik `id` of `class` voor identificatie van elementen.  
+   - Zorg voor **SEO-optimalisatie** (bijv. `<meta charset="UTF-8">`).  
+
+---
+
+### **Vraagstukken**
+- Hoe kun je de tekst van de knop veranderen?  
+- Wat is de functie van `onclick` in JavaScript?  
+- Hoe kun je de pagina automatisch updaten?  
+
+---
+
+### **Tips**
+- Gebruik `<!DOCTYPE html>` voor correcte rendering.  
+- Geef `id` of `class` aan elementen voor eenvoudige selectie.  
+- Gebruik `console.log()` in JavaScript om output te laten zien.  
+
+Laat me weten als je specifieke functies of problemen wilt uitbreiden! 🌟

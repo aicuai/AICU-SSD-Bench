@@ -1,0 +1,157 @@
+﻿Hier is een overzicht van de basisstructuur van een HTML-document met de secties die je hebt genoemd:
+
+---
+
+### **1. Doctype (Document Type Declaration)**
+Zorgt voor compatibilté met browsers en is essentieel voor de rendering van de pagina.
+```html
+<!DOCTYPE html>
+```
+
+---
+
+### **2. HTML-Element (HTML Document)**
+De hoofdstructuur van het document.
+```html
+<html>
+  <!-- ... -->
+</html>
+```
+
+---
+
+### **3. Head (Head Element)**
+Bevat metadata en stijl-invoer (CSS) die niet van de visuele inhoud zichtbaar is.
+```html
+<head>
+  <!-- Meta-tags -->
+  <meta charset="UTF-8">
+  <meta name="description" content="My website description">
+  <meta name="keywords" content="HTML, JavaScript">
+
+  <!-- Titel van de pagina -->
+  <title>My Website</title>
+
+  <!-- CSS-inhoud (extern of inline) -->
+  <style>
+    body { font-family: Arial; }
+  </style>
+</head>
+```
+
+---
+
+### **4. Body (Body Element)**
+Bevat de visuele inhoud van de pagina.
+```html
+<body>
+  <!-- Navigation -->
+  <nav>
+    <h1>My Website</h1>
+    <ul>
+      <li><a href="#">Home</a></li>
+      <li><a href="#">About</a></li>
+    </ul>
+  </nav>
+
+  <!-- Content -->
+  <main>
+    <h2>Welcome!</h2>
+    <p>This is the main content of the page.</p>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2023 My Website</p>
+  </footer>
+</body>
+```
+
+---
+
+### **5. JavaScript (In het Body of het HTML)**
+Voegt interaktieve functies toe.
+```html
+<body>
+  <script>
+    console.log("Hello, world!");
+    function greet() {
+      alert("Welcome!");
+    }
+  </script>
+</body>
+```
+
+---
+
+### **6. Gebruik van Semantische Tags**
+Zorgt voor beter zichtbaarheid en compatibiliteit:
+- `<header>`: Top van de pagina
+- `<nav>`: Navigation menu
+- `<main>`: Main content
+- `<footer>`: Bottom of the page
+
+---
+
+### **7. CSS (Inline of Extern)
+Je kunt CSS in het `<style>`-element of in een externe `.css`-bestand plaatsen.
+```html
+<style>
+  body { background-color: #f0f0f0; }
+  h1 { color: #333; }
+</style>
+```
+
+---
+
+### **Voorbeeld van een Compleet HTML-Document**
+```html
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="My website description">
+  <meta name="keywords" content="HTML, JavaScript">
+  <title>My Website</title>
+  <style>
+    body { font-family: Arial; background-color: #f0f0f0; }
+    h1 { color: #333; }
+  </style>
+</head>
+<body>
+  <nav>
+    <h1>My Website</h1>
+    <ul>
+      <li><a href="#">Home</a></li>
+      <li><a href="#">About</a></li>
+    </ul>
+  </nav>
+
+  <main>
+    <h2>Welcome!</h2>
+    <p>This is the main content of the page.</p>
+  </main>
+
+  <footer>
+    <p>&copy; 2023 My Website</p>
+  </footer>
+
+  <script>
+    console.log("Hello, world!");
+    function greet() {
+      alert("Welcome!");
+    }
+  </script>
+</body>
+</html>
+```
+
+---
+
+### **Tips**
+- Gebruik `<!DOCTYPE html>` voor moderne browsers.
+- Gebruik `meta`-tags voor SEO en beschrijvingen.
+- Zorg dat je CSS en JavaScript correct geïncludeerd is.
+- Gebruik semantische tags voor betere structuur en zichtbaarheid.
+
+Laat me weten als je meer wilt over een specifieke sectie! 🌐💻

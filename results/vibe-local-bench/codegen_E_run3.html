@@ -1,0 +1,62 @@
+﻿Hier is een voorbeeld van een HTML-bestand met HTML, JavaScript en CSS, die een simpel webpagina maakt met een titel, een tekst en een knop:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HTML + JavaScript Voorbeeld</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            text-align: center;
+            padding: 50px;
+        }
+        h1 {
+            color: #333;
+        }
+        button {
+            padding: 15px 30px;
+            font-size: 18px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <h1>HTML + JavaScript Voorbeeld</h1>
+    <p> Dit is een simpel webpagina met HTML, JavaScript en CSS.</p>
+    <button onclick="changeText()">Klik op de knop</button>
+
+    <script>
+        function changeText() {
+            document.querySelector('h1').textContent = 'Bedankt voor het klikken!';
+        }
+    </script>
+</body>
+</html>
+```
+
+### Wat het doet:
+1. **HTML**: Maakt de structuur van de pagina (titel, tekst, knop).
+2. **CSS**: Styliert de pagina (kleuren, letters, layout).
+3. **JavaScript**: Voegt een functie toe die de tekst van de titel wijkt wanneer de knop wordt geklikt.
+
+### Hoe je het gebruikt:
+- Kopieer de code en schilder de `.html`-bestand.
+- Open het bestand in een webbrowser.
+- Klik op de knop en zie de tekst van de titel veranderen.
+
+### Tips:
+- Gebruik `<!DOCTYPE html>` voor HTML5.
+- Zorg dat je de `<style>`-tag in de `<head>` plaats je.
+- Gebruik `onclick` in de `<button>` om JavaScript te laten uitvoeren.
+
+Laat het weten als je meer wilt weten of een specifieke functie wilt toevoegen! 🌟
