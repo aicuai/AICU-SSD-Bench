@@ -608,7 +608,105 @@
         "G"
       ],
       "model": "llm-jp/llm-jp-moshi-v1"
+    },
+    "disk_speed_1024MB": {
+      "drives": {
+        "D": {
+          "drive": "D",
+          "median_s": 7037.8,
+          "runs": 3,
+          "generated": "2026-03-11T18:37:55.337829",
+          "write_mbs": 2535.1,
+          "read_mbs": 7037.8
+        },
+        "E": {
+          "drive": "E",
+          "median_s": 7355.4,
+          "runs": 3,
+          "generated": "2026-03-11T18:37:58.728959",
+          "write_mbs": 433.5,
+          "read_mbs": 7355.4
+        },
+        "F": {
+          "drive": "F",
+          "median_s": 7137.7,
+          "runs": 3,
+          "generated": "2026-03-11T18:38:11.123719",
+          "write_mbs": 250.3,
+          "read_mbs": 7137.7
+        },
+        "G": {
+          "drive": "G",
+          "median_s": 6945.8,
+          "runs": 3,
+          "generated": "2026-03-11T18:38:23.282444",
+          "write_mbs": 2529.8,
+          "read_mbs": 6945.8
+        }
+      },
+      "drive_order": ["D", "E", "F", "G"],
+      "model": "1024MB sequential"
+    },
+    "comfyui_ltx23_t2v_cold": {
+      "drives": {
+        "D": {
+          "drive": "D",
+          "median_s": 98.352,
+          "runs": 1,
+          "generated": "2026-03-11T22:30:00.000000"
+        },
+        "E": {
+          "drive": "E",
+          "median_s": 180.67,
+          "runs": 1,
+          "generated": "2026-03-11T22:35:00.000000"
+        },
+        "F": {
+          "drive": "F",
+          "median_s": 288.11,
+          "runs": 1,
+          "generated": "2026-03-11T22:45:00.000000"
+        },
+        "G": {
+          "drive": "G",
+          "median_s": 98.738,
+          "runs": 1,
+          "generated": "2026-03-11T22:50:00.000000"
+        }
+      },
+      "drive_order": ["D", "E", "F", "G"],
+      "model": "LTX 2.3 22B FP8 t2v (cold start)"
+    },
+    "comfyui_ltx23_ia2v_warm": {
+      "drives": {
+        "D": {
+          "drive": "D",
+          "median_s": 95.31,
+          "runs": 1,
+          "generated": "2026-03-11T22:32:00.000000"
+        },
+        "E": {
+          "drive": "E",
+          "median_s": 96.622,
+          "runs": 1,
+          "generated": "2026-03-11T22:37:00.000000"
+        },
+        "F": {
+          "drive": "F",
+          "median_s": 103.395,
+          "runs": 1,
+          "generated": "2026-03-11T22:47:00.000000"
+        },
+        "G": {
+          "drive": "G",
+          "median_s": 94.775,
+          "runs": 1,
+          "generated": "2026-03-11T22:52:00.000000"
+        }
+      },
+      "drive_order": ["D", "E", "F", "G"],
+      "model": "LTX 2.3 22B FP8 ia2v (warm start)"
     }
   },
-  "updated": "2026-03-11T21:38:42.792525"
+  "updated": "2026-03-11T23:30:00.000000"
 }

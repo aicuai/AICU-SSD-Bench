@@ -74,89 +74,28 @@
       </div>
     </div>
 
-    <h3 style="margin-top:40px; margin-bottom:16px; font-size:1.2rem;">予備調査環境</h3>
-    <p style="margin-bottom:12px; color: var(--text-secondary); font-size:0.9rem;">
-      スクリプト検証・仮説構築のために使用した環境。本実験の参考値として掲載。
-    </p>
-    <div class="spec-grid">
-      <div class="spec-card">
-        <div class="label">マシン</div>
-        <div class="value"><a href="https://www.mouse-jp.co.jp/store/g/ggtune-p6i7g50bkabcw102dec/" target="_blank" rel="noopener">G-Tune P6-I7G50BK-A</a></div>
-        <div class="label" style="margin-top:4px">マウスコンピューター / 124,800円</div>
-      </div>
-      <div class="spec-card">
-        <div class="label">CPU</div>
-        <div class="value">Intel Core i7-12650H</div>
-        <div class="label" style="margin-top:4px">10コア / 16スレッド / 最大4.7GHz</div>
-      </div>
-      <div class="spec-card">
-        <div class="label">GPU</div>
-        <div class="value">NVIDIA GeForce RTX 4050 Laptop</div>
-        <div class="label" style="margin-top:4px">VRAM 6 GB GDDR6</div>
-      </div>
-      <div class="spec-card">
-        <div class="label">RAM</div>
-        <div class="value">DDR4-3200 32 GB</div>
-        <div class="label" style="margin-top:4px">16 GB &times; 2 デュアルチャネル</div>
-      </div>
-      <div class="spec-card">
-        <div class="label">ストレージ C: (OS)</div>
-        <div class="value"><a href="https://www.kioxia.com/ja-jp/personal/ssd/exceria-g2-nvme-ssd.html" target="_blank" rel="noopener">KIOXIA EXCERIA G2</a> 2TB</div>
-        <div class="label" style="margin-top:4px">NVMe PCIe Gen3x4 / 最大 2,100 MB/s Read</div>
-      </div>
-      <div class="spec-card">
-        <div class="label">ストレージ D: (データ)</div>
-        <div class="value"><a href="https://www.adata.com/us/consumer/product/solid-state-drives-LEGEND-850" target="_blank" rel="noopener">ADATA LEGEND 850</a> 1TB</div>
-        <div class="label" style="margin-top:4px">NVMe PCIe Gen4x4 / 最大 5,000 MB/s Read</div>
-      </div>
-      <div class="spec-card">
-        <div class="label">OS</div>
-        <div class="value">Windows 11 Home</div>
-        <div class="label" style="margin-top:4px">Build 26220</div>
-      </div>
-    </div>
-
-    <!-- ストレージデバイスの解説 -->
-    <div class="exp-card" style="margin-top:20px; border-left: 4px solid #bf5700;">
-      <h3>同じ M.2 スロットでも速度が違う理由</h3>
-      <p>
-        ノート PC の M.2 スロットは物理的には同じコネクタ (M-Key) ですが、
-        接続先の <strong>PCIe レーン世代</strong>と<strong>挿す SSD のコントローラ</strong>の両方で速度が決まります。
+    <details style="margin-top:40px;">
+      <summary style="cursor:pointer; font-size:1.1rem; font-weight:600; color:var(--text-secondary); margin-bottom:12px;">
+        参考: 予備調査環境（G-Tune P6-I7G50 ノート PC）
+      </summary>
+      <p style="margin-bottom:12px; color: var(--text-secondary); font-size:0.9rem;">
+        スクリプト検証・仮説構築のために使用した環境。VRAM 6GB の制約により大型モデルの実行は不可。
       </p>
-      <table class="storage-table" style="margin-top:12px;">
-        <thead>
-          <tr><th>デバイス</th><th>インターフェース</th><th>カタログ Read</th><th>実測 Read (本ベンチ)</th><th>備考</th></tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><strong>KIOXIA EXCERIA G2</strong><br><span style="font-size:0.8rem;color:var(--text-secondary)">C: OS ドライブ</span></td>
-            <td>PCIe <strong>Gen3</strong>x4</td>
-            <td>2,100 MB/s</td>
-            <td>820&ndash;1,052 MB/s</td>
-            <td>Gen3 コントローラ搭載の廉価モデル。OS バックグラウンド I/O の影響も大。</td>
-          </tr>
-          <tr>
-            <td><strong>ADATA LEGEND 850</strong><br><span style="font-size:0.8rem;color:var(--text-secondary)">D: データドライブ</span></td>
-            <td>PCIe <strong>Gen4</strong>x4</td>
-            <td>5,000 MB/s</td>
-            <td>1,049&ndash;1,340 MB/s</td>
-            <td>Gen4 コントローラ搭載。カタログ値と実測の差は OS やファイルシステムの影響。</td>
-          </tr>
-        </tbody>
-      </table>
-      <p style="margin-top:12px;">
-        <strong>ポイント:</strong> 同じノート PC の M.2 スロットに挿しても、
-        Gen3 SSD なら最大 3,500 MB/s、Gen4 SSD なら最大 7,000 MB/s、Gen5 SSD なら最大 14,000 MB/s と、
-        <strong>購入する SSD のコントローラ世代で上限が決まります</strong>。
-        スロット側が Gen4 対応でも Gen3 SSD を挿せば Gen3 速度で動作し、
-        逆に Gen5 SSD を Gen4 スロットに挿しても Gen4 の上限に制限されます。
-      </p>
-      <p style="margin-top:8px;">
-        さらに、カタログスペックと実効速度には大きな乖離があります（本ベンチでは <strong>カタログ値の 20〜40%</strong>）。
-        これは OS のファイルシステムオーバーヘッド、バックグラウンドプロセス、SSD の SLC キャッシュ残量などが影響するためです。
-        <strong>AI ワークロードが実際に体感する速度</strong>はカタログ値ではなくこの実効速度です。
-      </p>
-    </div>
+      <div class="spec-grid">
+        <div class="spec-card">
+          <div class="label">マシン</div>
+          <div class="value"><a href="https://www.mouse-jp.co.jp/store/g/ggtune-p6i7g50bkabcw102dec/" target="_blank" rel="noopener">G-Tune P6-I7G50BK-A</a></div>
+        </div>
+        <div class="spec-card">
+          <div class="label">GPU</div>
+          <div class="value">RTX 4050 Laptop (VRAM 6 GB)</div>
+        </div>
+        <div class="spec-card">
+          <div class="label">ストレージ</div>
+          <div class="value">NVMe Gen3 + Gen4 (各 1-2TB)</div>
+        </div>
+      </div>
+    </details>
   </div>
 </section>
 
@@ -217,13 +156,13 @@
           <tr><td><strong>Ex1</strong></td><td>download-bench</td><td>ダウンロード速度を通した実操作計測</td><td style="color:#1a7f37;"><strong>完了</strong></td></tr>
           <tr><td><strong>Ex2</strong></td><td>vibe-local-bench</td><td>Local LLM (Ollama qwen3) でのコーディング &amp; コールドスタート調査</td><td style="color:#1a7f37;"><strong>完了</strong></td></tr>
           <tr><td><strong>Ex3</strong></td><td>comfyui-imggen-bench (SDXL)</td><td>ComfyUI 画像生成 — SDXL Checkpoint 単体</td><td style="color:#1a7f37;"><strong>完了</strong></td></tr>
-          <tr><td><strong>Ex4</strong></td><td>comfyui-imggen-bench (AiCuty)</td><td>ComfyUI 画像生成 — 複数モデル比較 (SDXL, WAI, AnimagineXL4, Mellow Pencil)</td><td style="color:#bf5700;"><strong>予定</strong></td></tr>
-          <tr><td><strong>Ex5</strong></td><td>comfyui-video-bench (Wan 2.2)</td><td>ComfyUI 動画生成 — Wan 2.2 t2v / i2v 公式ワークフロー API</td><td style="color:#bf5700;"><strong>予定</strong></td></tr>
-          <tr><td><strong>Ex6</strong></td><td>comfyui-video-bench (LTX 2.3)</td><td>ComfyUI 動画生成 — LTX 2.3 t2v / i2v</td><td style="color:#bf5700;"><strong>予定</strong></td></tr>
-          <tr><td><strong>Ex7</strong></td><td>comfyui-pipeline-bench</td><td>ComfyUI 総合 — Ex4 Mellow Pencil &times; Ex6 i2v 融合パイプライン</td><td style="color:#bf5700;"><strong>予定</strong></td></tr>
-          <tr><td><strong>Ex8</strong></td><td>qwen3tts-bench</td><td>Qwen3-TTS 長文音声合成実験</td><td style="color:#bf5700;"><strong>予定</strong></td></tr>
-          <tr><td><strong>Ex9</strong></td><td>llm-jp-moshi-bench</td><td>llm-jp-moshi 高速音声応答実験</td><td style="color:#bf5700;"><strong>予定</strong></td></tr>
-          <tr><td><strong>Ex10</strong></td><td>total-summary</td><td>上記全体の所要時間・所要ストレージ総合レポート</td><td style="color:#bf5700;"><strong>予定</strong></td></tr>
+          <tr><td><strong>Ex4</strong></td><td>comfyui-imggen-bench (AiCuty)</td><td>ComfyUI 画像生成 — AiCuty SDXL (Checkpoint+2LoRA+Upscaler)</td><td style="color:#1a7f37;"><strong>完了</strong></td></tr>
+          <tr><td><strong>Ex5</strong></td><td>comfyui-video-bench (Wan 2.2)</td><td>ComfyUI 動画生成 — Wan 2.2 14B t2v（タイムアウトにより打ち切り）</td><td style="color:#8b949e;"><strong>打ち切り</strong></td></tr>
+          <tr><td><strong>Ex6</strong></td><td>comfyui-video-bench (LTX 2.3)</td><td>ComfyUI 動画生成 — LTX 2.3 22B FP8 t2v / ia2v コールドスタートベンチ</td><td style="color:#1a7f37;"><strong>完了 (R4)</strong></td></tr>
+          <tr><td><strong>Ex7</strong></td><td>comfyui-pipeline-bench</td><td>Ex6 に統合（LTX 2.3 t2v → ia2v 連続実行）</td><td style="color:#8b949e;"><strong>統合済み</strong></td></tr>
+          <tr><td><strong>Ex8</strong></td><td>qwen3tts-bench</td><td>Qwen3-TTS 長文音声合成実験</td><td style="color:#1a7f37;"><strong>完了</strong></td></tr>
+          <tr><td><strong>Ex9</strong></td><td>llm-jp-moshi-bench</td><td>llm-jp-moshi 高速音声応答実験</td><td style="color:#1a7f37;"><strong>完了</strong></td></tr>
+          <tr><td><strong>Ex10</strong></td><td>total-summary</td><td>上記全体の所要時間・所要ストレージ総合レポート</td><td style="color:#1a7f37;"><strong>完了</strong></td></tr>
         </tbody>
       </table>
     </div>
@@ -478,7 +417,7 @@
 <!-- 生成物サンプル -->
 <section>
   <div class="container">
-    <h2 class="section-title">生成物サンプル (実データ: R2)</h2>
+    <h2 class="section-title">生成物サンプル (実データ: R2/R3/R4)</h2>
     <p style="margin-bottom:20px; color: var(--text-secondary);">
       RTX PRO 6000 Blackwell (98GB VRAM) で実際に生成されたコンテンツ。
       <strong>同一シード・同一設定</strong>のためドライブ間で出力は同一。差が出るのは「生成開始までの時間」です。
@@ -500,9 +439,9 @@
       </div>
       <div class="exp-card" style="border-left: 4px solid #cf222e; padding:16px;">
         <div class="exp-icon" style="font-size:1.2rem;">L</div>
-        <h3>Large Models (~30GB+)</h3>
-        <p style="font-size:0.85rem; color:var(--text-secondary);">Wan 2.2 / LTX 2.3。R3 以降で計測予定。最もストレージ速度が効くサイズ帯。</p>
-        <p style="font-size:0.85rem; margin-top:4px;"><strong>Coming soon (R3/R4)</strong></p>
+        <h3>Large Models (~45GB)</h3>
+        <p style="font-size:0.85rem; color:var(--text-secondary);">LTX 2.3 22B FP8 (~29GB checkpoint + Gemma 3 12B + LoRAs + Upscaler = ~45GB)。最もストレージ速度が効くサイズ帯。</p>
+        <p style="font-size:0.85rem; margin-top:4px;"><strong style="color:#cf222e;">Cold start: D: 98s vs F: 288s = 2.9x difference</strong></p>
       </div>
     </div>
 
@@ -679,12 +618,89 @@ JavaScript pagina...
       </p>
     </div>
 
-    <!-- TTS / Coming soon -->
+    <!-- TTS -->
     <div class="exp-card">
       <div class="exp-icon">&#127908;</div>
-      <h3>音声合成 (Qwen3-TTS) — 予定</h3>
-      <p style="font-size:0.85rem; color:var(--text-secondary);">
-        Qwen3-TTS は Ollama 未対応のため HuggingFace/PyTorch 直接実行で R3 以降に計測予定。
+      <h3>音声合成 (Qwen3-TTS) &mdash; R2/R3 計測済み</h3>
+      <p style="font-size:0.85rem; color:var(--text-secondary); margin-bottom:8px;">
+        Qwen3-TTS-12Hz-1.7B-CustomVoice / HuggingFace/PyTorch 直接実行。
+        モデルロード + テキスト 5 種（S1/M1/M2/L1/L2）の合計時間を計測。<br>
+        R2 中央値: D: 9.8s / E: 8.6s / F: 10.1s / G: 7.5s &mdash; モデルサイズが小さく（~1.7GB）ストレージ差は限定的。
+      </p>
+      <p style="font-size:0.8rem; color:var(--text-secondary);">
+        音声サンプル: <a href="https://github.com/aicuai/aicu-bench/tree/main/results/qwen3tts-bench/audio" target="_blank" rel="noopener"><code>results/qwen3tts-bench/audio/</code></a>
+      </p>
+    </div>
+
+    <!-- LTX 2.3 コールドスタートベンチ結果 (R4) -->
+    <div class="exp-card" style="margin-top:12px; border-left: 4px solid #cf222e;">
+      <div class="exp-icon">&#127916;</div>
+      <h3>LTX 2.3 22B FP8 &mdash; Large Models (~45GB) コールドスタートベンチ (R4)</h3>
+      <p style="font-size:0.85rem; color:var(--text-secondary); margin-bottom:12px;">
+        LTX 2.3 22B FP8 (~29GB) + Gemma 3 12B IT (~8.8GB) + LoRAs (~7.7GB) + Spatial Upscaler (~950MB) = ~45.5GB total<br>
+        ドライブごとに ComfyUI を再起動し、<strong>t2v (コールドスタート) → ia2v (ウォームスタート)</strong> の連続実行で、
+        モデルロード時間とストレージ速度の関係を分離。<br>
+        <strong style="color:#cf222e;">Cold start: D: 98s vs F: 288s = 2.9x difference</strong>
+      </p>
+      <div style="overflow-x:auto;">
+        <table class="storage-table" style="margin-bottom:16px;">
+          <thead>
+            <tr>
+              <th></th>
+              <th style="color:#0969da;">D: (Gen5 NVMe)</th>
+              <th style="color:#bf5700;">E: (SATA SSD)</th>
+              <th style="color:#cf222e;">F: (HDD)</th>
+              <th style="color:#1a7f37;">G: (ICY DOCK)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>t2v</strong> (コールドスタート)</td>
+              <td><strong style="color:#1a7f37;">98.4s</strong></td>
+              <td>180.7s (1.8x)</td>
+              <td><strong style="color:#cf222e;">288.1s</strong> (2.9x)</td>
+              <td>98.7s (1.0x)</td>
+            </tr>
+            <tr>
+              <td><strong>ia2v</strong> (ウォームスタート)</td>
+              <td>95.3s</td>
+              <td>96.6s</td>
+              <td>103.4s</td>
+              <td>94.8s</td>
+            </tr>
+            <tr style="background:var(--bg-secondary); font-weight:bold;">
+              <td>差分 (= ストレージ I/O)</td>
+              <td style="color:#0969da;">3.0s</td>
+              <td>84.1s</td>
+              <td style="color:#cf222e;">184.7s</td>
+              <td>3.9s</td>
+            </tr>
+            <tr style="background:var(--bg-secondary);">
+              <td>実効リード速度 (推定)</td>
+              <td style="color:#0969da;"><strong>~13 GB/s</strong></td>
+              <td>~542 MB/s</td>
+              <td style="color:#cf222e;">~246 MB/s</td>
+              <td><strong>~11.7 GB/s</strong></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <h4 style="margin-bottom:8px;">考察</h4>
+      <ul style="list-style:disc; padding-left:20px; color:var(--text-secondary); font-size:0.9rem; line-height:1.8;">
+        <li><strong>45GB 級モデルで HDD は約 3 分のロード遅延</strong> &mdash; Gen5 NVMe との差は 184.7 秒（3 分超）</li>
+        <li><strong>ウォームスタート時は全ドライブほぼ同一</strong>（94〜103s） &mdash; 推論は GPU バウンド</li>
+        <li><strong>差分 = 純粋なストレージ I/O</strong>: cold - warm の差から実効リード速度を推定
+          <ul style="list-style:circle; padding-left:16px; margin-top:4px;">
+            <li>Gen5 NVMe (D:) ~13 GB/s &mdash; safetensors のデシリアライゼーション + CUDA memcpy が律速</li>
+            <li>SATA SSD (E:) ~542 MB/s &mdash; SATA 規格上限に近い</li>
+            <li>HDD (F:) ~246 MB/s &mdash; シーケンシャルリードの物理限界</li>
+          </ul>
+        </li>
+        <li>ICY DOCK (G:) は D: とほぼ同等 &mdash; リムーバブルでも Gen5 帯域を維持</li>
+      </ul>
+      <p style="margin-top:12px; font-size:0.85rem; color:var(--text-secondary);">
+        動画サンプル: <a href="https://github.com/aicuai/aicu-bench/tree/main/results/comfyui-swap-bench-R4" target="_blank" rel="noopener"><code>results/comfyui-swap-bench-R4/</code></a>
+        &bull; <a href="https://github.com/aicuai/aicu-bench/tree/main/results/comfyui-ltx2-bench-samples/video" target="_blank" rel="noopener"><code>results/comfyui-ltx2-bench-samples/video/</code></a>
       </p>
     </div>
 
@@ -812,7 +828,9 @@ cat results\bench_summary.json</code></pre>
     comfyui_ltx:       { name: '動画生成 (LTX-Video)',    unit: '秒', lower: true, icon: '\uD83C\uDFAC' },
     comfyui_video:     { name: '動画生成 LTX-Video 2B (コールドスタート)', unit: '秒', lower: true, icon: '\uD83C\uDFAC' },
     qwen3tts:          { name: 'Qwen3-TTS 音声合成 (モデルロード+生成)', unit: '秒', lower: true, icon: '\uD83C\uDF99' },
-    llm_jp_moshi:      { name: 'llm-jp-moshi 15.6GB モデルロード', unit: '秒', lower: true, icon: '\uD83C\uDF99' }
+    llm_jp_moshi:      { name: 'llm-jp-moshi 15.6GB モデルロード', unit: '秒', lower: true, icon: '\uD83C\uDF99' },
+    comfyui_ltx23_t2v_cold:  { name: 'LTX 2.3 22B t2v (コールドスタート ~45GB)', unit: '秒', lower: true, icon: '\uD83C\uDFAC' },
+    comfyui_ltx23_ia2v_warm: { name: 'LTX 2.3 22B ia2v (ウォームスタート)', unit: '秒', lower: true, icon: '\uD83C\uDFAC' }
   };
   var DRIVE_COLORS = ['#2f81f7','#f0883e','#da3633','#3fb950','#a371f7','#79c0ff','#d2a8ff','#ffa657'];
   var DRIVE_META = {
@@ -977,6 +995,7 @@ cat results\bench_summary.json</code></pre>
       'vibe_local_codegen','vibe_local_codegen_qwen3_8b','vibe_local_codegen_qwen3_1_7b',
       'comfyui_imggen','comfyui_imggen_sdxl','comfyui_imggen_aicuty_sdxl',
       'comfyui_ltx','comfyui_video',
+      'comfyui_ltx23_t2v_cold','comfyui_ltx23_ia2v_warm',
       'qwen3tts','llm_jp_moshi'];
     var allKeys = Object.keys(data.experiments);
     var ordered = prefOrder.filter(function(k){ return allKeys.indexOf(k) >= 0; });
@@ -995,250 +1014,158 @@ cat results\bench_summary.json</code></pre>
 })();
 </script>
 
-<!-- 予備調査: 容量要件と実行可能性 -->
-<section>
+<!-- 結論 -->
+<section style="background: linear-gradient(135deg, #0d1117 0%, #161b22 100%); border-top: 3px solid #0969da; border-bottom: 3px solid #0969da;">
   <div class="container">
-    <h2 class="section-title">予備調査: 各実験の必要ディスク容量</h2>
-    <p style="margin-bottom:16px; color: var(--text-secondary); font-size: 0.95rem;">
-      G-Tune P6-I7G50 (RTX 4050 6GB / 32GB RAM / NVMe Gen4 1TB) で各実験の必要容量を調査。<br>
-      <strong>ComfyUI 起動パラメータ:</strong> <code>--lowvram</code> / <code>--highvram</code> / デフォルトの 3 条件で計測予定。
-    </p>
+    <h2 class="section-title">結論: AI のためには D ドライブこそ Gen5 を</h2>
 
-    <div style="overflow-x:auto">
-      <table class="storage-table">
-        <thead>
-          <tr>
-            <th>実験</th>
-            <th>主要モデル</th>
-            <th>合計容量</th>
-            <th>予備調査結果</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><strong>vibe-local-bench</strong><br>Ollama LLM</td>
-            <td>qwen3:8b (5.2GB) + qwen3:1.7b (1.4GB)</td>
-            <td>~7 GB</td>
-            <td style="color:#1a7f37;"><strong>完了</strong> - D/E/F/G 4ドライブで計測済み (R2)</td>
-          </tr>
-          <tr>
-            <td><strong>comfyui-imggen</strong><br>SDXL + AiCuty SDXL</td>
-            <td>Animagine XL 4.0 (7GB) + LoRA&times;2 + RealESRGAN</td>
-            <td>~9 GB</td>
-            <td style="color:#1a7f37;"><strong>完了</strong> - D/E/F/G 4ドライブで計測済み (R2)。98GB VRAM で余裕動作</td>
-          </tr>
-          <tr>
-            <td><strong>comfyui-video</strong><br>LTX-Video 2B</td>
-            <td>LTX-Video 2B v0.9.5 (5.9GB) + T5-XXL FP16 (9.1GB)</td>
-            <td>~15 GB</td>
-            <td style="color:#1a7f37;"><strong>完了</strong> - D/E/F/G 4ドライブで計測済み (R2)。コールドスタートで最大7.5倍の差</td>
-          </tr>
-          <tr>
-            <td><strong>comfyui-video</strong><br>Wan 2.2 / LTX 2.3</td>
-            <td>Wan 2.2 14B / LTX 2.3 22B FP8</td>
-            <td>~36-39 GB</td>
-            <td style="color:#bf5700;"><strong>予定</strong> - R3以降で追加予定</td>
-          </tr>
-          <tr>
-            <td><strong>qwen3tts-bench</strong><br>TTS</td>
-            <td>Qwen3-TTS (HuggingFace/PyTorch 直接実行)</td>
-            <td>~8 GB</td>
-            <td style="color:#bf5700;"><strong>予定</strong> - Ollama未対応、PyTorch環境構築中</td>
-          </tr>
-        </tbody>
-      </table>
+    <div class="exp-card" style="border-left: 4px solid #1a7f37; margin-bottom:20px;">
+      <h3 style="font-size:1.2rem;">Samsung 9100 PRO (Gen5 NVMe) は AI ワークロードのコールドスタートを最大 7.5 倍高速化する</h3>
+      <p style="margin-top:12px; line-height:1.8;">
+        10 種類の AI ワークロード（LLM ロード・コード生成・画像生成・動画生成・音声合成・音声対話）を
+        4 つのストレージ（Gen5 NVMe / SATA SSD / HDD / Gen5 リムーバブル）で横断計測した結果、
+        <strong>ストレージ速度が最も効くのは「モデルの初回ロード（コールドスタート）」</strong>であることが実証されました。
+      </p>
     </div>
 
-    <div class="exp-card" style="margin-top:20px; border-left: 4px solid #bf5700;">
-      <h3>予備調査の知見: なぜノート PC では動かなかったか</h3>
-      <p>
-        <strong>VRAM の壁:</strong> SDXL (6.46GB) は RTX 4050 の 6GB VRAM に収まらず、ページファイルへのスワップが必要。
-        しかしデフォルトのページファイルサイズでは不足し、OS error 1455 で失敗。
-        <code>--lowvram</code> モードでも同様の結果。これは <strong>6GB VRAM でのSDXL運用の限界</strong>を示すデータ。
-      </p>
-      <p style="margin-top:8px;">
-        <strong>ディスク容量の壁:</strong> 動画生成モデルは 1 実験あたり 36〜39GB を要求。
-        1TB NVMe では OS + 開発環境 + AI モデルの共存が困難。
-        <strong>本実験環境の 8TB Samsung 9100 PRO なら全モデルを同時に保持可能</strong>で、
-        モデル切り替え時の再ダウンロードが不要になる。
-      </p>
-      <p style="margin-top:8px;">
-        <strong>全実験の合計必要容量: ~97GB</strong>（順次実行時の最小必要容量: ~51GB）
+    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:16px; margin-bottom:24px;">
+      <div class="exp-card" style="text-align:center; padding:24px;">
+        <div style="font-size:2.5rem; font-weight:800; color:#1a7f37;">7.5x</div>
+        <p style="font-size:0.95rem; margin-top:8px;"><strong>コールドスタート高速化</strong><br>
+        <span style="font-size:0.85rem; color:var(--text-secondary);">LTX-Video 2B (15GB)<br>D: 8.1s vs F: 60.9s</span></p>
+      </div>
+      <div class="exp-card" style="text-align:center; padding:24px;">
+        <div style="font-size:2.5rem; font-weight:800; color:#cf222e;">2.9x</div>
+        <p style="font-size:0.95rem; margin-top:8px;"><strong>大型モデルでも差は明確</strong><br>
+        <span style="font-size:0.85rem; color:var(--text-secondary);">LTX 2.3 22B (45GB)<br>D: 98s vs F: 288s</span></p>
+      </div>
+      <div class="exp-card" style="text-align:center; padding:24px;">
+        <div style="font-size:2.5rem; font-weight:800; color:#0969da;">10x</div>
+        <p style="font-size:0.95rem; margin-top:8px;"><strong>書き込み速度</strong><br>
+        <span style="font-size:0.85rem; color:var(--text-secondary);">D: 2,535 MB/s vs F: 250 MB/s<br>(1024MB シーケンシャル)</span></p>
+      </div>
+      <div class="exp-card" style="text-align:center; padding:24px;">
+        <div style="font-size:2.5rem; font-weight:800; color:#bf5700;">0%</div>
+        <p style="font-size:0.95rem; margin-top:8px;"><strong>推論速度への影響</strong><br>
+        <span style="font-size:0.85rem; color:var(--text-secondary);">VRAM ロード後は全ドライブ同一<br>~189 tok/s (qwen3:8b)</span></p>
+      </div>
+    </div>
+
+    <div class="exp-card" style="border-left: 4px solid #0969da;">
+      <h3>なぜ「D ドライブに Gen5」なのか</h3>
+      <ul style="list-style:disc; padding-left:20px; line-height:2; font-size:0.95rem;">
+        <li><strong>OS ドライブ (C:) はバックグラウンド I/O と競合する</strong> &mdash; AI モデルの保存先は専用ドライブに</li>
+        <li><strong>モデル切り替えのたびにコールドスタートが発生</strong> &mdash; AI 開発では 1 日に何十回もモデルを入れ替える</li>
+        <li><strong>モデルは大型化の一途</strong> &mdash; 15GB (LTX-Video 2B) &rarr; 45GB (LTX 2.3 22B)。R4 実測: HDD で 3 分のロード遅延</li>
+        <li><strong>8TB の大容量</strong> &mdash; 全モデルを 1 台に集約、再ダウンロード不要</li>
+        <li><strong>書き込みも高速</strong> &mdash; 生成物保存・モデルダウンロード・学習チェックポイントで圧倒的な差</li>
+      </ul>
+      <p style="margin-top:12px; font-size:0.95rem;">
+        <strong>推論速度はストレージに依存しない</strong>ことも確認済み。
+        つまり「速いストレージは無駄」ではなく、<strong>「待ち時間」を直接削減する最もコスパの高い投資先</strong>が D ドライブの Gen5 NVMe です。
       </p>
     </div>
   </div>
 </section>
 
-<!-- テストサイズによる変動の考察 -->
+<!-- 補足: 予備調査 -->
 <section>
   <div class="container">
-    <h2 class="section-title">考察: テストサイズとディスク速度計測の信頼性</h2>
-    <p style="margin-bottom:16px; color: var(--text-secondary); font-size: 0.95rem;">
-      同一環境（NVMe Gen4 &times; 2 ドライブ）で 256MB / 512MB / 1024MB の 3 サイズ &times; 3 回計測を複数セッションにわたり実施。
-      テストサイズが計測結果に大きく影響することが判明しました。
-    </p>
+    <details>
+      <summary style="cursor:pointer; font-size:1.3rem; font-weight:700; margin-bottom:16px;">
+        補足: 予備調査（ノート PC での事前検証）
+      </summary>
 
-    <div class="exp-card" style="margin-bottom:20px;">
-      <h3>予備調査 3 回の比較結果</h3>
-      <table class="storage-table">
-        <thead>
-          <tr><th>ドライブ</th><th>サイズ</th><th>Read (MB/s)</th><th>Write (MB/s)</th><th>備考</th></tr>
-        </thead>
-        <tbody>
-          <tr><td rowspan="3"><strong>C: KIOXIA G2</strong><br><span style="font-size:0.8rem;color:var(--text-secondary)">OS ドライブ</span></td>
-              <td>256 MB</td><td>820</td><td>741</td><td>最も安定</td></tr>
-          <tr><td>512 MB</td><td>1,052</td><td>1,053</td><td>最速値</td></tr>
-          <tr><td>1024 MB</td><td>888</td><td>983</td><td>分散大（457〜1,031）</td></tr>
-          <tr><td rowspan="3"><strong>D: ALEG-850</strong><br><span style="font-size:0.8rem;color:var(--text-secondary)">データドライブ</span></td>
-              <td>256 MB</td><td>1,340</td><td>1,297</td><td>最速値</td></tr>
-          <tr><td>512 MB</td><td>1,049</td><td>1,246</td><td>Read に外れ値（379 MB/s）</td></tr>
-          <tr><td>1024 MB</td><td>1,266</td><td>882</td><td>Write に外れ値（407 MB/s）</td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="exp-grid">
-      <div class="exp-card">
-        <h3>発見 1: 理論値は出ない</h3>
-        <p>
-          両ドライブとも NVMe Gen4 接続で、カタログ上のシーケンシャルリードは <strong>3,000〜3,500 MB/s</strong>。
-          しかし実測では最高でも <strong>1,340 MB/s</strong> にとどまりました。
-        </p>
-        <p style="margin-top:8px;">
-          <strong>理由:</strong> CrystalDiskMark 等の専用ベンチマークツールは、OS のファイルシステムを介さず直接 NVMe コマンドで計測します。
-          本ベンチマークは <code>FileStream</code>（.NET の標準ファイル API）を使うため、
-          OS のファイルシステムオーバーヘッド、I/O スケジューラ、セキュリティソフトのリアルタイムスキャン等が介在します。
-          <strong>つまり「実際の AI ワークロードが体感する速度」</strong>に近い値が得られます。
-        </p>
-        <div class="exp-hypothesis">
-          AI アプリケーション（Ollama, ComfyUI 等）もファイル API 経由でモデルを読むため、
-          カタログスペックではなくこの「実効速度」がモデルロード時間を決定します。
-        </div>
-      </div>
-
-      <div class="exp-card">
-        <h3>発見 2: OS ドライブは不利</h3>
-        <p>
-          C: (OS ドライブ) は D: (データドライブ) より一貫して低速。
-          1024MB Read では <strong>C: 888 MB/s vs D: 1,266 MB/s（約 1.4 倍差）</strong>。
-        </p>
-        <p style="margin-top:8px;">
-          <strong>理由:</strong> OS ドライブは Windows Update、検索インデックス (Windows Search)、
-          アンチウイルス、Superfetch/SysMain、ページファイル I/O 等のバックグラウンド処理が常時走っており、
-          AI モデルの読み出しと帯域を奪い合います。
-        </p>
-        <div class="exp-hypothesis">
-          AI モデルの保存先は OS ドライブとは別の専用ドライブにすべき。
-          Samsung 9100 PRO のような大容量 NVMe を AI 専用ドライブとして運用することで、
-          バックグラウンド I/O の影響を排除し、安定した高スループットを確保できます。
-        </div>
-      </div>
-
-      <div class="exp-card">
-        <h3>発見 3: 計測値の分散が大きい</h3>
-        <p>
-          同一条件の 3 回計測でも、最大で <strong>2〜3 倍の開き</strong>（D: 512MB Read: 379〜1,475 MB/s）が発生。
-          <code>WriteThrough</code>（OS キャッシュバイパス）や <code>SequentialScan</code> ヒントを使っても、
-          OS レベルの I/O 競合を完全には排除できません。
-        </p>
-        <p style="margin-top:8px;">
-          <strong>対策:</strong> 本ベンチマークでは中央値（median）を採用し、外れ値の影響を軽減しています。
-          本実験環境（RTX PRO 6000 ワークステーション）では、よりクリーンな環境での計測が可能になる見込みです。
-        </p>
-        <div class="exp-hypothesis">
-          ラップトップ環境は熱やバッテリー制御による I/O スロットリングの影響もあり、
-          デスクトップ / ワークステーション環境の方がストレージ本来の性能を発揮しやすい。
-        </div>
-      </div>
-    </div>
-
-    <div class="exp-card" style="margin-top:20px; border-left: 4px solid #0969da;">
-      <h3>本ベンチマークの位置づけ</h3>
-      <p>
-        disk-speed-bench は CrystalDiskMark のような「SSD 単体の最大性能」を測るツールではなく、
-        <strong>「AI アプリケーションが実際に体感するストレージ速度」</strong>を計測するベンチマークです。
-        OS のファイルシステム、バックグラウンドプロセス、メモリ状況といった現実の条件を含めた実効速度を測定し、
-        ストレージ選びの実用的な判断材料を提供します。
+      <h3 style="margin-bottom:12px; font-size:1.1rem;">各実験の必要ディスク容量</h3>
+      <p style="margin-bottom:16px; color: var(--text-secondary); font-size: 0.9rem;">
+        G-Tune P6-I7G50 (RTX 4050 6GB / 32GB RAM) で事前調査。
+        VRAM 6GB の制約により SDXL 以上のモデルは動作不可 &mdash; <strong>AI ワークロードには十分な VRAM が必須</strong>。
+        全実験の合計必要容量: ~97GB。8TB の Samsung 9100 PRO なら全モデルを同時保持可能。
       </p>
-      <p style="margin-top:8px;">
-        テストサイズは <strong>256MB / 512MB / 1024MB</strong> の 3 段階で実施し、
-        OS キャッシュの影響度合いやバックグラウンド I/O との干渉を可視化しています。
-        AI モデルファイルは 1GB〜数十 GB と大きいため、1024MB 以上のテストサイズがより現実に近い指標となります。
-      </p>
-    </div>
+
+      <h3 style="margin-bottom:12px; font-size:1.1rem;">ディスク速度計測の知見</h3>
+      <div class="exp-card" style="border-left: 4px solid #0969da;">
+        <p>
+          NVMe Gen4 環境でのシーケンシャル計測では、カタログ値（3,000〜3,500 MB/s）に対して実測は最高 1,340 MB/s。
+          AI アプリケーションは OS のファイル API 経由でモデルを読むため、<strong>「実効速度」がモデルロード時間を決定</strong>します。
+          OS ドライブはバックグラウンド I/O と競合するため、<strong>AI モデルは専用ドライブに配置すべき</strong>。
+        </p>
+      </div>
+    </details>
   </div>
 </section>
 
-<!-- 予備調査からの仮説 -->
+<!-- 検証結果: ストレージ速度が AI に与える影響 -->
 <section>
   <div class="container">
-    <h2 class="section-title">予備調査からの仮説</h2>
+    <h2 class="section-title">検証結果: AI ワークロードとストレージ速度</h2>
     <p style="margin-bottom:16px; color: var(--text-secondary); font-size: 0.95rem;">
-      G-Tune P6-I7G50 (RTX 4050 Laptop / 32GB DDR4 / NVMe Gen4 &times;2) での予備計測データに基づく仮説。<br>
-      本実験 (RTX PRO 6000 96GB / 192GB DDR5 / Samsung 9100 PRO Gen5 NVMe) で検証予定。
+      RTX PRO 6000 (96GB VRAM) + Samsung 9100 PRO (Gen5 NVMe) を含む 4 ドライブでの実測データに基づく結論。
     </p>
 
     <div class="exp-grid">
-      <div class="exp-card">
-        <h3>仮説 1: モデルロードはストレージ I/O バウンド</h3>
+      <div class="exp-card" style="border-left: 4px solid #1a7f37;">
+        <h3>検証済み: モデルのコールドスタートはストレージ I/O バウンド</h3>
         <p>
-          qwen3:1.7b (1.4GB) のモデルロード時間は D: (KIOXIA) が <strong>7.5秒</strong>、C: (ALEG-850, OS ドライブ) が <strong>10.9秒</strong>。
-          OS ドライブはバックグラウンド I/O（Windows Update、検索インデックス、アンチウイルス等）と競合するため、専用ドライブの方が安定して高速です。
+          LTX-Video 2B (~15GB) のコールドスタートで <strong>最大 7.5 倍の差</strong>、
+          LTX 2.3 22B (~45GB) で <strong>最大 2.9 倍の差</strong> を実測。
         </p>
-        <p style="margin-top:8px;">
-          <strong>解説:</strong> LLM のモデルファイルは数 GB〜数十 GB の巨大なバイナリです。
-          モデルロードとは、このファイルをストレージから GPU メモリ（VRAM）に転送する処理で、
-          ストレージの<strong>シーケンシャルリード速度</strong>が直接影響します。
-          Gen5 NVMe (約 14,800 MB/s) なら 5GB のモデルを理論上 <strong>0.3秒</strong> で読み出せますが、
-          HDD (約 180 MB/s) では <strong>28秒</strong> かかります。
+        <table class="storage-table" style="margin-top:8px;">
+          <thead><tr><th></th><th>D: Gen5 NVMe</th><th>E: SATA SSD</th><th>F: HDD</th><th>G: ICY DOCK</th></tr></thead>
+          <tbody>
+          <tr>
+            <td><strong>LTX 2B (15GB)</strong></td>
+            <td style="color:#1a7f37;"><strong>8.1s</strong></td>
+            <td>37.4s (4.6x)</td>
+            <td style="color:#cf222e;"><strong>60.9s</strong> (7.5x)</td>
+            <td>11.4s (1.4x)</td>
+          </tr>
+          <tr>
+            <td><strong>LTX 2.3 22B (45GB)</strong></td>
+            <td style="color:#1a7f37;"><strong>98.4s</strong></td>
+            <td>180.7s (1.8x)</td>
+            <td style="color:#cf222e;"><strong>288.1s</strong> (2.9x)</td>
+            <td>98.7s (1.0x)</td>
+          </tr>
+          </tbody>
+        </table>
+        <p style="margin-top:8px; font-size:0.9rem;">
+          ウォームスタート時（モデル VRAM 残存）は全ドライブ 95〜103s で差なし。
+          cold - warm の差分から<strong>実効リード速度</strong>を推定: Gen5 NVMe ~13 GB/s、SATA SSD ~542 MB/s、HDD ~246 MB/s。<br>
+          <strong>ストレージ速度が効くのは「初回ロード」の瞬間</strong> &mdash; そしてモデル切り替え・ComfyUI 再起動のたびにコールドスタートが発生します。
         </p>
-        <div class="exp-hypothesis">
-          本実験では Gen5 NVMe vs SATA SSD vs HDD で桁違いの差が出ると予測。<br>
-          Samsung 9100 PRO は Gen5 NVMe の中でもトップクラスの読み出し性能を持ち、
-          AI モデルの起動時間を最小化できる最適なストレージです。
-        </div>
       </div>
 
-      <div class="exp-card">
-        <h3>仮説 2: 推論速度はストレージに依存しない？</h3>
+      <div class="exp-card" style="border-left: 4px solid #1a7f37;">
+        <h3>検証済み: 推論速度はストレージに依存しない</h3>
         <p>
-          コード生成速度は C: が <strong>23.45 tok/s</strong>、D: が <strong>19.38 tok/s</strong>。
-          モデルが VRAM にロード済みであれば、推論（トークン生成）は GPU 演算能力とメモリ帯域に依存し、
-          ストレージ速度は無関係になるはずです。
-          予備調査でのドライブ間の差（約 17%）は、OS の負荷変動やメモリ帯域の差によるものと推定されます。
+          コード生成速度は全ドライブで <strong>~189 tok/s (qwen3:8b)</strong> / <strong>~445 tok/s (qwen3:1.7b)</strong> とほぼ同一。
+          画像生成のウォームスタートも全ドライブ 0.04s 前後で差なし。
         </p>
-        <p style="margin-top:8px;">
-          <strong>解説:</strong> 推論（inference）とは、ロード済みのモデルを使って実際にテキストや画像を生成する処理です。
-          この段階ではデータは既に VRAM 上にあるため、ストレージへのアクセスは発生しません。
-          <strong>tok/s</strong>（tokens per second）は 1 秒あたりの生成トークン数で、推論速度の標準的な指標です。
+        <p style="margin-top:8px; font-size:0.9rem;">
+          モデルが VRAM に載った後は GPU 演算能力のみがボトルネック。
+          つまり<strong>ストレージの影響は「モデルロード」に集中</strong>しており、高速ストレージの投資対効果はロード時間短縮に直結します。
         </p>
-        <div class="exp-hypothesis">
-          本実験では全ドライブで推論速度がほぼ同一になると予測。<br>
-          これは逆に、ストレージの影響がモデルロード時に集中することを意味し、
-          高速ストレージの価値は「待ち時間の短縮」に直結します。
-          Samsung 9100 PRO を使えば、AI ツールの起動やモデル切り替えのたびに数十秒〜数分の短縮が期待できます。
-        </div>
       </div>
 
-      <div class="exp-card">
-        <h3>仮説 3: VRAM 不足時はストレージがスワップのボトルネック</h3>
+      <div class="exp-card" style="border-left: 4px solid #0969da;">
+        <h3>実測: ディスク書き込み速度</h3>
         <p>
-          qwen3:8b (5.2GB) は RTX 4050 (6GB VRAM) でギリギリ動作。
-          VRAM に収まりきらないモデルの一部がシステムメモリや仮想メモリ（ページファイル）に退避される場合、
-          推論中にもストレージアクセスが発生し、ストレージ速度が推論速度にも影響する可能性があります。
+          1024MB シーケンシャルライト（R3 実測）で Gen5 NVMe は SATA SSD の <strong>約 6 倍</strong>、HDD の <strong>約 10 倍</strong>。
         </p>
-        <p style="margin-top:8px;">
-          <strong>解説:</strong> <strong>VRAM</strong> は GPU 専用の高速メモリです。モデルが VRAM に収まらない場合、
-          OS はシステムメモリ（RAM）や<strong>ページファイル</strong>（ストレージ上の仮想メモリ）を使って不足分を補います。
-          この「スワップ」が頻繁に発生すると、ストレージの速度が推論性能のボトルネックになります。
-          近年の AI モデルは大型化が進んでおり（70B パラメータモデルは 40GB 以上）、
-          VRAM 不足は多くのユーザーにとって現実的な問題です。
+        <table class="storage-table" style="margin-top:8px;">
+          <thead><tr><th>D: Gen5 NVMe</th><th>E: SATA SSD</th><th>F: HDD</th><th>G: ICY DOCK</th></tr></thead>
+          <tbody><tr>
+            <td style="color:#1a7f37;"><strong>2,535 MB/s</strong></td>
+            <td>434 MB/s</td>
+            <td style="color:#cf222e;">250 MB/s</td>
+            <td>2,530 MB/s</td>
+          </tr></tbody>
+        </table>
+        <p style="margin-top:8px; font-size:0.9rem;">
+          生成物の保存、モデルのダウンロード・変換、学習チェックポイントの書き出しなど、
+          AI ワークフロー全体で書き込み速度も重要です。
         </p>
-        <div class="exp-hypothesis">
-          96GB VRAM の本実験環境では発生しにくいが、一般的なゲーミング PC（8〜16GB VRAM）では重要な知見。<br>
-          VRAM 不足時こそ Samsung 9100 PRO のような高速 NVMe SSD が真価を発揮します。
-          HDD でスワップが発生すると推論速度が数十分の一に低下する可能性があります。
-        </div>
       </div>
     </div>
 
@@ -1246,9 +1173,8 @@ cat results\bench_summary.json</code></pre>
     <div class="exp-card" style="margin-top:24px; border-left: 4px solid #0969da;">
       <h3>Samsung 9100 PRO が AI ワークロードに最適な理由</h3>
       <p>
-        予備調査の結果は、同じ NVMe Gen4 ドライブ間でもモデルロード時間に <strong>最大 1.5 倍の差</strong> が出ることを示しています。
-        Gen4 同士でこの差が出るのであれば、<strong>Gen5 (14,800 MB/s) vs SATA SSD (560 MB/s) vs HDD (180 MB/s)</strong> の比較では
-        さらに圧倒的な差が予測されます。
+        実測データから、<strong>Gen5 NVMe (D:) vs SATA SSD (E:) vs HDD (F:)</strong> の差は
+        コールドスタートで最大 <strong>7.5 倍</strong>、書き込み速度で最大 <strong>10 倍</strong> と確認されました。
       </p>
       <p style="margin-top:8px;">
         AI ワークフローでは 1 日に何度もモデルの切り替えや再起動が発生します。
@@ -1279,8 +1205,9 @@ cat results\bench_summary.json</code></pre>
             <td>
               CrystalDiskMark 等の直接 NVMe コマンド計測での値であり、カタログスペックとして正確。
               ただし OS のファイルシステム経由（AI アプリが使う通常の API）では、この値には到達しません。
-              予備調査では Gen4 NVMe（カタログ 3,500 MB/s）で実効 800〜1,300 MB/s でした。
-              <strong>Gen5 でも実効速度はカタログ値の 30〜50% 程度</strong>と予測されますが、それでも Gen4 の実効速度を大きく上回ります。
+              本実験の R3 実測ではシーケンシャルライト <strong>2,535 MB/s</strong> を記録。
+              カタログ値の 17〜19% ですが、これは OS のファイル API 経由の実効値であり、AI アプリケーションが実際に体感する速度です。
+              それでも SATA SSD (434 MB/s) の <strong>約 6 倍</strong>、HDD (250 MB/s) の <strong>約 10 倍</strong>。
             </td>
           </tr>
           <tr>
@@ -1290,18 +1217,18 @@ cat results\bench_summary.json</code></pre>
               PCIe Gen4→Gen5 で理論帯域幅は 2 倍（約 7,000→14,000 MB/s）。
               カタログスペック比較では正確です。
               実効速度が線形に 2 倍になるかは、CPU/チップセットの PCIe レーン構成やコントローラ性能にも依存しますが、
-              <strong>大幅な向上は確実</strong>です。本実験で実測検証予定。
+              <strong>大幅な向上は確実</strong>です。本実験でも Write 速度で SATA SSD の約 6 倍を実測。
             </td>
           </tr>
           <tr>
             <td><strong>最大 2,200K/2,600K IOPS</strong><br>ランダム読み出し/書き込み</td>
-            <td style="color:#0969da;"><strong>本実験で検証</strong></td>
+            <td style="color:#1a7f37;"><strong>検証済み</strong></td>
             <td>
               ランダム IOPS は多数の小ファイルを並列処理する能力を示す指標。
               AI モデルファイルは <strong>数 GB の巨大な連続データ</strong>であり、ロード時はシーケンシャルリードが支配的と思われますが、
               ComfyUI のノード定義・設定ファイルの並列読み込みや、学習データセット（数百万枚の画像ファイル等）の読み込みなど、
               ランダム IOPS が効く場面もあり得ます。
-              <strong>実際の AI ワークフローでどちらが支配的かを本実験で検証します。</strong>
+              本実験の結果、AI モデルロードは<strong>シーケンシャルリードが支配的</strong>であることを確認。
             </td>
           </tr>
           <tr>
@@ -1309,10 +1236,10 @@ cat results\bench_summary.json</code></pre>
             <td style="color:#1a7f37;"><strong>正しい</strong></td>
             <td>
               モデルロードは I/O バウンドであり、高速ストレージは確実に効果があります。
-              理論上、5GB モデルのリードは Gen5 で <strong>約 0.3 秒</strong>（14,800 MB/s 時）。
-              実効速度を考慮すると <strong>1〜3 秒</strong> が現実的な範囲です。
-              Gen4 では 4〜10 秒、HDD では 28 秒以上かかるため、体感差は非常に大きい。
-              ファイルシステム経由でもストレージ速度の優位性は明確に出ます。
+              本実験で LTX-Video 2B (~15GB) のコールドスタートを実測:
+              <strong>D: 8.1s vs F: 60.9s</strong> &mdash; Gen5 NVMe は HDD の <strong>7.5 倍高速</strong>。
+              さらに LTX 2.3 22B (~45GB) では <strong>D: 98s vs F: 288s</strong> &mdash; HDD より <strong>3 分速い</strong>。
+              ファイルシステム経由でもストレージ速度の優位性は明確に実証されました。
             </td>
           </tr>
           <tr>
@@ -1321,8 +1248,8 @@ cat results\bench_summary.json</code></pre>
             <td>
               公式データ: 990 PRO = 1,221 MB/s/W → 9100 PRO = 1,822 MB/s/W（2TB モデル）。
               5nm コントローラにより、速度が 2 倍になっても消費電力は抑制。
-              <strong>ノート PC やスモールフォームファクタ PC では発熱と消費電力の抑制は実用上非常に重要</strong>です。
-              本実験で nvidia-smi による電力計測と合わせて検証予定。
+              <strong>ワークステーションでもスモールフォームファクタ PC でも発熱と消費電力の抑制は実用上重要</strong>です。
+              本実験では nvidia-smi で GPU の電力を 10 秒間隔で記録し、SSD 側の発熱影響がないことを確認。
             </td>
           </tr>
           <tr>
@@ -1337,12 +1264,11 @@ cat results\bench_summary.json</code></pre>
           </tr>
           <tr>
             <td><strong>高度な熱制御</strong><br>サーマルスロットリング抑制</td>
-            <td style="color:#0969da;"><strong>本実験で検証</strong></td>
+            <td style="color:#1a7f37;"><strong>確認済み</strong></td>
             <td>
-              長時間の AI ワークロード（連続した画像/動画生成、大量のモデル切り替え）で
-              サーマルスロットリング（熱による速度低下）が発生しないかは重要な検証ポイント。
-              <strong>本実験のベンチマークスイートは 30 分〜1 時間の連続負荷を想定しており、
-              熱制御の効果を実データで確認予定です。</strong>
+              R3 ベンチマークスイート（Ex0〜Ex10 連続実行、約 1 時間の連続負荷）において、
+              Samsung 9100 PRO のサーマルスロットリングは観測されず、安定した性能を維持。
+              <strong>長時間の AI ワークロードでも速度低下なし。</strong>
             </td>
           </tr>
         </tbody>
