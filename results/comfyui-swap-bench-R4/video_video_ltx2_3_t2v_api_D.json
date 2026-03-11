@@ -3,14 +3,14 @@
   "test": "video_ltx2_3_t2v_api",
   "drive": "D",
   "runs": 1,
-  "median_s": 124.882,
+  "median_s": 98.352,
   "workflow_file": "C:\\Users\\ASK-P8\\Documents\\GitHub\\aicu-bench\\workflows\\video_ltx2_3_t2v_api.json",
   "comfyui_info": {
     "system_stats": {
       "system": {
         "os": "win32",
         "ram_total": 205463932928,
-        "ram_free": 148350365696,
+        "ram_free": 184340795392,
         "comfyui_version": "0.16.4",
         "required_frontend_version": "1.39.19",
         "installed_templates_version": "0.9.18",
@@ -32,9 +32,9 @@
           "type": "cuda",
           "index": 0,
           "vram_total": 102641500160,
-          "vram_free": 65207072808,
-          "torch_vram_total": 9227468800,
-          "torch_vram_free": 9177462824
+          "vram_free": 100713627648,
+          "torch_vram_total": 0,
+          "torch_vram_free": 0
         }
       ]
     },
@@ -72,24 +72,24 @@
       "workflow_type": "video_ltx2_3_t2v_api",
       "drive": "D",
       "run": 1,
-      "total_time_s": 124.882,
+      "total_time_s": 98.352,
       "success": true,
       "gpu_before": {
         "gpu_name": "NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition",
-        "vram_used_mb": 40840,
+        "vram_used_mb": 1756,
         "vram_total_mb": 97887,
-        "temp_c": 84,
-        "power_w": 300.02
+        "temp_c": 53,
+        "power_w": 33.7
       },
       "gpu_after": {
         "gpu_name": "NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition",
-        "vram_used_mb": 37740,
+        "vram_used_mb": 37843,
         "vram_total_mb": 97887,
-        "temp_c": 74,
-        "power_w": 65.6
+        "temp_c": 70,
+        "power_w": 55.3
       },
-      "timestamp": "2026-03-11T21:00:45.594069"
+      "timestamp": "2026-03-11T21:21:40.590548"
     }
   ],
-  "generated": "2026-03-11T21:00:45.594176"
+  "generated": "2026-03-11T21:21:40.590657"
 }

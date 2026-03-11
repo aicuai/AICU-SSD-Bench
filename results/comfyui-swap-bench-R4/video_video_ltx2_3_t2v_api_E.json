@@ -3,14 +3,14 @@
   "test": "video_ltx2_3_t2v_api",
   "drive": "E",
   "runs": 1,
-  "median_s": null,
+  "median_s": 180.67,
   "workflow_file": "C:\\Users\\ASK-P8\\Documents\\GitHub\\aicu-bench\\workflows\\video_ltx2_3_t2v_api.json",
   "comfyui_info": {
     "system_stats": {
       "system": {
         "os": "win32",
         "ram_total": 205463932928,
-        "ram_free": 184605315072,
+        "ram_free": 184304066560,
         "comfyui_version": "0.16.4",
         "required_frontend_version": "1.39.19",
         "installed_templates_version": "0.9.18",
@@ -72,24 +72,24 @@
       "workflow_type": "video_ltx2_3_t2v_api",
       "drive": "E",
       "run": 1,
-      "total_time_s": 180.921,
-      "success": false,
+      "total_time_s": 180.67,
+      "success": true,
       "gpu_before": {
         "gpu_name": "NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition",
-        "vram_used_mb": 1758,
+        "vram_used_mb": 1761,
         "vram_total_mb": 97887,
-        "temp_c": 67,
-        "power_w": 37.23
+        "temp_c": 69,
+        "power_w": 98.69
       },
       "gpu_after": {
         "gpu_name": "NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition",
-        "vram_used_mb": 39051,
+        "vram_used_mb": 37805,
         "vram_total_mb": 97887,
         "temp_c": 68,
-        "power_w": 58.07
+        "power_w": 58.93
       },
-      "timestamp": "2026-03-11T21:05:39.928721"
+      "timestamp": "2026-03-11T21:26:35.289629"
     }
   ],
-  "generated": "2026-03-11T21:05:39.928800"
+  "generated": "2026-03-11T21:26:35.289703"
 }

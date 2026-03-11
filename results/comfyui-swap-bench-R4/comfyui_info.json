@@ -3,7 +3,7 @@
     "system": {
       "os": "win32",
       "ram_total": 205463932928,
-      "ram_free": 134661758976,
+      "ram_free": 133923381248,
       "comfyui_version": "0.16.4",
       "required_frontend_version": "1.39.19",
       "installed_templates_version": "0.9.18",
