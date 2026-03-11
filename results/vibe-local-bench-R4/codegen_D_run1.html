@@ -1,0 +1,139 @@
+﻿Hier is een overzicht van hoe je HTML + JavaScript gebruikt om een functieke webpagina te maken, met een focus op de opgegeven secties:
+
+---
+
+### 1. **HTML Structuur**
+Je maakt een basis HTML5 pagina met volgende elementen:
+```html
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>My Website</title>
+    <link rel="stylesheet" href="styles.css"> <!-- CSS aanvraag -->
+</head>
+<body>
+    <header>
+        <h1>My Website</h1>
+        <nav>
+            <a href="#">Home</a>
+            <a href="#">About</a>
+            <a href="#">Contact</a>
+        </nav>
+    </header>
+    <main>
+        <section id="content">
+            <h2>Over mij</h2>
+            <p>Ik ben een ontwikkelaar en programmererder.</p>
+        </section>
+        <section id="dynamic-list">
+            <h2>Dynamic List</h2>
+            <input type="text" id="list-input" placeholder="Voeg een item toe...">
+            <button onclick="addItem()">Voeg toe</button>
+            <ul id="list"></ul>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2023 My Website</p>
+    </footer>
+    <script src="script.js"></script> <!-- JavaScript aanvraag -->
+</body>
+</html>
+```
+
+---
+
+### 2. **JavaScript Functies**
+Je maakt interactieve elementen, zoals een knop die het achtergrondkleur van het hoofdmenu verandert:
+```javascript
+document.querySelector('#list-button').addEventListener('click', function() {
+    const color = this.style.backgroundColor;
+    document.querySelector('#header').style.backgroundColor = color === 'red' ? 'blue' : 'red';
+});
+```
+
+---
+
+### 3. **CSS Styling**
+Je stijlt de pagina met CSS om te zien hoe het er uitziet:
+```css
+/* styles.css */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: #333;
+    color: white;
+    padding: 1em;
+}
+
+#header h1 {
+    margin: 0;
+}
+
+#list-button {
+    padding: 0.5em 1em;
+    background-color: #222;
+    color: white;
+}
+
+#list {
+    list-style-type: none;
+    padding: 0;
+    margin: 1em 0;
+}
+```
+
+---
+
+### 4. **Dynamic List (via JavaScript)**
+Je voegt dynamische items toe aan de lijst:
+```javascript
+function addItem() {
+    const input = document.getElementById('list-input');
+    const list = document.getElementById('list');
+    const item = document.createElement('li');
+    item.textContent = input.value;
+    list.appendChild(item);
+    input.value = '';
+}
+```
+
+---
+
+### 5. **Gebruik van HTML + JavaScript**
+- **HTML**: Definieert de structuur van de pagina.
+- **JavaScript**: Voegt interactivity toe (zoals animatie, formulierverwerking, dynamische content).
+- **CSS**: Stijlt de elementen en maakt de pagina uitzichtelijk.
+
+---
+
+### 6. **Voordelen van HTML + JavaScript**
+- **Interactivity**: Knoppen, formulieren, animaties.
+- **Dynamische content**: Lijstjes, variabele data.
+- **Eenvoudig te testen**: Gebruik browserconsole (`console.log`) of devtools.
+
+---
+
+### 7. **Voorspelling**
+Als je dit opslaat als `index.html` en `styles.css` en `script.js` in dezelfde map zet, zou het er uitzien zoals:
+```
+index.html
+styles.css
+script.js
+```
+
+---
+
+### 8. **Tips**
+- Gebruik **semantic HTML** (e.g., `<nav>`, `<main>`, `<section>`).
+- Gebruik **responsive design** met media queries.
+- Test je code in verschillende browsers (zoals Chrome, Firefox, Edge).
+- Gebruik `console.log()` om fouten te detecteren.
+
+---
+
+Als je een specifieke functie wilt aanvullen (zoals een formulier, een slider, of een animatie), laat het weten! 🌟
