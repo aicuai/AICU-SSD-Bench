@@ -1,4 +1,4 @@
-# AGENTS.md — AICU-bench AI Agent Instructions
+# AGENTS.md — AICU-SSD-Bench AI Agent Instructions
 
 > **目的**: ストレージ速度（NVMe Gen5 / SATA SSD / HDD）が AI ワークロードに与える影響を定量計測し、オープンに公開する。
 

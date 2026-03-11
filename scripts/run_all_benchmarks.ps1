@@ -370,7 +370,7 @@ if ($TestDrives.Count -eq 0) {
 Write-Host @"
 
  ========================================================
-   ai-storage-bench - Full Benchmark Suite (Autonomous)
+   AICU-SSD-Bench - Full Benchmark Suite (Autonomous)
  ========================================================
    Mode                : $Mode
    Runs per experiment : $Runs
@@ -1001,7 +1001,7 @@ $SuiteEndTime = Get-Date
 $TotalDuration = $SuiteEndTime - $SuiteStartTime
 
 $summary = [ordered]@{
-    suite              = "ai-storage-bench"
+    suite              = "AICU-SSD-Bench"
     version            = "2.2"
     mode               = $Mode
     hostname           = $env:COMPUTERNAME
@@ -1087,7 +1087,7 @@ if ($script:Errors.Count -gt 0) {
 # ══════════════════════════════════════════════════════
 # Phase 9: 結果送信（コミュニティデータ共有）
 # ══════════════════════════════════════════════════════
-$submitUrl = "https://bench.aicu.jp/api/submit"
+$submitUrl = "https://bench-ssd.aicu.jp/api/submit"
 # SSD シリアル番号を匿名化（ハッシュ化）して送信
 $sysInfoFile = Join-Path $ResultsDir "sysinfo.json"
 $submitPayload = $null
@@ -1172,7 +1172,7 @@ if (Test-Path $reportScript) {
     Write-Host "  SKIP: $reportScript not found" -ForegroundColor DarkYellow
 }
 
-Write-Host "`nDone! View results at https://bench.aicu.jp" -ForegroundColor Cyan
+Write-Host "`nDone! View results at https://bench-ssd.aicu.jp" -ForegroundColor Cyan
 
 # 結果フォルダを開く
 explorer $ResultsDir

@@ -36,7 +36,7 @@ if (-not (Test-Path $OutputDir)) {
     New-Item -ItemType Directory -Path $OutputDir -Force | Out-Null
 }
 
-$TestDir = "${Drive}:\aicu-bench-temp"
+$TestDir = "${Drive}:\AICU-SSD-Bench-temp"
 $TestFile = Join-Path $TestDir "bench_test_${SizeMB}MB.bin"
 $BufferSize = 4MB  # 4MB バッファ（NVMe のキューデプスに最適化）
 

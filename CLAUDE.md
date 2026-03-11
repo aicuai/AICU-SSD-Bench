@@ -1,4 +1,4 @@
-# CLAUDE.md — ai-storage-bench スキル
+# CLAUDE.md — AICU-SSD-Bench スキル
 
 > このファイルを Claude Code に読み込ませることで、ベンチマーク実験の環境構築・実行・トラブルシューティングを AI が支援します。
 
@@ -6,8 +6,8 @@
 
 ストレージ速度（PCIe Gen5 NVMe / SATA SSD / HDD）が AI ワークロードに与える影響を定量計測するベンチマークスイートです。
 
-- **リポジトリ**: https://github.com/aicuai/aicu-bench
-- **LP**: https://bench.aicu.jp
+- **リポジトリ**: https://github.com/aicuai/AICU-SSD-Bench
+- **LP**: https://bench-ssd.aicu.jp
 - **対象環境**: Windows 11 + PowerShell
 
 ---
@@ -28,8 +28,8 @@
 ### 1. 基本環境
 ```powershell
 # リポジトリ取得
-git clone https://github.com/aicuai/aicu-bench
-cd aicu-bench
+git clone https://github.com/aicuai/AICU-SSD-Bench
+cd AICU-SSD-Bench
 
 # Python 3.10+ 確認
 python --version

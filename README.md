@@ -1,4 +1,4 @@
-# AICU-bench
+# AICU-SSD-Bench
 
 **AI ワークロードにおけるストレージ速度影響の定量評価**
 
@@ -6,7 +6,7 @@
 
 > Impress AKIBA PC Hotline! 取材協力ベンチマーク
 > Samsung 9100 PRO (Gen5 NVMe) × AI ワークロード
-> LP: [bench.aicu.jp](https://bench.aicu.jp)
+> LP: [bench-ssd.aicu.jp](https://bench-ssd.aicu.jp)
 
 ---
 
@@ -61,8 +61,8 @@ claude  # CLAUDE.md を自動読み込み
 ## クイックスタート
 
 ```powershell
-git clone https://github.com/aicuai/aicu-bench
-cd aicu-bench
+git clone https://github.com/aicuai/AICU-SSD-Bench
+cd AICU-SSD-Bench
 
 # R3 全実験を一気通貫で実行
 .\scripts\R3\R3_run_all.ps1
@@ -104,7 +104,7 @@ scripts/R3/
 
 計測結果は `results/*-R3/` に JSON 出力。`python scripts/update_site.py` で `site/data.json` に変換し、LP に自動反映。
 
-## LP (bench.aicu.jp)
+## LP (bench-ssd.aicu.jp)
 
 `site/` の静的 HTML/CSS。`main` に push → Cloudflare Pages に自動デプロイ。
 

@@ -23,7 +23,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages project create aicu-bench --production-branch main
+          command: pages project create aicu-ssd-bench --production-branch main
         continue-on-error: true
 
       - name: Deploy to Cloudflare Pages
@@ -31,4 +31,4 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy site --project-name=aicu-bench
+          command: pages deploy site --project-name=aicu-ssd-bench

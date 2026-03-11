@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AICU-bench | AI ワークロード × ストレージ速度ベンチマーク</title>
+  <title>AICU-SSD-Bench | AI ワークロード × ストレージ速度ベンチマーク</title>
   <meta name="description" content="AI ワークロードのパフォーマンスを多角的に計測するオープンソースベンチマーク。今回はストレージ速度の影響にフォーカスし、Samsung 9100 PRO (Gen5 NVMe) を含む 4 ドライブで検証。">
-  <meta property="og:title" content="AICU-bench">
+  <meta property="og:title" content="AICU-SSD-Bench">
   <meta property="og:description" content="AI ワークロードベンチマーク — 今回のテーマ: ストレージ速度の影響">
-  <meta property="og:url" content="https://bench.aicu.jp">
+  <meta property="og:url" content="https://bench-ssd.aicu.jp">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="ja_JP">
   <meta name="twitter:card" content="summary_large_image">
@@ -18,12 +18,12 @@
 <!-- Hero -->
 <header class="hero">
   <div class="container">
-    <h1>AICU-bench</h1>
+    <h1>AICU-SSD-Bench</h1>
     <p class="subtitle">AI ワークロードを多角的に計測するオープンソースベンチマーク</p>
     <p class="tagline">今回のテーマ: ストレージ速度が AI ワークロードに与える影響<br>Impress AKIBA PC Hotline! 取材協力 | Samsung 9100 PRO (Gen5 NVMe) &times; AI ワークロード</p>
     <span class="badge">MIT License</span>
     <br>
-    <a href="https://github.com/aicuai/aicu-bench" class="cta" target="_blank" rel="noopener">GitHub でソースを見る</a>
+    <a href="https://github.com/aicuai/AICU-SSD-Bench" class="cta" target="_blank" rel="noopener">GitHub でソースを見る</a>
   </div>
 </header>
 
@@ -34,7 +34,7 @@
   <div class="container">
     <h2 class="section-title">概要</h2>
     <p>
-      <strong>AICU-bench</strong> は、<strong>実際の AI 技術のユースケースを想定</strong>し、
+      <strong>AICU-SSD-Bench</strong> は、<strong>実際の AI 技術のユースケースを想定</strong>し、
       AI ワークロードのパフォーマンスを多角的に計測する
       <strong>再現可能なオープンソースベンチマーク</strong>です。<br>
       今回は<strong>ストレージ速度（PCIe Gen5 NVMe / SATA SSD / HDD）</strong>が
@@ -628,7 +628,7 @@ JavaScript pagina...
         R2 中央値: D: 9.8s / E: 8.6s / F: 10.1s / G: 7.5s &mdash; モデルサイズが小さく（~1.7GB）ストレージ差は限定的。
       </p>
       <p style="font-size:0.8rem; color:var(--text-secondary);">
-        音声サンプル: <a href="https://github.com/aicuai/aicu-bench/tree/main/results/qwen3tts-bench/audio" target="_blank" rel="noopener"><code>results/qwen3tts-bench/audio/</code></a>
+        音声サンプル: <a href="https://github.com/aicuai/AICU-SSD-Bench/tree/main/results/qwen3tts-bench/audio" target="_blank" rel="noopener"><code>results/qwen3tts-bench/audio/</code></a>
       </p>
     </div>
 
@@ -699,13 +699,13 @@ JavaScript pagina...
         <li>ICY DOCK (G:) は D: とほぼ同等 &mdash; リムーバブルでも Gen5 帯域を維持</li>
       </ul>
       <p style="margin-top:12px; font-size:0.85rem; color:var(--text-secondary);">
-        動画サンプル: <a href="https://github.com/aicuai/aicu-bench/tree/main/results/comfyui-swap-bench-R4" target="_blank" rel="noopener"><code>results/comfyui-swap-bench-R4/</code></a>
-        &bull; <a href="https://github.com/aicuai/aicu-bench/tree/main/results/comfyui-ltx2-bench-samples/video" target="_blank" rel="noopener"><code>results/comfyui-ltx2-bench-samples/video/</code></a>
+        動画サンプル: <a href="https://github.com/aicuai/AICU-SSD-Bench/tree/main/results/comfyui-swap-bench-R4" target="_blank" rel="noopener"><code>results/comfyui-swap-bench-R4/</code></a>
+        &bull; <a href="https://github.com/aicuai/AICU-SSD-Bench/tree/main/results/comfyui-ltx2-bench-samples/video" target="_blank" rel="noopener"><code>results/comfyui-ltx2-bench-samples/video/</code></a>
       </p>
     </div>
 
     <p style="margin-top:16px; font-size:0.85rem; color:var(--text-secondary);">
-      全生成物は <a href="https://github.com/aicuai/aicu-bench/tree/main/Results-P8" target="_blank" rel="noopener"><code>Results-P8/</code></a> にモデルサイズ別に格納。
+      全生成物は <a href="https://github.com/aicuai/AICU-SSD-Bench/tree/main/Results-P8" target="_blank" rel="noopener"><code>Results-P8/</code></a> にモデルサイズ別に格納。
       ComfyUI ワークフロー JSON も同梱。
     </p>
   </div>
@@ -715,8 +715,8 @@ JavaScript pagina...
 <section>
   <div class="container">
     <h2 class="section-title">クイックスタート</h2>
-    <pre class="code-block"><code>git clone https://github.com/aicuai/aicu-bench
-cd aicu-bench
+    <pre class="code-block"><code>git clone https://github.com/aicuai/AICU-SSD-Bench
+cd AICU-SSD-Bench
 
 # 全実験一括実行
 .\scripts\run_all_benchmarks.ps1 -Runs 3
@@ -753,8 +753,8 @@ claude</code></pre>
       <div class="exp-card">
         <div class="exp-icon">1</div>
         <h3>リポジトリをクローン</h3>
-        <pre class="code-block" style="margin-top:12px;"><code>git clone https://github.com/aicuai/aicu-bench
-cd aicu-bench</code></pre>
+        <pre class="code-block" style="margin-top:12px;"><code>git clone https://github.com/aicuai/AICU-SSD-Bench
+cd AICU-SSD-Bench</code></pre>
       </div>
       <div class="exp-card">
         <div class="exp-icon">2</div>
@@ -794,7 +794,7 @@ cat results\bench_summary.json</code></pre>
     </div>
 
     <div style="margin-top:20px; text-align:center;">
-      <a href="https://github.com/aicuai/aicu-bench" class="cta" target="_blank" rel="noopener">GitHub で始める</a>
+      <a href="https://github.com/aicuai/AICU-SSD-Bench" class="cta" target="_blank" rel="noopener">GitHub で始める</a>
     </div>
   </div>
 </section>
@@ -1290,7 +1290,7 @@ cat results\bench_summary.json</code></pre>
           <tr><td><strong>ウォームスタート</strong></td><td>モデルが既にメモリにロードされた状態。ストレージアクセスは不要。</td></tr>
           <tr><td><strong>tok/s (tokens per second)</strong></td><td>LLM の推論速度指標。1 秒あたりに生成されるトークン（単語の断片）の数。</td></tr>
           <tr><td><strong>GGUF</strong></td><td>LLM モデルの量子化ファイル形式。Ollama が内部で使用。モデルロード時にヘッダーパース＋テンソル展開が必要で、ディスク速度だけでなくデシリアライゼーション処理もボトルネックになる。<a href="https://github.com/ggml-org/ggml/blob/master/docs/gguf.md" target="_blank" rel="noopener">GGUF 仕様</a></td></tr>
-          <tr><td><strong>sec/GiB</strong></td><td>モデルロード時間をモデルサイズ (GiB) で割った正規化メトリクス。異なるサイズのモデル間でロード速度を公平に比較するための指標。本ベンチマーク独自の計測手法。<a href="https://github.com/aicuai/aicu-bench/blob/main/scripts/analyze_sec_per_gb.py" target="_blank" rel="noopener">算出スクリプト</a></td></tr>
+          <tr><td><strong>sec/GiB</strong></td><td>モデルロード時間をモデルサイズ (GiB) で割った正規化メトリクス。異なるサイズのモデル間でロード速度を公平に比較するための指標。本ベンチマーク独自の計測手法。<a href="https://github.com/aicuai/AICU-SSD-Bench/blob/main/scripts/analyze_sec_per_gb.py" target="_blank" rel="noopener">算出スクリプト</a></td></tr>
           <tr><td><strong>I/O バウンド</strong></td><td>ストレージの読み書き速度が処理全体のボトルネックになっている状態。</td></tr>
           <tr><td><strong>GPU バウンド</strong></td><td>GPU の演算能力がボトルネックになっている状態。ストレージ速度は影響しない。</td></tr>
           <tr><td><strong>サーマルスロットリング</strong></td><td>GPU や SSD の温度が閾値を超えた際にクロック周波数を自動的に下げて発熱を抑える保護機構。長時間ベンチマークでの性能低下の主要因。</td></tr>
@@ -1360,7 +1360,7 @@ cat results\bench_summary.json</code></pre>
   <div class="container">
     <p>&copy; 2025 AICU Inc. &mdash; MIT License</p>
     <div class="footer-links">
-      <a href="https://github.com/aicuai/aicu-bench" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://github.com/aicuai/AICU-SSD-Bench" target="_blank" rel="noopener">GitHub</a>
       <a href="https://aicu.ai" target="_blank" rel="noopener">AICU Inc.</a>
     </div>
   </div>

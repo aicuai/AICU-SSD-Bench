@@ -203,7 +203,7 @@ def main():
         drives = list(exp["drives"].keys())
         model = exp.get("model", "")
         print(f"    {key} ({model}): drives {drives}")
-    print(f"\nPush to main to deploy to bench.aicu.jp")
+    print(f"\nPush to main to deploy to bench-ssd.aicu.jp")
 
 
 if __name__ == "__main__":
