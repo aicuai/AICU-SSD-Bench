@@ -21,7 +21,7 @@ foreach ($drive in $Drives) {
                 --drive $drive --runs $Runs `
                 --host "http://127.0.0.1:${Port}" `
                 --output-dir "$benchDir\results\comfyui-wan2-bench-R4" `
-                --timeout 60
+                --timeout 300
         } else {
             Write-Host "  SKIP: wan2_2_14B_t2v_api.json not found" -ForegroundColor DarkYellow
         }

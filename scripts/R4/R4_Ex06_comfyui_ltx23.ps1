@@ -12,8 +12,8 @@ foreach ($drive in $Drives) {
     Write-Host "`n--- Drive $drive ---" -ForegroundColor Cyan
     $proc = Start-ComfyUI -Drive $drive
     if ($proc) {
-        # t2v: LTX 2.3 優先、なければ LTX 2B にフォールバック
-        $wfPath = "$benchDir\workflows\ltx2_3_t2v.json"
+        # t2v: LTX 2.3 API形式を使用（UI形式はAPI投入不可）
+        $wfPath = "$benchDir\workflows\video_ltx2_3_t2v_api.json"
         if (-not (Test-Path $wfPath)) { $wfPath = "$benchDir\workflows\ltx_2b_t2v_bench.json" }
         Write-Host "  Workflow: $(Split-Path $wfPath -Leaf)" -ForegroundColor Cyan
 
