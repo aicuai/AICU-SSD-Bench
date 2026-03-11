@@ -194,7 +194,7 @@
   },
   "88": {
     "inputs": {
-      "frame_rate": 16,
+      "fps": 16,
       "images": [
         "87",
         0
@@ -209,6 +209,7 @@
     "inputs": {
       "filename_prefix": "video/ComfyUI",
       "format": "auto",
+      "codec": "auto",
       "pix_fmt": "auto",
       "video": [
         "88",
@@ -264,7 +265,7 @@
   },
   "100": {
     "inputs": {
-      "frame_rate": 16,
+      "fps": 16,
       "images": [
         "97",
         0
@@ -378,6 +379,7 @@
     "inputs": {
       "filename_prefix": "video/ComfyUI",
       "format": "auto",
+      "codec": "auto",
       "pix_fmt": "auto",
       "video": [
         "100",
