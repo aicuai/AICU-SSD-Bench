@@ -1,0 +1,55 @@
+﻿{
+    "experiment":  "disk-speed-bench",
+    "test":  "sequential",
+    "drive":  "D",
+    "disk_info":  {
+                      "model":  "Samsung SSD 9100 PRO 8TB",
+                      "serial":  "0025_38A6_5142_0389.",
+                      "unique_id":  "eui.002538A651420389",
+                      "bus_type":  "NVMe",
+                      "firmware":  "0B2QNXH7"
+                  },
+    "size_mb":  1024,
+    "runs":  3,
+    "write_median_mbs":  2519.8,
+    "read_median_mbs":  6645.3,
+    "results":  [
+                    {
+                        "run":  1,
+                        "write_mbs":  2519.8,
+                        "write_time_s":  0.406,
+                        "write_ok":  true,
+                        "read_mbs":  6645.3,
+                        "read_time_s":  0.154,
+                        "read_ok":  true,
+                        "size_mb":  1024,
+                        "buffer_mb":  4,
+                        "timestamp":  "2026-03-11T20:26:22.8208791+09:00"
+                    },
+                    {
+                        "run":  2,
+                        "write_mbs":  2396.7,
+                        "write_time_s":  0.427,
+                        "write_ok":  true,
+                        "read_mbs":  6800.4,
+                        "read_time_s":  0.151,
+                        "read_ok":  true,
+                        "size_mb":  1024,
+                        "buffer_mb":  4,
+                        "timestamp":  "2026-03-11T20:26:23.9947956+09:00"
+                    },
+                    {
+                        "run":  3,
+                        "write_mbs":  2574.6,
+                        "write_time_s":  0.398,
+                        "write_ok":  true,
+                        "read_mbs":  6557.5,
+                        "read_time_s":  0.156,
+                        "read_ok":  true,
+                        "size_mb":  1024,
+                        "buffer_mb":  4,
+                        "timestamp":  "2026-03-11T20:26:25.1393993+09:00"
+                    }
+                ],
+    "generated":  "2026-03-11T20:26:27.5291586+09:00"
+}
