@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AICU-bench R2 Evidence Report — 2026-03-11</title>
+<title>AICU-bench R2 証拠レポート — 2026-03-11</title>
 <style>
 :root { --bg: #0d1117; --card: #161b22; --border: #30363d; --text: #e6edf3; --muted: #8b949e; --accent: #58a6ff; --green: #3fb950; --yellow: #d29922; --red: #f85149; }
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -35,61 +35,61 @@ pre { background: #0d1117; border: 1px solid var(--border); border-radius: 4px; 
 </head>
 <body>
 
-<h1>AICU-bench R2 Evidence Report</h1>
+<h1>AICU-bench R2 証拠レポート</h1>
 <p class="meta">
-  Date: 2026-03-11 | Machine: NVIDIA RTX PRO 6000 (98GB) + AMD Threadripper PRO 7975WX<br>
-  Storage: D: Gen5 NVMe / E: SATA SSD / F: HDD / G: Gen5 NVMe (ICY DOCK)
+  計測日: 2026-03-11 | マシン: NVIDIA RTX PRO 6000 (98GB) + AMD Threadripper PRO 7975WX<br>
+  ストレージ: D: Gen5 NVMe / E: SATA SSD / F: HDD / G: Gen5 NVMe (ICY DOCK)
 </p>
 
-<!-- ===== System Info ===== -->
-<h2>System Configuration</h2>
+<!-- ===== システム構成 ===== -->
+<h2>システム構成</h2>
 <div class="card">
 <table>
-<tr><th>Component</th><th>Spec</th></tr>
+<tr><th>構成要素</th><th>スペック</th></tr>
 <tr><td>GPU</td><td>NVIDIA RTX PRO 6000 Blackwell Max-Q (97,887 MiB VRAM)</td></tr>
 <tr><td>CPU</td><td>AMD Ryzen Threadripper PRO 7975WX (32C/64T)</td></tr>
 <tr><td>RAM</td><td>DDR5-4800 192GB</td></tr>
 <tr><td>OS</td><td>Windows 11 Pro</td></tr>
-<tr><td>D: Drive</td><td>Samsung 9100 PRO 8TB — PCIe Gen5 NVMe (~14,800 MB/s)</td></tr>
-<tr><td>E: Drive</td><td>Samsung 870 QVO 8TB — SATA SSD (~560 MB/s)</td></tr>
-<tr><td>F: Drive</td><td>HDD 8TB — SATA HDD (~180 MB/s)</td></tr>
-<tr><td>G: Drive</td><td>Samsung 9100 PRO 8TB — PCIe Gen5 NVMe via ICY DOCK</td></tr>
+<tr><td>D: ドライブ</td><td>Samsung 9100 PRO 8TB — PCIe Gen5 NVMe (~14,800 MB/s)</td></tr>
+<tr><td>E: ドライブ</td><td>Samsung 870 QVO 8TB — SATA SSD (~560 MB/s)</td></tr>
+<tr><td>F: ドライブ</td><td>HDD 8TB — SATA HDD (~180 MB/s)</td></tr>
+<tr><td>G: ドライブ</td><td>Samsung 9100 PRO 8TB — PCIe Gen5 NVMe (ICY DOCK リムーバブル)</td></tr>
 </table>
 </div>
 
-<!-- ===== Experiment Results ===== -->
-<h2>Experiment Results</h2>
+<!-- ===== 実験結果 ===== -->
+<h2>実験結果</h2>
 
 <!-- Ollama LLM -->
-<h3>Ollama LLM: Cold Start + Code Generation</h3>
+<h3>Ollama LLM: コールドスタート + コード生成</h3>
 <div class="card">
-<p><span class="badge badge-s">Small ~5GB</span> qwen3:8b / qwen3:1.7b — Model Load + Codegen</p>
+<p><span class="badge badge-s">小型 ~5GB</span> qwen3:8b / qwen3:1.7b — モデルロード + コード生成</p>
 <table>
-<tr><th>Metric</th><th>D: Gen5</th><th>E: SATA</th><th>F: HDD</th><th>G: ICY DOCK</th></tr>
-<tr><td>8b Load Median</td><td class="highlight">2.65s</td><td>2.67s</td><td>2.70s</td><td>2.65s</td></tr>
-<tr><td>8b tok/s</td><td class="highlight">~189</td><td>~189</td><td>~189</td><td>~189</td></tr>
-<tr><td>1.7b Load Median</td><td>1.15s</td><td>1.16s</td><td>1.17s</td><td>1.15s</td></tr>
-<tr><td>1.7b tok/s</td><td>~445</td><td>~445</td><td>~445</td><td>~445</td></tr>
+<tr><th>指標</th><th>D: Gen5</th><th>E: SATA</th><th>F: HDD</th><th>G: ICY DOCK</th></tr>
+<tr><td>8b ロード中央値</td><td class="highlight">2.65s</td><td>2.67s</td><td>2.70s</td><td>2.65s</td></tr>
+<tr><td>8b トークン/秒</td><td class="highlight">~189</td><td>~189</td><td>~189</td><td>~189</td></tr>
+<tr><td>1.7b ロード中央値</td><td>1.15s</td><td>1.16s</td><td>1.17s</td><td>1.15s</td></tr>
+<tr><td>1.7b トークン/秒</td><td>~445</td><td>~445</td><td>~445</td><td>~445</td></tr>
 </table>
-<div class="finding">Storage has zero impact on small LLM inference. 98GB VRAM absorbs 5-8GB models instantly.</div>
+<div class="finding">小型LLMの推論にストレージ速度の影響はゼロ。98GB VRAMが5-8GBモデルを瞬時に吸収。</div>
 </div>
 
-<!-- ComfyUI Image Gen -->
-<h3>ComfyUI Image Generation: SDXL + AiCuty</h3>
+<!-- ComfyUI 画像生成 -->
+<h3>ComfyUI 画像生成: SDXL + AiCuty</h3>
 <div class="card">
-<p><span class="badge badge-s">Small ~7GB</span> SDXL base / AiCuty SDXL upscale</p>
+<p><span class="badge badge-s">小型 ~7GB</span> SDXL ベース / AiCuty SDXL アップスケール</p>
 <table>
-<tr><th>Workflow</th><th>Metric</th><th>D: Gen5</th><th>E: SATA</th><th>F: HDD</th><th>G: ICY DOCK</th></tr>
-<tr><td>SDXL</td><td>Cold Start</td><td class="highlight">6.1s</td><td>7.1s</td><td>7.2s</td><td>6.1s</td></tr>
-<tr><td>SDXL</td><td>Warm Start</td><td>0.04s</td><td>0.04s</td><td>0.03s</td><td>0.04s</td></tr>
-<tr><td>AiCuty</td><td>Cold Start</td><td>13.2s</td><td>13.2s</td><td>12.4s</td><td>13.2s</td></tr>
-<tr><td>AiCuty</td><td>Warm Start</td><td>0.04s</td><td>0.04s</td><td>0.03s</td><td>0.04s</td></tr>
+<tr><th>ワークフロー</th><th>指標</th><th>D: Gen5</th><th>E: SATA</th><th>F: HDD</th><th>G: ICY DOCK</th></tr>
+<tr><td>SDXL</td><td>コールドスタート</td><td class="highlight">6.1s</td><td>7.1s</td><td>7.2s</td><td>6.1s</td></tr>
+<tr><td>SDXL</td><td>ウォームスタート</td><td>0.04s</td><td>0.04s</td><td>0.03s</td><td>0.04s</td></tr>
+<tr><td>AiCuty</td><td>コールドスタート</td><td>13.2s</td><td>13.2s</td><td>12.4s</td><td>13.2s</td></tr>
+<tr><td>AiCuty</td><td>ウォームスタート</td><td>0.04s</td><td>0.04s</td><td>0.03s</td><td>0.04s</td></tr>
 </table>
-<div class="finding">7GB models: minimal cold start difference across drives. Warm start identical (VRAM cached).</div>
+<div class="finding">7GBモデル: コールドスタートでもドライブ間の差はわずか。ウォームスタートは全ドライブ同一（VRAMキャッシュ済み）。</div>
 </div>
 
-<!-- Generated Images -->
-<h3>Generated Image Artifacts</h3>
+<!-- 生成画像アーティファクト -->
+<h3>生成画像アーティファクト</h3>
 <div class="card">
 <p>SDXL 832x1216 — "A fantasy castle on a cliff, sunset, cinematic, 8k, masterpiece"</p>
 <div class="img-grid">
@@ -101,7 +101,7 @@ pre { background: #0d1117; border: 1px solid var(--border); border-radius: 4px; 
 </div>
 
 <div class="card">
-<p>AiCuty SDXL 2944x4512 upscaled</p>
+<p>AiCuty SDXL 2944x4512 アップスケール済み</p>
 <div class="img-grid">
 <figure><img src="small-models-7GB/aicuty-sdxl/aicuty_sdxl_D_run1.png" alt="D: AiCuty"><figcaption>D: Gen5 NVMe</figcaption></figure>
 <figure><img src="small-models-7GB/aicuty-sdxl/aicuty_sdxl_E.png" alt="E: AiCuty"><figcaption>E: SATA SSD</figcaption></figure>
@@ -111,21 +111,21 @@ pre { background: #0d1117; border: 1px solid var(--border); border-radius: 4px; 
 </div>
 
 <!-- LTX Video -->
-<h3>ComfyUI LTX-Video 2B: Text-to-Video</h3>
+<h3>ComfyUI LTX-Video 2B: テキストから動画生成</h3>
 <div class="card">
-<p><span class="badge badge-m">Medium ~15GB</span> LTX-Video 2B + T5 encoder — biggest storage speed difference!</p>
+<p><span class="badge badge-m">中型 ~15GB</span> LTX-Video 2B + T5エンコーダー — ストレージ速度差が最大の実験！</p>
 <table>
-<tr><th>Metric</th><th>D: Gen5</th><th>E: SATA</th><th>F: HDD</th><th>G: ICY DOCK</th></tr>
-<tr><td>Run 1 (Cold)</td><td class="highlight">8.1s</td><td class="slow">37.4s</td><td class="slow">60.9s</td><td>11.4s</td></tr>
-<tr><td>Run 2 (Cached)</td><td>7.3s</td><td>7.3s</td><td>7.3s</td><td>8.2s</td></tr>
-<tr><td>Run 3 (Cached)</td><td>7.4s</td><td>7.3s</td><td>7.3s</td><td>7.3s</td></tr>
+<tr><th>指標</th><th>D: Gen5</th><th>E: SATA</th><th>F: HDD</th><th>G: ICY DOCK</th></tr>
+<tr><td>Run 1（コールド）</td><td class="highlight">8.1s</td><td class="slow">37.4s</td><td class="slow">60.9s</td><td>11.4s</td></tr>
+<tr><td>Run 2（キャッシュ済み）</td><td>7.3s</td><td>7.3s</td><td>7.3s</td><td>8.2s</td></tr>
+<tr><td>Run 3（キャッシュ済み）</td><td>7.4s</td><td>7.3s</td><td>7.3s</td><td>7.3s</td></tr>
 </table>
-<div class="finding"><strong>D: vs F: = 7.5x difference</strong> for cold start with 15GB model. After VRAM cache, all drives identical. This is THE key finding for storage impact.</div>
+<div class="finding"><strong>D: vs F: = 7.5倍の差</strong> — 15GBモデルのコールドスタートで。VRAMキャッシュ後は全ドライブ同一。これがストレージ速度影響の核心的発見。</div>
 </div>
 
-<!-- LTX Video Artifacts -->
+<!-- LTX動画アーティファクト -->
 <div class="card">
-<p>LTX-Video generated clips (animated WEBP)</p>
+<p>LTX-Video 生成クリップ（アニメーションWEBP）</p>
 <div class="img-grid">
 <figure><img src="medium-models-15GB/ltx-video-2b/ltx_D_run1.webp" alt="D: LTX"><figcaption>D: Gen5</figcaption></figure>
 <figure><img src="medium-models-15GB/ltx-video-2b/ltx_D_run2.webp" alt="D: LTX Run2"><figcaption>D: Run2</figcaption></figure>
@@ -135,98 +135,98 @@ pre { background: #0d1117; border: 1px solid var(--border); border-radius: 4px; 
 </div>
 
 <!-- Qwen3-TTS -->
-<h3>Qwen3-TTS: Japanese Text-to-Speech</h3>
+<h3>Qwen3-TTS: 日本語音声合成</h3>
 <div class="card">
-<p><span class="badge badge-s">Small ~1.7B / 3.5GB VRAM</span> Qwen/Qwen3-TTS-12Hz-1.7B-CustomVoice (speaker: ono_anna)</p>
+<p><span class="badge badge-s">小型 ~1.7B / 3.5GB VRAM</span> Qwen/Qwen3-TTS-12Hz-1.7B-CustomVoice（話者: ono_anna）</p>
 <table>
-<tr><th>Text</th><th>Chars</th><th>D: Gen5</th><th>E: SATA</th><th>F: HDD</th><th>G: ICY DOCK</th></tr>
-<tr><td>S1 (Greeting)</td><td>17</td><td class="highlight">9.8s</td><td>8.6s</td><td>10.1s</td><td>7.5s</td></tr>
-<tr><td>M1 (Natsume Soseki)</td><td>69</td><td>32.2s</td><td>30.2s</td><td>40.9s</td><td>27.6s</td></tr>
-<tr><td>M2 (Miyazawa Kenji)</td><td>60</td><td>25.7s</td><td>23.4s</td><td>25.1s</td><td>21.2s</td></tr>
-<tr><td>L1 (Dazai "Run Melos")</td><td>145</td><td>79.1s</td><td>83.6s</td><td>80.1s</td><td>84.7s</td></tr>
-<tr><td>L2 (AI Tech)</td><td>221</td><td>75.6s</td><td>78.1s</td><td>83.8s</td><td>77.3s</td></tr>
-<tr><td><strong>Total Median</strong></td><td></td><td><strong>231.3s</strong></td><td><strong>225.9s</strong></td><td><strong>236.0s</strong></td><td><strong>225.4s</strong></td></tr>
-<tr><td>Model Load</td><td></td><td>6.4s</td><td>6.2s</td><td>6.3s</td><td>6.6s</td></tr>
+<tr><th>テキスト</th><th>文字数</th><th>D: Gen5</th><th>E: SATA</th><th>F: HDD</th><th>G: ICY DOCK</th></tr>
+<tr><td>S1（挨拶）</td><td>17</td><td>9.8s</td><td>8.6s</td><td>10.1s</td><td class="highlight">7.5s</td></tr>
+<tr><td>M1（夏目漱石『吾輩は猫である』）</td><td>69</td><td>32.2s</td><td>30.2s</td><td class="slow">40.9s</td><td class="highlight">27.6s</td></tr>
+<tr><td>M2（宮沢賢治『銀河鉄道の夜』）</td><td>60</td><td>25.7s</td><td>23.4s</td><td>25.1s</td><td class="highlight">21.2s</td></tr>
+<tr><td>L1（太宰治『走れメロス』）</td><td>145</td><td class="highlight">79.1s</td><td>83.6s</td><td>80.1s</td><td>84.7s</td></tr>
+<tr><td>L2（AI技術解説）</td><td>221</td><td class="highlight">75.6s</td><td>78.1s</td><td class="slow">83.8s</td><td>77.3s</td></tr>
+<tr><td><strong>合計中央値</strong></td><td></td><td><strong>231.3s</strong></td><td><strong>225.9s</strong></td><td><strong>236.0s</strong></td><td><strong>225.4s</strong></td></tr>
+<tr><td>モデルロード時間</td><td></td><td>6.4s</td><td>6.2s</td><td>6.3s</td><td>6.6s</td></tr>
 </table>
-<div class="finding">TTS generation time is purely GPU-bound. Storage has negligible impact on 1.7B model. Generation time scales ~linearly with text length.</div>
+<div class="finding">TTS生成時間は完全にGPUバウンド。1.7Bモデルではストレージ速度の影響は無視できるレベル。生成時間はテキスト長にほぼ比例。</div>
 </div>
 
 <!-- llm-jp-moshi -->
-<h3>llm-jp-moshi: Japanese Full-Duplex Voice Dialogue</h3>
+<h3>llm-jp-moshi: 日本語フルデュプレックス音声対話</h3>
 <div class="card">
-<p><span class="badge badge-m">Medium ~15.6GB</span> llm-jp/llm-jp-moshi-v1 (7B param, Mimi codec + LM)</p>
+<p><span class="badge badge-m">中型 ~15.6GB</span> llm-jp/llm-jp-moshi-v1（7Bパラメータ、Mimiコーデック + LM）</p>
 <table>
-<tr><th>Metric</th><th>D: Gen5</th><th>E: SATA</th><th>F: HDD</th><th>G: ICY DOCK</th></tr>
-<tr><td>Total Load Median</td><td class="highlight">9.0s</td><td>9.1s</td><td>10.3s</td><td class="slow">11.4s</td></tr>
-<tr><td>LM Load (14.7GB)</td><td class="highlight">8.5s</td><td>8.7s</td><td>9.9s</td><td class="slow">11.1s</td></tr>
-<tr><td>Mimi Codec Load</td><td>0.47s</td><td>0.46s</td><td>0.56s</td><td>0.38s</td></tr>
-<tr><td>Codec Encode (3s audio)</td><td>0.016s</td><td>0.016s</td><td>0.014s</td><td>0.014s</td></tr>
-<tr><td>Codec Decode (3s audio)</td><td>0.010s</td><td>0.010s</td><td>0.010s</td><td>0.010s</td></tr>
+<tr><th>指標</th><th>D: Gen5</th><th>E: SATA</th><th>F: HDD</th><th>G: ICY DOCK</th></tr>
+<tr><td>総ロード中央値</td><td class="highlight">9.0s</td><td>9.1s</td><td>10.3s</td><td class="slow">11.4s</td></tr>
+<tr><td>LMロード（14.7GB）</td><td class="highlight">8.5s</td><td>8.7s</td><td>9.9s</td><td class="slow">11.1s</td></tr>
+<tr><td>Mimiコーデックロード</td><td>0.47s</td><td>0.46s</td><td>0.56s</td><td>0.38s</td></tr>
+<tr><td>コーデックエンコード（3秒音声）</td><td>0.016s</td><td>0.016s</td><td>0.014s</td><td>0.014s</td></tr>
+<tr><td>コーデックデコード（3秒音声）</td><td>0.010s</td><td>0.010s</td><td>0.010s</td><td>0.010s</td></tr>
 </table>
-<div class="finding">15GB model: D:(Gen5) 8.5s vs F:(HDD) 9.9s = 16% difference. G:(ICY DOCK) shows 30% penalty vs D: for this model size. After load, codec performance identical across drives.</div>
+<div class="finding">15GBモデル: D:(Gen5) 8.5s vs F:(HDD) 9.9s = 16%の差。G:(ICY DOCK) はD:と比較して30%の遅延。ロード後のコーデック性能は全ドライブ同一。</div>
 </div>
 
-<!-- Parallel Workload -->
-<h2>Parallel Workload Coexistence</h2>
+<!-- 並列実行テスト -->
+<h2>並列ワークロード共存テスト</h2>
 <div class="card">
-<h3>TTS + moshi Simultaneous GPU Execution</h3>
-<p>98GB VRAM allows multiple AI workloads to run simultaneously without interference.</p>
+<h3>TTS + moshi 同時GPU実行</h3>
+<p>98GB VRAMにより、複数のAIワークロードを干渉なく同時実行可能。</p>
 <table>
-<tr><th>State</th><th>VRAM Used</th><th>VRAM Free</th><th>GPU Temp</th><th>Power</th><th>GPU Util</th></tr>
-<tr><td>Idle</td><td>~1.2 GB</td><td>~96.7 GB</td><td>42°C</td><td>33W</td><td>0%</td></tr>
-<tr><td>TTS Only</td><td>~7 GB</td><td>~90 GB</td><td>63°C</td><td>87W</td><td>8-22%</td></tr>
-<tr><td><strong>TTS + moshi Parallel</strong></td><td><strong>~23 GB</strong></td><td><strong>~74 GB</strong></td><td><strong>65°C</strong></td><td><strong>111W</strong></td><td><strong>22%</strong></td></tr>
+<tr><th>状態</th><th>VRAM使用量</th><th>VRAM空き</th><th>GPU温度</th><th>消費電力</th><th>GPU使用率</th></tr>
+<tr><td>アイドル</td><td>~1.2 GB</td><td>~96.7 GB</td><td>42°C</td><td>33W</td><td>0%</td></tr>
+<tr><td>TTSのみ</td><td>~7 GB</td><td>~90 GB</td><td>63°C</td><td>87W</td><td>8-22%</td></tr>
+<tr><td><strong>TTS + moshi 並列</strong></td><td><strong>~23 GB</strong></td><td><strong>~74 GB</strong></td><td><strong>65°C</strong></td><td><strong>111W</strong></td><td><strong>22%</strong></td></tr>
 </table>
-<div class="finding"><strong>Confirmed: TTS (3.5GB) + moshi (15.4GB) coexist on 98GB VRAM with only +2°C temperature increase.</strong> This validates multi-task AI workstation use cases that are only possible with large VRAM + fast storage.</div>
+<div class="finding"><strong>確認済み: TTS (3.5GB) + moshi (15.4GB) が98GB VRAM上で温度上昇わずか+2°Cで共存。</strong>大容量VRAM + 高速ストレージでのみ実現可能なマルチタスクAIワークステーションの実証。</div>
 
-<!-- GPU Monitor Chart -->
-<h3>GPU Monitor Timeline (TTS + moshi parallel)</h3>
+<!-- GPUモニターチャート -->
+<h3>GPUモニター タイムライン（TTS + moshi 並列実行時）</h3>
 <div class="chart-container">
 <canvas id="gpuChart"></canvas>
 </div>
 </div>
 
-<!-- Key Findings -->
-<h2>Key Findings Summary</h2>
+<!-- 主要知見 -->
+<h2>主要知見まとめ</h2>
 <div class="grid">
 <div class="card">
-<h3>1. VRAM Zombie Process (R1 Fix)</h3>
-<p>R1 showed D: 186 tok/s vs others 19-21 tok/s. Root cause: zombie Ollama process consuming all VRAM, forcing CPU fallback. After cleanup, all drives ~189 tok/s.</p>
+<h3>1. VRAMゾンビプロセス問題（R1で発覚）</h3>
+<p>R1ではD: 186 tok/s vs 他 19-21 tok/sという異常値を観測。原因: Ollamaのゾンビプロセスが全VRAMを占有し、CPUフォールバックが発生。クリーンアップ後、全ドライブ ~189 tok/s に統一。</p>
 </div>
 <div class="card">
-<h3>2. Model Size Determines Storage Impact</h3>
-<p><strong>Small (&lt;7GB):</strong> No storage difference<br>
-<strong>Medium (~15GB):</strong> Up to 7.5x cold start difference (D: vs F:)<br>
-After VRAM cache: all drives identical</p>
+<h3>2. モデルサイズがストレージ影響を決定</h3>
+<p><strong>小型（&lt;7GB）:</strong> ストレージ差なし<br>
+<strong>中型（~15GB）:</strong> コールドスタートで最大7.5倍の差（D: vs F:）<br>
+VRAMキャッシュ後: 全ドライブ同一</p>
 </div>
 <div class="card">
-<h3>3. ICY DOCK Performance</h3>
-<p>Same Gen5 NVMe via ICY DOCK removable bay: ~30-40% penalty for 15GB+ model loads, negligible for &lt;7GB models. Practical for swappable storage.</p>
+<h3>3. ICY DOCK パフォーマンス</h3>
+<p>同じGen5 NVMeをICY DOCKリムーバブルベイ経由で接続: 15GB以上のモデルロードで~30-40%の遅延、7GB以下では無視できるレベル。交換可能ストレージとして十分実用的。</p>
 </div>
 <div class="card">
-<h3>4. Parallel AI Workloads</h3>
-<p>98GB VRAM enables true multi-task AI: TTS + voice dialogue + image gen simultaneously with &lt;25% VRAM usage, stable 65°C. Only video gen (&gt;30GB) conflicts.</p>
+<h3>4. 並列AIワークロード</h3>
+<p>98GB VRAMは真のマルチタスクAIを実現: TTS + 音声対話 + 画像生成を同時実行してもVRAM使用率25%以下、温度65°Cで安定。動画生成（&gt;30GB）のみ競合。</p>
 </div>
 </div>
 
-<!-- Storage Impact Matrix -->
-<h2>Storage Impact Matrix</h2>
+<!-- ストレージ影響マトリクス -->
+<h2>ストレージ影響マトリクス</h2>
 <div class="card">
 <table>
-<tr><th>Model Size</th><th>Examples</th><th>Cold Start Impact</th><th>Warm/Cached</th><th>Verdict</th></tr>
-<tr><td><span class="badge badge-s">~5GB</span></td><td>Ollama qwen3:8b/1.7b</td><td>None (all ~2.7s)</td><td>N/A (VRAM)</td><td>Storage irrelevant</td></tr>
-<tr><td><span class="badge badge-s">~7GB</span></td><td>SDXL, AiCuty</td><td>Minimal (6-7s)</td><td>Identical (0.04s)</td><td>Storage irrelevant</td></tr>
-<tr><td><span class="badge badge-m">~15GB</span></td><td>LTX-Video, moshi</td><td><strong>Up to 7.5x</strong></td><td>Identical</td><td><strong>Gen5 NVMe matters!</strong></td></tr>
-<tr><td><span class="badge badge-s">~3.5GB</span></td><td>Qwen3-TTS 1.7B</td><td>None (~6s all)</td><td>GPU-bound</td><td>Storage irrelevant</td></tr>
+<tr><th>モデルサイズ</th><th>対象モデル</th><th>コールドスタート影響</th><th>ウォーム/キャッシュ後</th><th>結論</th></tr>
+<tr><td><span class="badge badge-s">~5GB</span></td><td>Ollama qwen3:8b/1.7b</td><td>なし（全て ~2.7s）</td><td>N/A（VRAM常駐）</td><td>ストレージ無関係</td></tr>
+<tr><td><span class="badge badge-s">~7GB</span></td><td>SDXL, AiCuty</td><td>わずか（6-7s）</td><td>同一（0.04s）</td><td>ストレージ無関係</td></tr>
+<tr><td><span class="badge badge-m">~15GB</span></td><td>LTX-Video, moshi</td><td><strong>最大7.5倍</strong></td><td>同一</td><td><strong>Gen5 NVMeが効く！</strong></td></tr>
+<tr><td><span class="badge badge-s">~3.5GB</span></td><td>Qwen3-TTS 1.7B</td><td>なし（全て ~6s）</td><td>GPUバウンド</td><td>ストレージ無関係</td></tr>
 </table>
 </div>
 
 <p class="meta" style="margin-top:3rem; text-align:center;">
-  Generated: 2026-03-11 | AICU-bench R2 | <a href="https://bench.aicu.jp" style="color:var(--accent)">bench.aicu.jp</a>
+  生成日: 2026-03-11 | AICU-bench R2 | <a href="https://bench.aicu.jp" style="color:var(--accent)">bench.aicu.jp</a>
 </p>
 
 <script>
-// GPU Monitor Data (from CSV)
+// GPUモニターデータ（CSVより）
 const monitorData = [
   {t:0,vram:22911,temp:65,power:109,util:22,cpu:3.8},
   {t:10,vram:22958,temp:65,power:112,util:22,cpu:7.8},
@@ -259,7 +259,7 @@ const monitorData = [
   {t:280,vram:7047,temp:65,power:105,util:10,cpu:3.8},
 ];
 
-// Simple canvas chart
+// Canvasチャート描画
 const canvas = document.getElementById('gpuChart');
 if (canvas) {
   const ctx = canvas.getContext('2d');
@@ -277,7 +277,7 @@ if (canvas) {
   ctx.fillStyle = '#0d1117';
   ctx.fillRect(0,0,W,H);
 
-  // Axes
+  // 軸
   ctx.strokeStyle = '#30363d';
   ctx.lineWidth = 1;
   ctx.beginPath();
@@ -286,7 +286,7 @@ if (canvas) {
   ctx.lineTo(W-pad.r, H-pad.b);
   ctx.stroke();
 
-  // VRAM line (scale: 0-25000)
+  // VRAM（スケール: 0-25000）
   const vramMax = 25000;
   ctx.strokeStyle = '#58a6ff';
   ctx.lineWidth = 2;
@@ -298,7 +298,7 @@ if (canvas) {
   });
   ctx.stroke();
 
-  // Power line (scale: 0-200)
+  // 消費電力（スケール: 0-200）
   const pwrMax = 200;
   ctx.strokeStyle = '#d29922';
   ctx.lineWidth = 2;
@@ -310,7 +310,7 @@ if (canvas) {
   });
   ctx.stroke();
 
-  // GPU Util line (scale: 0-100)
+  // GPU使用率（スケール: 0-100）
   ctx.strokeStyle = '#3fb950';
   ctx.lineWidth = 1.5;
   ctx.setLineDash([4,4]);
@@ -323,7 +323,7 @@ if (canvas) {
   ctx.stroke();
   ctx.setLineDash([]);
 
-  // Labels
+  // 時間軸ラベル
   ctx.font = '12px Segoe UI';
   ctx.fillStyle = '#8b949e';
   ctx.textAlign = 'center';
@@ -332,18 +332,18 @@ if (canvas) {
     ctx.fillText(t+'s', x, H-pad.b+20);
   }
 
-  // Legend
+  // 凡例
   ctx.textAlign = 'left';
   const ly = 15;
-  [{c:'#58a6ff',l:'VRAM (MB)'},{c:'#d29922',l:'Power (W)'},{c:'#3fb950',l:'GPU Util (%)'}].forEach((item,i) => {
-    const lx = pad.l + i*140;
+  [{c:'#58a6ff',l:'VRAM (MB)'},{c:'#d29922',l:'消費電力 (W)'},{c:'#3fb950',l:'GPU使用率 (%)'}].forEach((item,i) => {
+    const lx = pad.l + i*150;
     ctx.fillStyle = item.c;
     ctx.fillRect(lx, ly-6, 20, 3);
     ctx.fillStyle = '#e6edf3';
     ctx.fillText(item.l, lx+25, ly);
   });
 
-  // Annotation: moshi unload
+  // 注釈: moshiアンロード
   const t20x = pad.l + (20/280)*cW;
   ctx.strokeStyle = '#f8514966';
   ctx.setLineDash([3,3]);
@@ -354,7 +354,7 @@ if (canvas) {
   ctx.setLineDash([]);
   ctx.fillStyle = '#f85149';
   ctx.font = '10px Segoe UI';
-  ctx.fillText('moshi unloaded', t20x+3, pad.t+15);
+  ctx.fillText('moshi アンロード', t20x+3, pad.t+15);
 }
 </script>
 
