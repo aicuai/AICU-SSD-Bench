@@ -21,16 +21,35 @@
     <h1>AICU-SSD-Bench</h1>
     <p class="subtitle">AI ワークロードを多角的に計測するオープンソースベンチマーク</p>
     <p class="tagline">今回のテーマ: ストレージ速度が AI ワークロードに与える影響<br>Impress AKIBA PC Hotline! 取材協力 | Samsung 9100 PRO (Gen5 NVMe) &times; AI ワークロード</p>
-    <span class="badge">MIT License</span>
-    <br>
-    <a href="https://github.com/aicuai/AICU-SSD-Bench" class="cta" target="_blank" rel="noopener">GitHub でソースを見る</a>
+    <div class="hero-video-bg">
+      <video class="hero-video" autoplay muted playsinline preload="auto"
+        src="assets/video/r4-ltx23/D_ltx23_t2v_cold.mp4"
+        data-sources='["assets/video/r4-ltx23/D_ltx23_t2v_cold.mp4","assets/video/r4-ltx23/D_ltx23_ia2v_warm.mp4","assets/video/r4-ltx23/E_ltx23_t2v_cold.mp4","assets/video/r4-ltx23/G_ltx23_t2v_cold.mp4"]'></video>
+    </div>
   </div>
 </header>
 
-<main>
+<nav id="toc" class="tab-nav" role="tablist" aria-label="セクションナビゲーション">
+  <div class="container">
+    <ul class="tab-list">
+      <li><button role="tab" data-tab="overview" aria-selected="true" aria-controls="overview" id="tab-overview">概要</button></li>
+      <li><button role="tab" data-tab="hypothesis" aria-selected="false" aria-controls="hypothesis" id="tab-hypothesis">仮説</button></li>
+      <li><button role="tab" data-tab="setup" aria-selected="false" aria-controls="setup" id="tab-setup">構成</button></li>
+      <li><button role="tab" data-tab="methodology" aria-selected="false" aria-controls="methodology" id="tab-methodology">手法</button></li>
+      <li><button role="tab" data-tab="results" aria-selected="false" aria-controls="results" id="tab-results">結果</button></li>
+      <li><button role="tab" data-tab="samples" aria-selected="false" aria-controls="samples" id="tab-samples">生成物</button></li>
+      <li class="tab-highlight"><button role="tab" data-tab="conclusion" aria-selected="false" aria-controls="conclusion" id="tab-conclusion">結論</button></li>
+      <li><button role="tab" data-tab="discussion" aria-selected="false" aria-controls="discussion" id="tab-discussion">考察</button></li>
+      <li><button role="tab" data-tab="resources" aria-selected="false" aria-controls="resources" id="tab-resources">資料</button></li>
+      <li><button role="tab" data-tab="credits" aria-selected="false" aria-controls="credits" id="tab-credits">謝辞</button></li>
+    </ul>
+  </div>
+</nav>
 
-<!-- 概要 -->
-<section>
+<main class="tab-panels">
+
+<!-- ====== 1. 概要 ====== -->
+<div class="tab-panel active" id="overview" role="tabpanel" aria-labelledby="tab-overview">
   <div class="container">
     <h2 class="section-title">概要</h2>
     <p>
@@ -44,13 +63,97 @@
       <strong>SSD フラグメンテーションによる性能変化</strong>についても評価しています。
     </p>
   </div>
-</section>
+</div>
 
-<!-- テスト環境 -->
-<section>
+<!-- ====== 2. 仮説 ====== -->
+<div class="tab-panel" id="hypothesis" role="tabpanel" aria-labelledby="tab-hypothesis">
   <div class="container">
-    <h2 class="section-title">テスト環境</h2>
+    <h2 class="section-title">仮説: AI ワークロードにおけるストレージ速度の影響</h2>
+    <p style="margin-bottom:24px; color: var(--text-secondary);">
+      各実験で検証する仮説と、モデルサイズ別に予測される影響度。
+    </p>
 
+    <!-- モデルサイズ別影響予測 -->
+    <div style="display:grid; grid-template-columns: repeat(2, 1fr); gap:12px; margin-bottom:28px;">
+      <div class="exp-card" style="border-left: 4px solid #0969da; padding:16px;">
+        <div class="exp-icon" style="font-size:1.2rem;">S</div>
+        <h3>Small Models (~7GB)</h3>
+        <p style="font-size:0.85rem; color:var(--text-secondary);">SDXL Checkpoint 単体。98GB VRAM に余裕で収まり、ストレージ差はほぼ出ない。</p>
+        <p style="font-size:0.85rem; margin-top:4px;"><strong>Cold start: 6-7s</strong> (差: ~1s)</p>
+      </div>
+      <div class="exp-card" style="border-left: 4px solid #bf5700; padding:16px;">
+        <div class="exp-icon" style="font-size:1.2rem;">M</div>
+        <h3>Medium Models (~15GB)</h3>
+        <p style="font-size:0.85rem; color:var(--text-secondary);">LTX-Video 2B + T5-XXL。コールドスタートでストレージ速度差が顕在化。</p>
+        <p style="font-size:0.85rem; margin-top:4px;"><strong>Cold start: 8s vs 61s</strong> (差: 7.5x)</p>
+      </div>
+      <div class="exp-card" style="border-left: 4px solid #cf222e; padding:16px;">
+        <div class="exp-icon" style="font-size:1.2rem;">L</div>
+        <h3>Large Models (~45GB)</h3>
+        <p style="font-size:0.85rem; color:var(--text-secondary);">LTX 2.3 22B FP8 (~29GB checkpoint + Gemma 3 12B + LoRAs + Upscaler = ~45GB)。最もストレージ速度が効くサイズ帯。</p>
+        <p style="font-size:0.85rem; margin-top:4px;"><strong style="color:#cf222e;">Cold start: D: 98s vs F: 288s = 2.9x difference</strong></p>
+      </div>
+      <div class="exp-card" style="border-left: 4px solid #1a7f37; padding:16px;">
+        <div class="exp-icon" style="font-size:1.2rem;">GPU</div>
+        <h3>推論（VRAM ロード後）</h3>
+        <p style="font-size:0.85rem; color:var(--text-secondary);">VRAM にモデルが展開された後は、ストレージ速度は推論に影響しない。</p>
+        <p style="font-size:0.85rem; margin-top:4px;"><strong>全ドライブ同一: ~189 tok/s</strong></p>
+      </div>
+    </div>
+
+    <!-- 実験別仮説 -->
+    <h3 style="margin-bottom:16px; font-size:1.1rem;">実験別の検証仮説</h3>
+    <div class="exp-grid">
+      <div class="exp-card">
+        <h3>Ex0: disk-speed-bench</h3>
+        <div class="exp-hypothesis">Gen5 NVMe のカタログ値 14,800 MB/s に対する実効速度を計測。</div>
+      </div>
+      <div class="exp-card">
+        <h3>Ex1: download-bench</h3>
+        <div class="exp-hypothesis">ダウンロード時はネットワーク帯域がボトルネック。ストレージ速度は書き込み側で影響。</div>
+      </div>
+      <div class="exp-card">
+        <h3>Ex2: vibe-local-bench</h3>
+        <div class="exp-hypothesis">Gen5 では即座に起動。HDD では待機が体感に直結。</div>
+      </div>
+      <div class="exp-card">
+        <h3>Ex3: comfyui-imggen (SDXL)</h3>
+        <div class="exp-hypothesis">コールドスタートで差が出る。ウォーム時は GPU 依存で差なし。</div>
+      </div>
+      <div class="exp-card">
+        <h3>Ex4: comfyui-imggen (AiCuty)</h3>
+        <div class="exp-hypothesis">モデル切り替え時の再ロードでストレージ速度差が顕著に。</div>
+      </div>
+      <div class="exp-card">
+        <h3>Ex5: Wan 2.2 14B</h3>
+        <div class="exp-hypothesis">巨大モデル (~34GB) のロードで Gen5 NVMe の優位性が最大化。</div>
+      </div>
+      <div class="exp-card">
+        <h3>Ex6: LTX 2.3 22B</h3>
+        <div class="exp-hypothesis">合計 ~37GB のモデルロードで最もストレージ速度の影響が大きい実験。</div>
+      </div>
+      <div class="exp-card">
+        <h3>Ex7: パイプライン</h3>
+        <div class="exp-hypothesis">複数モデルの連続ロードが発生し、ストレージ速度差が累積的に効く。</div>
+      </div>
+      <div class="exp-card">
+        <h3>Ex8: Qwen3-TTS</h3>
+        <div class="exp-hypothesis">初動時間でストレージ速度の影響を可視化。合成中は影響軽微。</div>
+      </div>
+      <div class="exp-card">
+        <h3>Ex9: llm-jp-moshi</h3>
+        <div class="exp-hypothesis">15GB 級モデルのロードで Gen5 NVMe の効果が明確に表れる。</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ====== 3. 構成 ====== -->
+<div class="tab-panel" id="setup" role="tabpanel" aria-labelledby="tab-setup">
+  <div class="container">
+    <h2 class="section-title">テスト構成</h2>
+
+    <!-- テスト環境 -->
     <h3 style="margin-bottom:16px; font-size:1.2rem;">本実験環境</h3>
     <div class="spec-grid">
       <div class="spec-card">
@@ -74,8 +177,8 @@
       </div>
     </div>
 
-    <details style="margin-top:40px;">
-      <summary style="cursor:pointer; font-size:1.1rem; font-weight:600; color:var(--text-secondary); margin-bottom:12px;">
+    <details style="margin-top:24px;">
+      <summary style="cursor:pointer; font-size:1rem; font-weight:600; color:var(--text-secondary); margin-bottom:12px;">
         参考: 予備調査環境（G-Tune P6-I7G50 ノート PC）
       </summary>
       <p style="margin-bottom:12px; color: var(--text-secondary); font-size:0.9rem;">
@@ -96,13 +199,9 @@
         </div>
       </div>
     </details>
-  </div>
-</section>
 
-<!-- テスト対象ストレージ -->
-<section>
-  <div class="container">
-    <h2 class="section-title">テスト対象ストレージ</h2>
+    <!-- ストレージ -->
+    <h3 style="margin-top:40px; margin-bottom:16px; font-size:1.2rem;">テスト対象ストレージ</h3>
     <div style="overflow-x:auto">
       <table class="storage-table">
         <thead>
@@ -136,17 +235,10 @@
         </tbody>
       </table>
     </div>
-  </div>
-</section>
-
-<!-- 実験構成 -->
-<section id="experiments">
-  <div class="container">
-    <h2 class="section-title">実験構成</h2>
 
     <!-- 実験インデックス -->
+    <h3 style="margin-top:40px; margin-bottom:16px; font-size:1.2rem;">実験インデックス</h3>
     <div style="background:var(--bg-secondary); border:1px solid var(--border); border-radius:var(--radius); padding:20px 24px; margin-bottom:28px;">
-      <h3 style="margin-bottom:12px; font-size:1.1rem;">実験インデックス</h3>
       <table class="storage-table" style="margin:0;">
         <thead>
           <tr><th style="width:60px;">#</th><th style="width:240px;">実験名</th><th>内容</th><th style="width:80px;">状態</th></tr>
@@ -155,11 +247,11 @@
           <tr><td><strong>Ex0</strong></td><td>disk-speed-bench</td><td>ダミーファイルを使ったシーケンシャル速度スペックチェック</td><td style="color:#1a7f37;"><strong>完了</strong></td></tr>
           <tr><td><strong>Ex1</strong></td><td>download-bench</td><td>ダウンロード速度を通した実操作計測</td><td style="color:#1a7f37;"><strong>完了</strong></td></tr>
           <tr><td><strong>Ex2</strong></td><td>vibe-local-bench</td><td>Local LLM (Ollama qwen3) でのコーディング &amp; コールドスタート調査</td><td style="color:#1a7f37;"><strong>完了</strong></td></tr>
-          <tr><td><strong>Ex3</strong></td><td>comfyui-imggen-bench (SDXL)</td><td>ComfyUI 画像生成 — SDXL Checkpoint 単体</td><td style="color:#1a7f37;"><strong>完了</strong></td></tr>
-          <tr><td><strong>Ex4</strong></td><td>comfyui-imggen-bench (AiCuty)</td><td>ComfyUI 画像生成 — AiCuty SDXL (Checkpoint+2LoRA+Upscaler)</td><td style="color:#1a7f37;"><strong>完了</strong></td></tr>
-          <tr><td><strong>Ex5</strong></td><td>comfyui-video-bench (Wan 2.2)</td><td>ComfyUI 動画生成 — Wan 2.2 14B t2v（タイムアウトにより打ち切り）</td><td style="color:#8b949e;"><strong>打ち切り</strong></td></tr>
-          <tr><td><strong>Ex6</strong></td><td>comfyui-video-bench (LTX 2.3)</td><td>ComfyUI 動画生成 — LTX 2.3 22B FP8 t2v / ia2v コールドスタートベンチ</td><td style="color:#1a7f37;"><strong>完了 (R4)</strong></td></tr>
-          <tr><td><strong>Ex7</strong></td><td>comfyui-pipeline-bench</td><td>Ex6 に統合（LTX 2.3 t2v → ia2v 連続実行）</td><td style="color:#8b949e;"><strong>統合済み</strong></td></tr>
+          <tr><td><strong>Ex3</strong></td><td>comfyui-imggen-bench (SDXL)</td><td>ComfyUI 画像生成 &mdash; SDXL Checkpoint 単体</td><td style="color:#1a7f37;"><strong>完了</strong></td></tr>
+          <tr><td><strong>Ex4</strong></td><td>comfyui-imggen-bench (AiCuty)</td><td>ComfyUI 画像生成 &mdash; AiCuty SDXL (Checkpoint+2LoRA+Upscaler)</td><td style="color:#1a7f37;"><strong>完了</strong></td></tr>
+          <tr><td><strong>Ex5</strong></td><td>comfyui-video-bench (Wan 2.2)</td><td>ComfyUI 動画生成 &mdash; Wan 2.2 14B t2v（タイムアウトにより打ち切り）</td><td style="color:#8b949e;"><strong>打ち切り</strong></td></tr>
+          <tr><td><strong>Ex6</strong></td><td>comfyui-video-bench (LTX 2.3)</td><td>ComfyUI 動画生成 &mdash; LTX 2.3 22B FP8 t2v / ia2v コールドスタートベンチ</td><td style="color:#1a7f37;"><strong>完了 (R4)</strong></td></tr>
+          <tr><td><strong>Ex7</strong></td><td>comfyui-pipeline-bench</td><td>Ex6 に統合（LTX 2.3 t2v &rarr; ia2v 連続実行）</td><td style="color:#8b949e;"><strong>統合済み</strong></td></tr>
           <tr><td><strong>Ex8</strong></td><td>qwen3tts-bench</td><td>Qwen3-TTS 長文音声合成実験</td><td style="color:#1a7f37;"><strong>完了</strong></td></tr>
           <tr><td><strong>Ex9</strong></td><td>llm-jp-moshi-bench</td><td>llm-jp-moshi 高速音声応答実験</td><td style="color:#1a7f37;"><strong>完了</strong></td></tr>
           <tr><td><strong>Ex10</strong></td><td>total-summary</td><td>上記全体の所要時間・所要ストレージ総合レポート</td><td style="color:#1a7f37;"><strong>完了</strong></td></tr>
@@ -167,129 +259,76 @@
       </table>
     </div>
 
+    <!-- 実験カード -->
     <div class="exp-grid">
-
-      <!-- Ex0: disk-speed-bench -->
       <div class="exp-card">
         <div class="exp-icon">&#x1F4BE;</div>
         <h3>Ex0: disk-speed-bench</h3>
         <div class="exp-tool">ダミーファイル シーケンシャル R/W</div>
         <p>256MB / 512MB / 1024MB のダミーファイルでシーケンシャルリード/ライト速度を計測。ストレージの基本スペックを確認。</p>
-        <div class="exp-hypothesis">Gen5 NVMe のカタログ値 14,800 MB/s に対する実効速度を計測。</div>
       </div>
-
-      <!-- Ex1: download-bench -->
       <div class="exp-card">
         <div class="exp-icon">&#x2B07;</div>
         <h3>Ex1: download-bench</h3>
         <div class="exp-tool">モデルダウンロード実測</div>
         <p>HuggingFace / Ollama からのモデルダウンロード速度を実測。ネットワーク + ストレージ書き込みの複合スループットを計測。</p>
-        <div class="exp-hypothesis">ダウンロード時はネットワーク帯域がボトルネック。ストレージ速度は書き込み側で影響。</div>
       </div>
-
-      <!-- Ex2: vibe-local-bench -->
       <div class="exp-card">
         <div class="exp-icon">&gt;_</div>
         <h3>Ex2: vibe-local-bench</h3>
         <div class="exp-tool">Ollama + qwen3:8b / 1.7b</div>
         <p>ローカル LLM のモデルロード時間とコード生成時間を計測。5.2 GB モデルの読み込みでストレージ速度差を定量化。</p>
-        <div class="exp-hypothesis">Gen5 では即座に起動。HDD では待機が体感に直結。</div>
       </div>
-
-      <!-- Ex3: comfyui-imggen SDXL -->
       <div class="exp-card">
         <div class="exp-icon">&#128444;</div>
-        <h3>Ex3: comfyui-imggen-bench (SDXL)</h3>
+        <h3>Ex3: comfyui-imggen (SDXL)</h3>
         <div class="exp-tool">ComfyUI + Animagine XL 4.0</div>
         <p>SDXL Checkpoint 単体 (6.46GB) での画像生成。コールドスタート vs ウォームスタートの差でストレージ影響を分離。</p>
-        <div class="exp-hypothesis">コールドスタートで差が出る。ウォーム時は GPU 依存で差なし。</div>
       </div>
-
-      <!-- Ex4: comfyui-imggen AiCuty -->
       <div class="exp-card">
         <div class="exp-icon">&#128444;</div>
-        <h3>Ex4: comfyui-imggen-bench (AiCuty)</h3>
-        <div class="exp-tool">ComfyUI + <a href="https://github.com/aicuai/AiCuty" target="_blank" rel="noopener">AiCuty</a> 複数モデル比較</div>
-        <p>
-          SDXL / WAI / AnimagineXL4 / Mellow Pencil の複数 Checkpoint を切り替えながら計測。
-          Checkpoint + LoRA &times; 2 + RealESRGAN アップスケールによる本格パイプライン。
-        </p>
-        <div class="exp-hypothesis">
-          モデル切り替え時の再ロードでストレージ速度差が顕著に。736&times;1128 / 28 steps / DPM++ 2M SDE Karras / CFG 5。
-        </div>
+        <h3>Ex4: comfyui-imggen (AiCuty)</h3>
+        <div class="exp-tool">ComfyUI + <a href="https://github.com/aicuai/AiCuty" target="_blank" rel="noopener">AiCuty</a></div>
+        <p>SDXL / WAI / AnimagineXL4 / Mellow Pencil の複数 Checkpoint + LoRA &times; 2 + RealESRGAN アップスケール。</p>
       </div>
-
-      <!-- Ex5: Wan 2.2 -->
       <div class="exp-card">
         <div class="exp-icon">&#127916;</div>
-        <h3>Ex5: comfyui-video-bench (Wan 2.2)</h3>
+        <h3>Ex5: Wan 2.2 14B</h3>
         <div class="exp-tool">ComfyUI + Wan 2.2 14B t2v / i2v</div>
-        <p>
-          Wan 2.2 14B (Dual-UNET ~34GB) で text-to-video &amp; image-to-video を計測。
-          High/Low Noise の 2 つの UNET 切り替えでモデルスイッチングの影響も可視化。
-        </p>
-        <div class="exp-hypothesis">巨大モデル (~34GB) のロードで Gen5 NVMe の優位性が最大化。</div>
+        <p>Wan 2.2 14B (Dual-UNET ~34GB) で text-to-video &amp; image-to-video。タイムアウトにより打ち切り。</p>
       </div>
-
-      <!-- Ex6: LTX 2.3 -->
       <div class="exp-card">
         <div class="exp-icon">&#127916;</div>
-        <h3>Ex6: comfyui-video-bench (LTX 2.3)</h3>
+        <h3>Ex6: LTX 2.3 22B</h3>
         <div class="exp-tool">ComfyUI + LTX 2.3 22B FP8 t2v / i2v</div>
-        <p>
-          LTX 2.3 (22B FP8 ~29GB + Gemma 3 12B + Upscaler) で動画生成。
-          単一 29GB チェックポイントのロードでストレージ速度差が直結。
-        </p>
-        <div class="exp-hypothesis">合計 ~37GB のモデルロードで最もストレージ速度の影響が大きい実験。</div>
+        <p>LTX 2.3 (22B FP8 ~29GB + Gemma 3 12B + Upscaler) で動画生成。最もストレージ速度が効くサイズ帯。</p>
       </div>
-
-      <!-- Ex7: 総合パイプライン -->
       <div class="exp-card">
         <div class="exp-icon">&#x1F3AC;</div>
-        <h3>Ex7: comfyui-pipeline-bench</h3>
+        <h3>Ex7: パイプライン</h3>
         <div class="exp-tool">ComfyUI 総合パイプライン</div>
-        <p>
-          Ex4 の Mellow Pencil 画像生成結果を Ex6 LTX 2.3 i2v に入力する融合パイプライン。
-          画像生成 → 動画生成の連続ワークフローでストレージ/VRAM の総合影響を計測。
-        </p>
-        <div class="exp-hypothesis">複数モデルの連続ロードが発生し、ストレージ速度差が累積的に効く。</div>
+        <p>Mellow Pencil 画像生成 &rarr; LTX 2.3 i2v の融合パイプライン。Ex6 に統合。</p>
       </div>
-
-      <!-- Ex8: TTS -->
       <div class="exp-card">
         <div class="exp-icon">&#127908;</div>
-        <h3>Ex8: qwen3tts-bench</h3>
+        <h3>Ex8: Qwen3-TTS</h3>
         <div class="exp-tool">Qwen3-TTS 長文音声合成</div>
         <p>長文テキストの音声合成で初動時間（Time-to-First-Audio）とバッチ生成速度を計測。</p>
-        <div class="exp-hypothesis">初動時間でストレージ速度の影響を可視化。合成中は影響軽微。</div>
       </div>
-
-      <!-- Ex9: llm-jp-moshi -->
       <div class="exp-card">
         <div class="exp-icon">&#127908;</div>
-        <h3>Ex9: llm-jp-moshi-bench</h3>
+        <h3>Ex9: llm-jp-moshi</h3>
         <div class="exp-tool">llm-jp-moshi 高速音声応答</div>
         <p>15.6GB モデルの高速音声応答。モデルロード時間と応答レイテンシを計測。</p>
-        <div class="exp-hypothesis">15GB 級モデルのロードで Gen5 NVMe の効果が明確に表れる。</div>
       </div>
-
-      <!-- Ex10: 総合 -->
-      <div class="exp-card">
-        <div class="exp-icon">&#x1F4CA;</div>
-        <h3>Ex10: 総合レポート</h3>
-        <div class="exp-tool">全実験の所要時間・ストレージ消費</div>
-        <p>Ex0〜Ex9 の全実験結果を統合し、所要時間・所要ストレージ容量の総合レポートを作成。</p>
-        <div class="exp-hypothesis">Samsung 9100 PRO 8TB の AI ワークフロー全体への効果を可視化。</div>
-      </div>
-
     </div>
 
-    <!-- ComfyUI 起動パラメータの影響 -->
+    <!-- ComfyUI パラメータ -->
     <div class="exp-card" style="margin-top:20px; border-left: 4px solid #8250df;">
       <h3>ComfyUI 起動パラメータとストレージ I/O の関係</h3>
       <p>
         ComfyUI の VRAM 管理方式はモデルのロード・オフロード挙動に大きく影響し、
-        ストレージ I/O パターンが変化します。本ベンチマークでは以下の 3 条件で計測。
+        ストレージ I/O パターンが変化します。
       </p>
       <table class="storage-table" style="margin-top:12px;">
         <thead>
@@ -319,10 +358,10 @@
       </p>
     </div>
   </div>
-</section>
+</div>
 
-<!-- 分析手法 -->
-<section>
+<!-- ====== 4. 手法 ====== -->
+<div class="tab-panel" id="methodology" role="tabpanel" aria-labelledby="tab-methodology">
   <div class="container">
     <h2 class="section-title">分析手法: 「秒」だけでは見えないボトルネック</h2>
     <p style="margin-bottom:20px; color: var(--text-secondary); font-size: 0.95rem;">
@@ -330,7 +369,7 @@
       本ベンチマークでは以下の手法で<strong>ストレージ速度の寄与を分離・正規化</strong>して計測します。
     </p>
 
-    <div class="exp-grid">
+    <div style="display:grid; grid-template-columns: repeat(2, 1fr); gap:20px;">
       <div class="exp-card" style="border-left: 4px solid #0969da;">
         <div class="exp-icon">&#x1F4CF;</div>
         <h3>sec/GiB 正規化メトリクス</h3>
@@ -342,8 +381,6 @@
         <p style="margin-top:8px;">
           さらに、Ollama の内部計測値 <code>runner_started_s</code>（GPU 初期化時間）を差し引くことで、
           <strong>純粋なディスク I/O スループット</strong>（IO est MB/s）を推定。
-          Raw ディスクベンチ結果との比率から、デシリアライゼーションや
-          メモリ確保のオーバーヘッドを定量化します。
         </p>
         <div class="exp-hypothesis">
           予備調査では実効ロードスループット（150〜240 MB/s）は
@@ -360,11 +397,6 @@
           GPU 温度、消費電力、GPU 使用率、VRAM 使用量、クロック周波数、P-State を
           時系列 CSV として保存します。
         </p>
-        <p style="margin-top:8px;">
-          <strong>サーマルスロットリング</strong>（温度上昇によるクロック制限）が発生するタイミングを
-          特定し、ベンチマーク結果への影響を評価。
-          長時間連続負荷でストレージと GPU 双方の温度推移を可視化します。
-        </p>
         <div class="exp-hypothesis">
           ラップトップ環境では GPU 温度 80&deg;C 付近でスロットリング開始の傾向。
           Samsung 9100 PRO の高度な熱制御がワークステーション環境でどう効くか検証。
@@ -376,13 +408,7 @@
         <h3>SSD フラグメンテーション影響</h3>
         <p>
           NVMe SSD は HDD と異なりシークタイムがないため「フラグメンテーション無関係」とされがちですが、
-          <strong>論理ブロックの断片化は内部的なガベージコレクションや WAF（Write Amplification Factor）に影響</strong>
-          する可能性があります。
-        </p>
-        <p style="margin-top:8px;">
-          新品状態 vs 長期使用（大量のモデルダウンロード・削除を繰り返した状態）で
-          シーケンシャルリード性能に差が出るかを検証。
-          AI ワークロードは数 GB 単位のファイルを頻繁に書き換えるため、実運用に近い条件です。
+          <strong>論理ブロックの断片化は内部的なガベージコレクションや WAF に影響</strong>する可能性があります。
         </p>
         <div class="exp-hypothesis">
           Samsung 9100 PRO の 8TB 大容量は空き領域が潤沢で GC 負荷が低く、
@@ -392,30 +418,35 @@
 
       <div class="exp-card" style="border-left: 4px solid #1a7f37;">
         <div class="exp-icon">&#x1F504;</div>
-        <h3>モデル切り替え &amp; 初回ロードベンチマーク</h3>
+        <h3>モデル切り替え &amp; 初回ロード</h3>
         <p>
-          実際の AI 開発では、用途に応じてモデルを何度も切り替えます。
-          <strong>10〜20 回連続でモデルのアンロード→ロードを繰り返す</strong>ストレステストに加え、
-          <strong>異なるドライブ間でのモデル切り替え</strong>（例: D: → E: → D:）も計測。
-        </p>
-        <p style="margin-top:8px;">
-          <strong>初回ロード</strong>（コールドスタート）と <strong>2 回目以降</strong>（OS キャッシュヒット時）の差、
-          さらに<strong>ドライブ切り替え時のキャッシュ無効化</strong>による影響を分離します。
-          GPU 温度モニタリングのデータと照合し、
-          <strong>熱がロード性能に与える影響</strong>を定量化します。
+          <strong>10〜20 回連続でモデルのアンロード&rarr;ロードを繰り返す</strong>ストレステスト。
+          初回ロード（コールドスタート）と 2 回目以降（OS キャッシュヒット時）の差を分離。
         </p>
         <div class="exp-hypothesis">
           初回ロードとキャッシュヒット時で最大 2〜3 倍の差が出ると予測。
-          ドライブ切り替え時は確実にコールドスタートとなるため、ストレージ速度の差が最も顕著に表れる。
-          Samsung 9100 PRO の高速読み出しが最も効く場面。
+          ドライブ切り替え時は確実にコールドスタートとなる。
         </div>
       </div>
     </div>
   </div>
-</section>
+</div>
 
-<!-- 生成物サンプル -->
-<section>
+<!-- ====== 5. 結果 ====== -->
+<div class="tab-panel" id="results" role="tabpanel" aria-labelledby="tab-results">
+  <div class="container">
+    <h2 class="section-title">計測結果</h2>
+
+    <!-- data.json チャート -->
+    <div id="results-area">
+      <p style="color: var(--text-secondary);">計測データ読み込み中...</p>
+    </div>
+
+  </div>
+</div>
+
+<!-- ====== 生成物 ====== -->
+<div class="tab-panel" id="samples" role="tabpanel" aria-labelledby="tab-samples">
   <div class="container">
     <h2 class="section-title">生成物サンプル (実データ: R2/R3/R4)</h2>
     <p style="margin-bottom:20px; color: var(--text-secondary);">
@@ -423,52 +454,28 @@
       <strong>同一シード・同一設定</strong>のためドライブ間で出力は同一。差が出るのは「生成開始までの時間」です。
     </p>
 
-    <!-- Size classification info -->
-    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap:12px; margin-bottom:24px;">
-      <div class="exp-card" style="border-left: 4px solid #0969da; padding:16px;">
-        <div class="exp-icon" style="font-size:1.2rem;">S</div>
-        <h3>Small Models (~7GB)</h3>
-        <p style="font-size:0.85rem; color:var(--text-secondary);">SDXL Checkpoint 単体。98GB VRAM に余裕で収まり、ストレージ差はほぼ出ない。</p>
-        <p style="font-size:0.85rem; margin-top:4px;"><strong>Cold start: 6-7s</strong> (差: ~1s)</p>
-      </div>
-      <div class="exp-card" style="border-left: 4px solid #bf5700; padding:16px;">
-        <div class="exp-icon" style="font-size:1.2rem;">M</div>
-        <h3>Medium Models (~15GB)</h3>
-        <p style="font-size:0.85rem; color:var(--text-secondary);">LTX-Video 2B + T5-XXL。コールドスタートでストレージ速度差が顕在化。</p>
-        <p style="font-size:0.85rem; margin-top:4px;"><strong>Cold start: 8s vs 61s</strong> (差: 7.5x)</p>
-      </div>
-      <div class="exp-card" style="border-left: 4px solid #cf222e; padding:16px;">
-        <div class="exp-icon" style="font-size:1.2rem;">L</div>
-        <h3>Large Models (~45GB)</h3>
-        <p style="font-size:0.85rem; color:var(--text-secondary);">LTX 2.3 22B FP8 (~29GB checkpoint + Gemma 3 12B + LoRAs + Upscaler = ~45GB)。最もストレージ速度が効くサイズ帯。</p>
-        <p style="font-size:0.85rem; margin-top:4px;"><strong style="color:#cf222e;">Cold start: D: 98s vs F: 288s = 2.9x difference</strong></p>
-      </div>
-    </div>
-
-    <!-- AiCuty SDXL Gallery -->
     <div class="exp-card" style="margin-bottom:20px;">
-      <h3>&#128444; AiCuty SDXL — Small Models (~7GB) Checkpoint + 2 LoRA + Upscaler</h3>
+      <h3>&#128444; AiCuty SDXL &mdash; Small Models (~7GB) Checkpoint + 2 LoRA + Upscaler</h3>
       <p style="font-size:0.85rem; color:var(--text-secondary); margin-bottom:12px;">
         <a href="https://github.com/aicuai/AiCuty" target="_blank" rel="noopener">AiCuty</a> ワークフロー:
         Animagine XL 4.0 + Niji Anime LoRA + Enchanting Eyes LoRA + RealESRGAN 4x Upscale<br>
-        736&times;1128 / 28 steps / DPM++ 2M SDE Karras / CFG 5 &rarr; <strong>2944&times;4512px 最終出力</strong><br>
-        ComfyUI: <code>python main.py --listen 0.0.0.0 --port 8188</code> (default VRAM mode)
+        736&times;1128 / 28 steps / DPM++ 2M SDE Karras / CFG 5 &rarr; <strong>2944&times;4512px 最終出力</strong>
       </p>
-      <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:12px;">
+      <div style="display:grid; grid-template-columns: repeat(2, 1fr); gap:12px;">
         <div style="text-align:center;">
-          <img src="../Results-P8/small-models-7GB/aicuty-sdxl/D_aicuty_00001.png" alt="AiCuty SDXL - D: Gen5 NVMe" style="width:100%; border-radius:8px; border:1px solid var(--border);" loading="lazy">
+          <img src="assets/img/aicuty-sdxl/D_aicuty_00001.png" alt="AiCuty SDXL - D: Gen5 NVMe" style="width:100%; border-radius:8px; border:1px solid var(--border);" loading="lazy">
           <p style="font-size:0.8rem; color:var(--text-secondary); margin-top:4px;"><strong>D:</strong> Gen5 NVMe (15.2s cold)</p>
         </div>
         <div style="text-align:center;">
-          <img src="../Results-P8/small-models-7GB/aicuty-sdxl/E_aicuty_00001.png" alt="AiCuty SDXL - E: SATA SSD" style="width:100%; border-radius:8px; border:1px solid var(--border);" loading="lazy">
+          <img src="assets/img/aicuty-sdxl/E_aicuty_00001.png" alt="AiCuty SDXL - E: SATA SSD" style="width:100%; border-radius:8px; border:1px solid var(--border);" loading="lazy">
           <p style="font-size:0.8rem; color:var(--text-secondary); margin-top:4px;"><strong>E:</strong> SATA SSD (17.3s cold)</p>
         </div>
         <div style="text-align:center;">
-          <img src="../Results-P8/small-models-7GB/aicuty-sdxl/D_aicuty_00002.png" alt="AiCuty SDXL - D: Run 2" style="width:100%; border-radius:8px; border:1px solid var(--border);" loading="lazy">
+          <img src="assets/img/aicuty-sdxl/D_aicuty_00002.png" alt="AiCuty SDXL - D: Run 2" style="width:100%; border-radius:8px; border:1px solid var(--border);" loading="lazy">
           <p style="font-size:0.8rem; color:var(--text-secondary); margin-top:4px;"><strong>D:</strong> Run 2 (13.2s median)</p>
         </div>
         <div style="text-align:center;">
-          <img src="../Results-P8/small-models-7GB/aicuty-sdxl/D_aicuty_00003.png" alt="AiCuty SDXL - D: Run 3" style="width:100%; border-radius:8px; border:1px solid var(--border);" loading="lazy">
+          <img src="assets/img/aicuty-sdxl/D_aicuty_00003.png" alt="AiCuty SDXL - D: Run 3" style="width:100%; border-radius:8px; border:1px solid var(--border);" loading="lazy">
           <p style="font-size:0.8rem; color:var(--text-secondary); margin-top:4px;"><strong>D:</strong> Run 3 (13.2s median)</p>
         </div>
       </div>
@@ -476,68 +483,64 @@
 
     <!-- SDXL Basic Gallery -->
     <div class="exp-card" style="margin-bottom:20px;">
-      <h3>&#128444; SDXL Basic — Small Models (~7GB) Checkpoint Only</h3>
+      <h3>&#128444; SDXL Basic &mdash; Small Models (~7GB) Checkpoint Only</h3>
       <p style="font-size:0.85rem; color:var(--text-secondary); margin-bottom:12px;">
-        Animagine XL 4.0 (6.46GB) / 832&times;1216 / euler 28 steps / CFG 5<br>
-        ComfyUI: <code>python main.py --listen 0.0.0.0 --port 8188</code>
+        Animagine XL 4.0 (6.46GB) / 832&times;1216 / euler 28 steps / CFG 5
       </p>
-      <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:12px;">
+      <div style="display:grid; grid-template-columns: repeat(2, 1fr); gap:12px;">
         <div style="text-align:center;">
-          <img src="../Results-P8/small-models-7GB/sdxl/D_sdxl_00001.png" alt="SDXL - D: Gen5 NVMe" style="width:100%; border-radius:8px; border:1px solid var(--border);" loading="lazy">
+          <img src="assets/img/sdxl/D_sdxl_00001.png" alt="SDXL - D: Gen5 NVMe" style="width:100%; border-radius:8px; border:1px solid var(--border);" loading="lazy">
           <p style="font-size:0.8rem; color:var(--text-secondary); margin-top:4px;"><strong>D:</strong> Gen5 NVMe (6.1s cold)</p>
         </div>
         <div style="text-align:center;">
-          <img src="../Results-P8/small-models-7GB/sdxl/E_sdxl_00001.png" alt="SDXL - E: SATA SSD" style="width:100%; border-radius:8px; border:1px solid var(--border);" loading="lazy">
+          <img src="assets/img/sdxl/E_sdxl_00001.png" alt="SDXL - E: SATA SSD" style="width:100%; border-radius:8px; border:1px solid var(--border);" loading="lazy">
           <p style="font-size:0.8rem; color:var(--text-secondary); margin-top:4px;"><strong>E:</strong> SATA SSD (7.1s cold)</p>
         </div>
         <div style="text-align:center;">
-          <img src="../Results-P8/small-models-7GB/sdxl/F_sdxl_00001.png" alt="SDXL - F: HDD" style="width:100%; border-radius:8px; border:1px solid var(--border);" loading="lazy">
+          <img src="assets/img/sdxl/F_sdxl_00001.png" alt="SDXL - F: HDD" style="width:100%; border-radius:8px; border:1px solid var(--border);" loading="lazy">
           <p style="font-size:0.8rem; color:var(--text-secondary); margin-top:4px;"><strong>F:</strong> HDD (7.2s cold)</p>
         </div>
         <div style="text-align:center;">
-          <img src="../Results-P8/small-models-7GB/sdxl/G_sdxl_00001.png" alt="SDXL - G: ICY DOCK" style="width:100%; border-radius:8px; border:1px solid var(--border);" loading="lazy">
+          <img src="assets/img/sdxl/G_sdxl_00001.png" alt="SDXL - G: ICY DOCK" style="width:100%; border-radius:8px; border:1px solid var(--border);" loading="lazy">
           <p style="font-size:0.8rem; color:var(--text-secondary); margin-top:4px;"><strong>G:</strong> ICY DOCK (6.1s cold)</p>
         </div>
       </div>
     </div>
 
-    <!-- LTX-Video Gallery -->
+    <!-- LTX-Video 2B Gallery -->
     <div class="exp-card" style="margin-bottom:20px;">
-      <h3>&#127916; LTX-Video 2B — Medium Models (~15GB) Checkpoint + T5-XXL</h3>
+      <h3>&#127916; LTX-Video 2B &mdash; Medium Models (~15GB) Checkpoint + T5-XXL</h3>
       <p style="font-size:0.85rem; color:var(--text-secondary); margin-bottom:12px;">
         LTX-Video 2B v0.9.5 (5.9GB) + T5-XXL FP16 (9.1GB) = ~15GB total<br>
         512&times;320 / 25 frames @24fps / euler 20 steps / CFG 1.0 &rarr; animated WEBP<br>
-        ComfyUI: <code>python main.py --listen 0.0.0.0 --port 8188</code><br>
         <strong style="color:#cf222e;">Cold start: D: 8.1s vs F: 60.9s = 7.5x difference</strong>
       </p>
-      <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:12px;">
+      <div style="display:grid; grid-template-columns: repeat(2, 1fr); gap:12px;">
         <div style="text-align:center;">
-          <img src="../Results-P8/medium-models-15GB/ltx-video-2b/D_ltx_video_00001.webp" alt="LTX-Video - D: Gen5 NVMe" style="width:100%; border-radius:8px; border:1px solid var(--border);" loading="lazy">
+          <img src="assets/img/ltx-video-2b/D_ltx_video_00001.webp" alt="LTX-Video - D: Gen5 NVMe" style="width:100%; border-radius:8px; border:1px solid var(--border);" loading="lazy">
           <p style="font-size:0.8rem; color:var(--text-secondary); margin-top:4px;"><strong>D:</strong> Gen5 NVMe (<strong style="color:#1a7f37;">8.1s</strong> cold)</p>
         </div>
         <div style="text-align:center;">
-          <img src="../Results-P8/medium-models-15GB/ltx-video-2b/E_ltx_video_00001.webp" alt="LTX-Video - E: SATA SSD" style="width:100%; border-radius:8px; border:1px solid var(--border);" loading="lazy">
+          <img src="assets/img/ltx-video-2b/E_ltx_video_00001.webp" alt="LTX-Video - E: SATA SSD" style="width:100%; border-radius:8px; border:1px solid var(--border);" loading="lazy">
           <p style="font-size:0.8rem; color:var(--text-secondary); margin-top:4px;"><strong>E:</strong> SATA SSD (37.4s cold)</p>
         </div>
         <div style="text-align:center;">
-          <img src="../Results-P8/medium-models-15GB/ltx-video-2b/F_ltx_video_00001.webp" alt="LTX-Video - F: HDD" style="width:100%; border-radius:8px; border:1px solid var(--border);" loading="lazy">
+          <img src="assets/img/ltx-video-2b/F_ltx_video_00001.webp" alt="LTX-Video - F: HDD" style="width:100%; border-radius:8px; border:1px solid var(--border);" loading="lazy">
           <p style="font-size:0.8rem; color:var(--text-secondary); margin-top:4px;"><strong>F:</strong> HDD (<strong style="color:#cf222e;">60.9s</strong> cold)</p>
         </div>
         <div style="text-align:center;">
-          <img src="../Results-P8/medium-models-15GB/ltx-video-2b/G_ltx_video_00001.webp" alt="LTX-Video - G: ICY DOCK" style="width:100%; border-radius:8px; border:1px solid var(--border);" loading="lazy">
+          <img src="assets/img/ltx-video-2b/G_ltx_video_00001.webp" alt="LTX-Video - G: ICY DOCK" style="width:100%; border-radius:8px; border:1px solid var(--border);" loading="lazy">
           <p style="font-size:0.8rem; color:var(--text-secondary); margin-top:4px;"><strong>G:</strong> ICY DOCK (11.4s cold)</p>
         </div>
       </div>
     </div>
 
-    <!-- LTX-Video 2B 詳細結果 -->
+    <!-- LTX-Video 2B 詳細結果テーブル -->
     <div class="exp-card" style="margin-bottom:20px; border-left: 4px solid #bf5700;">
-      <h3>&#127916; Experiment: ComfyUI LTX-Video 2B 動画生成ベンチマーク（詳細）</h3>
+      <h3>&#127916; LTX-Video 2B 動画生成ベンチマーク（詳細）</h3>
       <p style="font-size:0.85rem; color:var(--text-secondary); margin-bottom:12px;">
         <strong>モデル:</strong> LTX-Video 2B v0.9.5 (5.91 GB) + T5-XXL FP16 (9.12 GB)<br>
         <strong>設定:</strong> SamplerCustom euler 20steps, CFG=1.0, 512&times;320, 25フレーム @24fps<br>
-        <strong>ワークフロー:</strong> <code>workflows/ltx_2b_t2v_bench.json</code>（CLIPLoader + ModelSamplingLTXV + LTXVScheduler）<br>
-        <strong>ComfyUI:</strong> v0.16.4, PyTorch 2.10.0+cu128<br>
         <strong>条件:</strong> ドライブごとに ComfyUI を再起動（コールドスタート計測）
       </p>
       <div style="overflow-x:auto;">
@@ -583,63 +586,19 @@
           </tbody>
         </table>
       </div>
-      <h4 style="margin-bottom:8px;">考察</h4>
       <ul style="list-style:disc; padding-left:20px; color:var(--text-secondary); font-size:0.9rem; line-height:1.8;">
-        <li><strong>Run 1 のコールドスタートでストレージ差が明確に出た</strong>
-          <ul style="list-style:circle; padding-left:16px; margin-top:4px;">
-            <li>D: (Gen5 NVMe) 8.1s vs F: (HDD) 60.9s &rarr; <strong style="color:#cf222e;">約7.5倍の差</strong></li>
-            <li>E: (SATA SSD) 37.4s &rarr; NVMe の約4.6倍</li>
-            <li>G: (ICY DOCK) 11.4s &rarr; D: と近い（同じ 9100 PRO だが ICY DOCK 経由で若干遅い）</li>
-          </ul>
-        </li>
-        <li>Run 2-3 は <code>free_memory</code> でアンロード指示を出しているが、VRAM/システムキャッシュに残っているため差が出ない</li>
-        <li>合計モデルサイズ ~15GB（LTX 2B + T5-XXL）のロードでストレージ速度差が顕在化</li>
-        <li><strong>結論:</strong> 15GB 級のモデルロードでは Gen5 NVMe の優位性が明確。SATA SSD/HDD との差は 5〜8 倍</li>
+        <li><strong>Run 1 のコールドスタートでストレージ差が明確</strong>: D: 8.1s vs F: 60.9s &rarr; <strong style="color:#cf222e;">約7.5倍の差</strong></li>
+        <li>Run 2-3 は VRAM/システムキャッシュに残っているため差が出ない</li>
+        <li><strong>結論:</strong> 15GB 級のモデルロードでは Gen5 NVMe の優位性が明確</li>
       </ul>
     </div>
 
-    <!-- Code Generation -->
-    <div class="exp-card" style="margin-bottom:20px;">
-      <div class="exp-icon">&gt;_</div>
-      <h3>コード生成 (Ollama qwen3) — Small Models (~5GB)</h3>
-      <p style="font-size:0.85rem; color:var(--text-secondary); margin-bottom:8px;">
-        Prompt: <em>"じゃんけんゲームを HTML + JavaScript で作成してください"</em><br>
-        R2 結果: 全ドライブで ~189 tok/s (8b) / ~445 tok/s (1.7b) — <strong>98GB VRAM で差なし</strong>
-      </p>
-      <pre class="code-block" style="font-size:0.8rem; max-height:120px; overflow:hidden;"><code>&lt;!-- qwen3:1.7b の実際の出力（予備調査） --&gt;
-Hier is een voorbeeld van een HTML +
-JavaScript pagina...
-&lt;button class="button"
-  onclick="changeBackground()"&gt;
-  Geen achtergrond
-&lt;/button&gt;</code></pre>
-      <p style="font-size:0.8rem; color:var(--text-secondary); margin-top:8px;">
-        qwen3:1.7b は日本語プロンプトに対してオランダ語で応答。小型モデルの多言語能力の限界を示す実例。
-      </p>
-    </div>
-
-    <!-- TTS -->
-    <div class="exp-card">
-      <div class="exp-icon">&#127908;</div>
-      <h3>音声合成 (Qwen3-TTS) &mdash; R2/R3 計測済み</h3>
-      <p style="font-size:0.85rem; color:var(--text-secondary); margin-bottom:8px;">
-        Qwen3-TTS-12Hz-1.7B-CustomVoice / HuggingFace/PyTorch 直接実行。
-        モデルロード + テキスト 5 種（S1/M1/M2/L1/L2）の合計時間を計測。<br>
-        R2 中央値: D: 9.8s / E: 8.6s / F: 10.1s / G: 7.5s &mdash; モデルサイズが小さく（~1.7GB）ストレージ差は限定的。
-      </p>
-      <p style="font-size:0.8rem; color:var(--text-secondary);">
-        音声サンプル: <a href="https://github.com/aicuai/AICU-SSD-Bench/tree/main/results/qwen3tts-bench/audio" target="_blank" rel="noopener"><code>results/qwen3tts-bench/audio/</code></a>
-      </p>
-    </div>
-
-    <!-- LTX 2.3 コールドスタートベンチ結果 (R4) -->
-    <div class="exp-card" style="margin-top:12px; border-left: 4px solid #cf222e;">
-      <div class="exp-icon">&#127916;</div>
-      <h3>LTX 2.3 22B FP8 &mdash; Large Models (~45GB) コールドスタートベンチ (R4)</h3>
+    <!-- LTX 2.3 コールドスタート -->
+    <div class="exp-card" style="margin-bottom:20px; border-left: 4px solid #cf222e;">
+      <h3>&#127916; LTX 2.3 22B FP8 &mdash; Large Models (~45GB) コールドスタートベンチ (R4)</h3>
       <p style="font-size:0.85rem; color:var(--text-secondary); margin-bottom:12px;">
         LTX 2.3 22B FP8 (~29GB) + Gemma 3 12B IT (~8.8GB) + LoRAs (~7.7GB) + Spatial Upscaler (~950MB) = ~45.5GB total<br>
-        ドライブごとに ComfyUI を再起動し、<strong>t2v (コールドスタート) → ia2v (ウォームスタート)</strong> の連続実行で、
-        モデルロード時間とストレージ速度の関係を分離。<br>
+        ドライブごとに ComfyUI を再起動し、<strong>t2v (コールドスタート) &rarr; ia2v (ウォームスタート)</strong> の連続実行。<br>
         <strong style="color:#cf222e;">Cold start: D: 98s vs F: 288s = 2.9x difference</strong>
       </p>
       <div style="overflow-x:auto;">
@@ -685,71 +644,344 @@ JavaScript pagina...
           </tbody>
         </table>
       </div>
-      <h4 style="margin-bottom:8px;">考察</h4>
       <ul style="list-style:disc; padding-left:20px; color:var(--text-secondary); font-size:0.9rem; line-height:1.8;">
-        <li><strong>45GB 級モデルで HDD は約 3 分のロード遅延</strong> &mdash; Gen5 NVMe との差は 184.7 秒（3 分超）</li>
-        <li><strong>ウォームスタート時は全ドライブほぼ同一</strong>（94〜103s） &mdash; 推論は GPU バウンド</li>
-        <li><strong>差分 = 純粋なストレージ I/O</strong>: cold - warm の差から実効リード速度を推定
-          <ul style="list-style:circle; padding-left:16px; margin-top:4px;">
-            <li>Gen5 NVMe (D:) ~13 GB/s &mdash; safetensors のデシリアライゼーション + CUDA memcpy が律速</li>
-            <li>SATA SSD (E:) ~542 MB/s &mdash; SATA 規格上限に近い</li>
-            <li>HDD (F:) ~246 MB/s &mdash; シーケンシャルリードの物理限界</li>
-          </ul>
-        </li>
+        <li><strong>45GB 級モデルで HDD は約 3 分のロード遅延</strong> &mdash; Gen5 NVMe との差は 184.7 秒</li>
+        <li><strong>ウォームスタート時は全ドライブほぼ同一</strong>（94〜103s）</li>
         <li>ICY DOCK (G:) は D: とほぼ同等 &mdash; リムーバブルでも Gen5 帯域を維持</li>
       </ul>
+
+      <h4 style="margin-top:20px; margin-bottom:12px;">R4 生成動画サンプル (LTX 2.3 22B)</h4>
+      <p style="font-size:0.85rem; color:var(--text-secondary); margin-bottom:12px;">
+        各ドライブで生成された動画。<strong>同一プロンプト・同一シード</strong>のため出力内容は同一。
+      </p>
+      <div style="display:grid; grid-template-columns: repeat(2, 1fr); gap:16px; margin-bottom:16px;">
+        <div style="text-align:center;">
+          <video src="assets/video/r4-ltx23/D_ltx23_t2v_cold.mp4" controls muted playsinline loop style="width:100%; border-radius:8px; border:1px solid var(--border);" preload="metadata"></video>
+          <p style="font-size:0.8rem; color:var(--text-secondary); margin-top:4px;"><strong style="color:#0969da;">D:</strong> t2v cold (<strong style="color:#1a7f37;">98.4s</strong>)</p>
+        </div>
+        <div style="text-align:center;">
+          <video src="assets/video/r4-ltx23/E_ltx23_t2v_cold.mp4" controls muted playsinline loop style="width:100%; border-radius:8px; border:1px solid var(--border);" preload="metadata"></video>
+          <p style="font-size:0.8rem; color:var(--text-secondary); margin-top:4px;"><strong style="color:#bf5700;">E:</strong> t2v cold (180.7s)</p>
+        </div>
+        <div style="text-align:center;">
+          <video src="assets/video/r4-ltx23/F_ltx23_t2v_cold.mp4" controls muted playsinline loop style="width:100%; border-radius:8px; border:1px solid var(--border);" preload="metadata"></video>
+          <p style="font-size:0.8rem; color:var(--text-secondary); margin-top:4px;"><strong style="color:#cf222e;">F:</strong> t2v cold (<strong style="color:#cf222e;">288.1s</strong>)</p>
+        </div>
+        <div style="text-align:center;">
+          <video src="assets/video/r4-ltx23/G_ltx23_t2v_cold.mp4" controls muted playsinline loop style="width:100%; border-radius:8px; border:1px solid var(--border);" preload="metadata"></video>
+          <p style="font-size:0.8rem; color:var(--text-secondary); margin-top:4px;"><strong style="color:#1a7f37;">G:</strong> t2v cold (98.7s)</p>
+        </div>
+      </div>
+      <div style="display:grid; grid-template-columns: repeat(2, 1fr); gap:16px;">
+        <div style="text-align:center;">
+          <video src="assets/video/r4-ltx23/D_ltx23_ia2v_warm.mp4" controls muted playsinline loop style="width:100%; border-radius:8px; border:1px solid var(--border);" preload="metadata"></video>
+          <p style="font-size:0.8rem; color:var(--text-secondary); margin-top:4px;"><strong style="color:#0969da;">D:</strong> ia2v warm (95.3s)</p>
+        </div>
+        <div style="text-align:center;">
+          <video src="assets/video/r4-ltx23/E_ltx23_ia2v_warm.mp4" controls muted playsinline loop style="width:100%; border-radius:8px; border:1px solid var(--border);" preload="metadata"></video>
+          <p style="font-size:0.8rem; color:var(--text-secondary); margin-top:4px;"><strong style="color:#bf5700;">E:</strong> ia2v warm (96.6s)</p>
+        </div>
+        <div style="text-align:center;">
+          <video src="assets/video/r4-ltx23/F_ltx23_ia2v_warm.mp4" controls muted playsinline loop style="width:100%; border-radius:8px; border:1px solid var(--border);" preload="metadata"></video>
+          <p style="font-size:0.8rem; color:var(--text-secondary); margin-top:4px;"><strong style="color:#cf222e;">F:</strong> ia2v warm (103.4s)</p>
+        </div>
+        <div style="text-align:center;">
+          <video src="assets/video/r4-ltx23/G_ltx23_ia2v_warm.mp4" controls muted playsinline loop style="width:100%; border-radius:8px; border:1px solid var(--border);" preload="metadata"></video>
+          <p style="font-size:0.8rem; color:var(--text-secondary); margin-top:4px;"><strong style="color:#1a7f37;">G:</strong> ia2v warm (94.8s)</p>
+        </div>
+      </div>
       <p style="margin-top:12px; font-size:0.85rem; color:var(--text-secondary);">
-        動画サンプル: <a href="https://github.com/aicuai/AICU-SSD-Bench/tree/main/results/comfyui-swap-bench-R4" target="_blank" rel="noopener"><code>results/comfyui-swap-bench-R4/</code></a>
-        &bull; <a href="https://github.com/aicuai/AICU-SSD-Bench/tree/main/results/comfyui-ltx2-bench-samples/video" target="_blank" rel="noopener"><code>results/comfyui-ltx2-bench-samples/video/</code></a>
+        全動画: <a href="https://github.com/aicuai/AICU-SSD-Bench/tree/main/results/comfyui-swap-bench-R4/video" target="_blank" rel="noopener">GitHub</a>
+      </p>
+    </div>
+
+    <!-- コード生成 -->
+    <div class="exp-card" style="margin-bottom:20px;">
+      <div class="exp-icon">&gt;_</div>
+      <h3>コード生成 (Ollama qwen3) &mdash; Small Models (~5GB)</h3>
+      <p style="font-size:0.85rem; color:var(--text-secondary); margin-bottom:8px;">
+        Prompt: <em>"じゃんけんゲームを HTML + JavaScript で作成してください"</em><br>
+        R2 結果: 全ドライブで ~189 tok/s (8b) / ~445 tok/s (1.7b) &mdash; <strong>98GB VRAM で差なし</strong>
+      </p>
+    </div>
+
+    <!-- TTS -->
+    <div class="exp-card">
+      <div class="exp-icon">&#127908;</div>
+      <h3>音声合成 (Qwen3-TTS) &mdash; R2/R3 計測済み</h3>
+      <p style="font-size:0.85rem; color:var(--text-secondary); margin-bottom:8px;">
+        Qwen3-TTS-12Hz-1.7B-CustomVoice / HuggingFace/PyTorch 直接実行。
+        R2 中央値: D: 9.8s / E: 8.6s / F: 10.1s / G: 7.5s &mdash; モデルサイズが小さく（~1.7GB）ストレージ差は限定的。
+      </p>
+      <p style="font-size:0.8rem; color:var(--text-secondary);">
+        音声サンプル: <a href="https://github.com/aicuai/AICU-SSD-Bench/tree/main/results/qwen3tts-bench/audio" target="_blank" rel="noopener"><code>results/qwen3tts-bench/audio/</code></a>
       </p>
     </div>
 
     <p style="margin-top:16px; font-size:0.85rem; color:var(--text-secondary);">
       全生成物は <a href="https://github.com/aicuai/AICU-SSD-Bench/tree/main/Results-P8" target="_blank" rel="noopener"><code>Results-P8/</code></a> にモデルサイズ別に格納。
-      ComfyUI ワークフロー JSON も同梱。
     </p>
   </div>
-</section>
+</div>
 
-<!-- クイックスタート -->
-<section>
+<!-- ====== 6. 結論 ====== -->
+<div class="tab-panel" id="conclusion" role="tabpanel" aria-labelledby="tab-conclusion">
   <div class="container">
-    <h2 class="section-title">クイックスタート</h2>
+    <h2 class="section-title">結論: AI のためには D ドライブこそ Gen5 を</h2>
+
+    <div class="exp-card" style="border-left: 4px solid #1a7f37; margin-bottom:20px;">
+      <h3 style="font-size:1.2rem;">Samsung 9100 PRO (Gen5 NVMe) は AI ワークロードのコールドスタートを最大 7.5 倍高速化する</h3>
+      <p style="margin-top:12px; line-height:1.8;">
+        10 種類の AI ワークロード（LLM ロード・コード生成・画像生成・動画生成・音声合成・音声対話）を
+        4 つのストレージ（Gen5 NVMe / SATA SSD / HDD / Gen5 リムーバブル）で横断計測した結果、
+        <strong>ストレージ速度が最も効くのは「モデルの初回ロード（コールドスタート）」</strong>であることが実証されました。
+      </p>
+    </div>
+
+    <div style="display:grid; grid-template-columns: repeat(2, 1fr); gap:16px; margin-bottom:24px;">
+      <div class="exp-card" style="text-align:center; padding:24px;">
+        <div style="font-size:2.5rem; font-weight:800; color:#1a7f37;">7.5x</div>
+        <p style="font-size:0.95rem; margin-top:8px;"><strong>コールドスタート高速化</strong><br>
+        <span style="font-size:0.85rem; color:var(--text-secondary);">LTX-Video 2B (15GB)<br>D: 8.1s vs F: 60.9s</span></p>
+      </div>
+      <div class="exp-card" style="text-align:center; padding:24px;">
+        <div style="font-size:2.5rem; font-weight:800; color:#cf222e;">2.9x</div>
+        <p style="font-size:0.95rem; margin-top:8px;"><strong>大型モデルでも差は明確</strong><br>
+        <span style="font-size:0.85rem; color:var(--text-secondary);">LTX 2.3 22B (45GB)<br>D: 98s vs F: 288s</span></p>
+      </div>
+      <div class="exp-card" style="text-align:center; padding:24px;">
+        <div style="font-size:2.5rem; font-weight:800; color:#0969da;">10x</div>
+        <p style="font-size:0.95rem; margin-top:8px;"><strong>書き込み速度</strong><br>
+        <span style="font-size:0.85rem; color:var(--text-secondary);">D: 2,535 MB/s vs F: 250 MB/s<br>(1024MB シーケンシャル)</span></p>
+      </div>
+      <div class="exp-card" style="text-align:center; padding:24px;">
+        <div style="font-size:2.5rem; font-weight:800; color:#bf5700;">0%</div>
+        <p style="font-size:0.95rem; margin-top:8px;"><strong>推論速度への影響</strong><br>
+        <span style="font-size:0.85rem; color:var(--text-secondary);">VRAM ロード後は全ドライブ同一<br>~189 tok/s (qwen3:8b)</span></p>
+      </div>
+    </div>
+
+    <div class="exp-card" style="border-left: 4px solid #0969da;">
+      <h3>なぜ「D ドライブに Gen5」なのか</h3>
+      <ul style="list-style:disc; padding-left:20px; line-height:2; font-size:0.95rem;">
+        <li><strong>OS ドライブ (C:) はバックグラウンド I/O と競合する</strong> &mdash; AI モデルの保存先は専用ドライブに</li>
+        <li><strong>モデル切り替えのたびにコールドスタートが発生</strong> &mdash; AI 開発では 1 日に何十回もモデルを入れ替える</li>
+        <li><strong>モデルは大型化の一途</strong> &mdash; 15GB (LTX-Video 2B) &rarr; 45GB (LTX 2.3 22B)。R4 実測: HDD で 3 分のロード遅延</li>
+        <li><strong>8TB の大容量</strong> &mdash; 全モデルを 1 台に集約、再ダウンロード不要</li>
+        <li><strong>書き込みも高速</strong> &mdash; 生成物保存・モデルダウンロード・学習チェックポイントで圧倒的な差</li>
+      </ul>
+      <p style="margin-top:12px; font-size:0.95rem;">
+        <strong>推論速度はストレージに依存しない</strong>ことも確認済み。
+        つまり「速いストレージは無駄」ではなく、<strong>「待ち時間」を直接削減する最もコスパの高い投資先</strong>が D ドライブの Gen5 NVMe です。
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- ====== 7. 考察 ====== -->
+<div class="tab-panel" id="discussion" role="tabpanel" aria-labelledby="tab-discussion">
+  <div class="container">
+    <h2 class="section-title">考察: AI ワークロードとストレージ速度</h2>
+    <p style="margin-bottom:16px; color: var(--text-secondary); font-size: 0.95rem;">
+      RTX PRO 6000 (96GB VRAM) + Samsung 9100 PRO (Gen5 NVMe) を含む 4 ドライブでの実測データに基づく考察。
+    </p>
+
+    <div class="exp-grid">
+      <div class="exp-card" style="border-left: 4px solid #1a7f37;">
+        <h3>検証済み: モデルのコールドスタートはストレージ I/O バウンド</h3>
+        <p>
+          LTX-Video 2B (~15GB) のコールドスタートで <strong>最大 7.5 倍の差</strong>、
+          LTX 2.3 22B (~45GB) で <strong>最大 2.9 倍の差</strong> を実測。
+        </p>
+        <table class="storage-table" style="margin-top:8px;">
+          <thead><tr><th></th><th>D: Gen5 NVMe</th><th>E: SATA SSD</th><th>F: HDD</th><th>G: ICY DOCK</th></tr></thead>
+          <tbody>
+          <tr>
+            <td><strong>LTX 2B (15GB)</strong></td>
+            <td style="color:#1a7f37;"><strong>8.1s</strong></td>
+            <td>37.4s (4.6x)</td>
+            <td style="color:#cf222e;"><strong>60.9s</strong> (7.5x)</td>
+            <td>11.4s (1.4x)</td>
+          </tr>
+          <tr>
+            <td><strong>LTX 2.3 22B (45GB)</strong></td>
+            <td style="color:#1a7f37;"><strong>98.4s</strong></td>
+            <td>180.7s (1.8x)</td>
+            <td style="color:#cf222e;"><strong>288.1s</strong> (2.9x)</td>
+            <td>98.7s (1.0x)</td>
+          </tr>
+          </tbody>
+        </table>
+        <p style="margin-top:8px; font-size:0.9rem;">
+          ウォームスタート時は全ドライブ 95〜103s で差なし。
+          cold - warm の差分から<strong>実効リード速度</strong>を推定: Gen5 NVMe ~13 GB/s、SATA SSD ~542 MB/s、HDD ~246 MB/s。
+        </p>
+      </div>
+
+      <div class="exp-card" style="border-left: 4px solid #1a7f37;">
+        <h3>検証済み: 推論速度はストレージに依存しない</h3>
+        <p>
+          コード生成速度は全ドライブで <strong>~189 tok/s (qwen3:8b)</strong> / <strong>~445 tok/s (qwen3:1.7b)</strong> とほぼ同一。
+          画像生成のウォームスタートも全ドライブ 0.04s 前後で差なし。
+        </p>
+        <p style="margin-top:8px; font-size:0.9rem;">
+          <strong>ストレージの影響は「モデルロード」に集中</strong>しており、高速ストレージの投資対効果はロード時間短縮に直結します。
+        </p>
+      </div>
+
+      <div class="exp-card" style="border-left: 4px solid #0969da;">
+        <h3>実測: ディスク書き込み速度</h3>
+        <p>
+          1024MB シーケンシャルライト（R3 実測）で Gen5 NVMe は SATA SSD の <strong>約 6 倍</strong>、HDD の <strong>約 10 倍</strong>。
+        </p>
+        <table class="storage-table" style="margin-top:8px;">
+          <thead><tr><th>D: Gen5 NVMe</th><th>E: SATA SSD</th><th>F: HDD</th><th>G: ICY DOCK</th></tr></thead>
+          <tbody><tr>
+            <td style="color:#1a7f37;"><strong>2,535 MB/s</strong></td>
+            <td>434 MB/s</td>
+            <td style="color:#cf222e;">250 MB/s</td>
+            <td>2,530 MB/s</td>
+          </tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Samsung 視点 -->
+    <div class="exp-card" style="margin-top:24px; border-left: 4px solid #0969da;">
+      <h3>Samsung 9100 PRO が AI ワークロードに最適な理由</h3>
+      <p>
+        <strong>Gen5 NVMe (D:) vs SATA SSD (E:) vs HDD (F:)</strong> の差は
+        コールドスタートで最大 <strong>7.5 倍</strong>、書き込み速度で最大 <strong>10 倍</strong>。
+      </p>
+      <p style="margin-top:8px;">
+        Samsung 9100 PRO は PCIe Gen5 の帯域幅をフル活用し、シーケンシャルリード <strong>14,800 MB/s</strong>、
+        8TB の大容量で複数の AI モデルを 1 台に集約可能。
+        AI クリエイターにとって「待たない AI 環境」を実現する最適なストレージです。
+      </p>
+    </div>
+
+    <!-- 9100 PRO 公式スペック検証 -->
+    <div style="margin-top:32px;">
+      <h3 style="font-size:1.15rem; margin-bottom:16px;">Samsung 9100 PRO <a href="https://semiconductor.samsung.com/jp/consumer-storage/internal-ssd/9100-pro/" target="_blank" rel="noopener" style="font-size:0.85rem;">公式ページ</a> の主張を検証</h3>
+      <table class="storage-table">
+        <thead>
+          <tr><th style="width:30%;">公式の主張</th><th style="width:12%;">評価</th><th>解説</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>最大 14,800/13,400 MB/s</strong></td>
+            <td style="color:#1a7f37;"><strong>正しい</strong></td>
+            <td>カタログスペックとして正確。OS ファイル API 経由では R3 実測ライト 2,535 MB/s。それでも SATA SSD の約 6 倍。</td>
+          </tr>
+          <tr>
+            <td><strong>990 PRO の 2 倍高速</strong></td>
+            <td style="color:#1a7f37;"><strong>概ね正しい</strong></td>
+            <td>Gen4&rarr;Gen5 で理論帯域幅は 2 倍。実効速度が線形に 2 倍になるかは環境依存だが、大幅な向上は確実。</td>
+          </tr>
+          <tr>
+            <td><strong>最大 2,200K/2,600K IOPS</strong></td>
+            <td style="color:#1a7f37;"><strong>検証済み</strong></td>
+            <td>AI モデルロードは<strong>シーケンシャルリードが支配的</strong>であることを確認。ランダム IOPS は学習データセット読み込み等で効く場面も。</td>
+          </tr>
+          <tr>
+            <td><strong>AI アプリに即時ロード</strong></td>
+            <td style="color:#1a7f37;"><strong>正しい</strong></td>
+            <td>LTX-Video 2B: D: 8.1s vs F: 60.9s (7.5x)。LTX 2.3 22B: D: 98s vs F: 288s (3分速い)。</td>
+          </tr>
+          <tr>
+            <td><strong>電力効率 49% 向上</strong></td>
+            <td style="color:#1a7f37;"><strong>妥当</strong></td>
+            <td>5nm コントローラにより速度 2 倍でも消費電力を抑制。本実験でも SSD 側の発熱影響なし。</td>
+          </tr>
+          <tr>
+            <td><strong>8TB 大容量</strong></td>
+            <td style="color:#1a7f37;"><strong>事実</strong></td>
+            <td>LLM 70B (約 40GB) を 200 個、SD Checkpoint (2〜7GB) なら 1,000 個以上格納可能。</td>
+          </tr>
+          <tr>
+            <td><strong>高度な熱制御</strong></td>
+            <td style="color:#1a7f37;"><strong>確認済み</strong></td>
+            <td>R3 連続実行（約 1 時間）でサーマルスロットリングは観測されず。</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 用語集 -->
+    <details style="margin-top:32px;">
+      <summary style="cursor:pointer; font-size:1.1rem; font-weight:600;">用語集</summary>
+      <table class="storage-table" style="margin-top:12px;">
+        <thead>
+          <tr><th style="width:200px;">用語</th><th>解説</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>NVMe Gen5</strong></td><td>PCIe 5.0 接続の SSD 規格。最大約 14,800 MB/s（Gen4 の約 2 倍、SATA の約 26 倍）。</td></tr>
+          <tr><td><strong>コールドスタート</strong></td><td>モデルがメモリに存在しない状態からの起動。ストレージからの読み込みが必要。</td></tr>
+          <tr><td><strong>ウォームスタート</strong></td><td>モデルが既にメモリにロードされた状態。ストレージアクセスは不要。</td></tr>
+          <tr><td><strong>VRAM</strong></td><td>GPU 専用のビデオメモリ。AI 推論にはモデル全体を VRAM に展開する必要がある。</td></tr>
+          <tr><td><strong>tok/s</strong></td><td>LLM の推論速度指標。1 秒あたりに生成されるトークン数。</td></tr>
+          <tr><td><strong>sec/GiB</strong></td><td>モデルロード時間をモデルサイズで割った正規化メトリクス。本ベンチマーク独自。</td></tr>
+          <tr><td><strong>I/O バウンド</strong></td><td>ストレージ速度がボトルネック。</td></tr>
+          <tr><td><strong>GPU バウンド</strong></td><td>GPU 演算能力がボトルネック。ストレージ速度は影響しない。</td></tr>
+          <tr><td><strong>サーマルスロットリング</strong></td><td>温度超過時のクロック制限。長時間ベンチマークでの性能低下の主要因。</td></tr>
+          <tr><td><strong>GGUF</strong></td><td>LLM モデルの量子化ファイル形式。Ollama が内部で使用。</td></tr>
+          <tr><td><strong>ComfyUI</strong></td><td>画像・動画生成 AI のワークフロー構築ツール。<a href="https://github.com/comfyanonymous/ComfyUI" target="_blank" rel="noopener">GitHub</a></td></tr>
+          <tr><td><strong>Ollama</strong></td><td>ローカル LLM 実行ツール。<a href="https://ollama.com/" target="_blank" rel="noopener">公式サイト</a></td></tr>
+          <tr><td><strong>LTX-Video</strong></td><td>Lightricks 社の動画生成 AI。<a href="https://github.com/Lightricks/LTX-Video" target="_blank" rel="noopener">GitHub</a></td></tr>
+          <tr><td><strong>Qwen3-TTS</strong></td><td>Alibaba Qwen の音声合成モデル。<a href="https://github.com/QwenLM/Qwen3" target="_blank" rel="noopener">GitHub</a></td></tr>
+        </tbody>
+      </table>
+    </details>
+
+    <!-- 予備調査 -->
+    <details id="appendix" style="margin-top:24px;">
+      <summary style="cursor:pointer; font-size:1.1rem; font-weight:600;">補足: 予備調査（ノート PC での事前検証）</summary>
+      <div style="margin-top:12px;">
+        <p style="color: var(--text-secondary); font-size: 0.9rem;">
+          G-Tune P6-I7G50 (RTX 4050 6GB / 32GB RAM) で事前調査。
+          VRAM 6GB の制約により SDXL 以上は動作不可。全実験の合計必要容量: ~97GB。
+        </p>
+        <div class="exp-card" style="margin-top:12px; border-left: 4px solid #0969da;">
+          <p>
+            NVMe Gen4 環境ではカタログ値（3,000〜3,500 MB/s）に対して実測は最高 1,340 MB/s。
+            AI アプリは OS のファイル API 経由でモデルを読むため、<strong>「実効速度」がモデルロード時間を決定</strong>。
+            OS ドライブはバックグラウンド I/O と競合するため、<strong>AI モデルは専用ドライブに配置すべき</strong>。
+          </p>
+        </div>
+      </div>
+    </details>
+  </div>
+</div>
+
+<!-- ====== 8. 資料 ====== -->
+<div class="tab-panel" id="resources" role="tabpanel" aria-labelledby="tab-resources">
+  <div class="container">
+    <h2 class="section-title">資料</h2>
+
+    <!-- クイックスタート -->
+    <h3 style="margin-bottom:12px; font-size:1.1rem;">クイックスタート</h3>
     <pre class="code-block"><code>git clone https://github.com/aicuai/AICU-SSD-Bench
 cd AICU-SSD-Bench
 
 # 全実験一括実行
-.\scripts\run_all_benchmarks.ps1 -Runs 3
-</code></pre>
-  </div>
-</section>
+.\scripts\run_all_benchmarks.ps1 -Runs 3</code></pre>
 
-<!-- Claude Code -->
-<section>
-  <div class="container">
-    <h2 class="section-title">Claude Code でセットアップ</h2>
+    <!-- Claude Code -->
+    <h3 style="margin-top:32px; margin-bottom:12px; font-size:1.1rem;">Claude Code でセットアップ</h3>
     <p>
-      トラブルシューティングや初期の実験環境のセットアップを高速に進めるため、
       <a href="https://j.aicu.ai/_Claude" target="_blank" rel="noopener"><strong>Claude Code</strong></a>
-      を使って行います。無料で利用できますので、準備いただけますと幸いです。
+      を使って環境構築からベンチマーク実行、結果分析まで AI が支援します。
     </p>
-    <p style="margin-top:12px; color: var(--text-secondary);">
-      本リポジトリの <code>CLAUDE.md</code> を読み込ませるだけで、環境構築からベンチマーク実行、結果分析まで AI が支援します。
-    </p>
-    <pre class="code-block"><code># Claude Code を起動（CLAUDE.md を自動読み込み）
+    <pre class="code-block" style="margin-top:12px;"><code># Claude Code を起動（CLAUDE.md を自動読み込み）
 claude</code></pre>
-  </div>
-</section>
 
-<!-- この実験に参加しよう -->
-<section id="participate">
-  <div class="container">
-    <h2 class="section-title">この実験に参加して新しいデータを追加しませんか?</h2>
+    <!-- 参加方法 -->
+    <h3 style="margin-top:32px; margin-bottom:12px; font-size:1.1rem;">この実験に参加して新しいデータを追加しませんか?</h3>
     <p style="margin-bottom:20px;">
-      あなたの PC でベンチマークを実行し、コミュニティの比較データに貢献できます。<br>
-      <strong>所要時間は約 10〜30 分</strong>。結果は自動的に集計され、このページに反映されます。
+      あなたの PC でベンチマークを実行し、コミュニティの比較データに貢献できます。
+      <strong>所要時間は約 10〜30 分</strong>。
     </p>
-    <div class="exp-grid">
+    <div style="display:grid; grid-template-columns: repeat(2, 1fr); gap:16px;">
       <div class="exp-card">
         <div class="exp-icon">1</div>
         <h3>リポジトリをクローン</h3>
@@ -759,58 +991,216 @@ cd AICU-SSD-Bench</code></pre>
       <div class="exp-card">
         <div class="exp-icon">2</div>
         <h3>Ollama をインストール</h3>
-        <p><a href="https://ollama.com/" target="_blank" rel="noopener">ollama.com</a> からダウンロード。各テスト対象ドライブにモデルを配置:</p>
+        <p><a href="https://ollama.com/" target="_blank" rel="noopener">ollama.com</a> からダウンロード。</p>
         <pre class="code-block" style="margin-top:12px;"><code>$env:OLLAMA_MODELS = "D:\ollama\models"
 ollama pull qwen3:8b</code></pre>
       </div>
       <div class="exp-card">
         <div class="exp-icon">3</div>
         <h3>ベンチマーク実行</h3>
-        <p>全自動スクリプトが前提条件チェック、ダウンロード計測、ベンチマーク、クリーンアップまで一気に実行します。</p>
         <pre class="code-block" style="margin-top:12px;"><code>.\scripts\run_all_benchmarks.ps1 -Fresh</code></pre>
       </div>
       <div class="exp-card">
         <div class="exp-icon">4</div>
         <h3>結果を共有</h3>
-        <p>スクリプト終了時に結果が自動送信されます。<br>
-        手動で送信する場合:</p>
-        <pre class="code-block" style="margin-top:12px;"><code># 結果 JSON を確認
-cat results\bench_summary.json</code></pre>
+        <pre class="code-block" style="margin-top:12px;"><code>cat results\bench_summary.json</code></pre>
         <p style="margin-top:8px; font-size:0.85rem; color:var(--text-secondary);">
-          送信されるデータ: CPU/GPU/RAM スペック、ストレージ型番（シリアル番号はハッシュ化）、ベンチマーク結果。個人を特定する情報は含まれません。
+          送信データ: CPU/GPU/RAM スペック、ストレージ型番（シリアル番号はハッシュ化）、ベンチマーク結果。
         </p>
       </div>
     </div>
-    <!-- プライバシーと重複回避 -->
-    <div style="margin-top:28px; padding:20px 24px; background:var(--bg-secondary); border:1px solid var(--border); border-radius:var(--radius);">
-      <h4 style="margin-bottom:10px;">プライバシー保護と同一結果の回避</h4>
+
+    <!-- プライバシー -->
+    <div style="margin-top:20px; padding:16px 20px; background:var(--bg-secondary); border:1px solid var(--border); border-radius:var(--radius);">
+      <h4 style="margin-bottom:8px;">プライバシー保護</h4>
       <ul style="list-style:disc; padding-left:20px; color:var(--text-secondary); font-size:0.9rem; line-height:1.8;">
-        <li><strong>ホスト名・SSD シリアル番号は SHA-256 でハッシュ化</strong>して送信されます。元の値を復元することはできません。</li>
-        <li>送信される情報は CPU/GPU/RAM の型番、ストレージの製品名・バスタイプ・ファームウェアバージョン、およびベンチマーク数値のみです。</li>
-        <li><strong>個人を特定できる情報（ユーザー名、IP アドレス、ファイルパス等）は一切送信されません。</strong></li>
-        <li>SSD の UniqueId（EUI-64）をハッシュ化した <strong>device_id</strong> により、同一デバイスからの重複送信を検出・統合します。同じ環境で複数回実行しても、最新の結果のみが反映されます。</li>
-        <li>送信前に <code>results\bench_summary.json</code> の内容を確認できます。送信は任意です（<code>-SkipSubmit</code> フラグで無効化可能）。</li>
+        <li>ホスト名・SSD シリアル番号は SHA-256 でハッシュ化</li>
+        <li>個人を特定できる情報は一切送信されません</li>
+        <li><code>-SkipSubmit</code> フラグで送信無効化可能</li>
       </ul>
     </div>
 
-    <div style="margin-top:20px; text-align:center;">
-      <a href="https://github.com/aicuai/AICU-SSD-Bench" class="cta" target="_blank" rel="noopener">GitHub で始める</a>
-    </div>
-  </div>
-</section>
+    <!-- 関連リンク -->
+    <h3 style="margin-top:32px; margin-bottom:12px; font-size:1.1rem;">関連リンク</h3>
+    <ul class="links-list">
+      <li>
+        <a href="https://github.com/aicuai/AICU-SSD-Bench" target="_blank" rel="noopener">GitHub リポジトリ</a>
+        <div class="link-desc">ソースコード・ワークフロー・結果データ (MIT License)</div>
+      </li>
+      <li>
+        <a href="https://akiba-pc.watch.impress.co.jp/" target="_blank" rel="noopener">Impress AKIBA PC Hotline!</a>
+        <div class="link-desc">取材協力メディア</div>
+      </li>
+      <li>
+        <a href="https://forest.watch.impress.co.jp/docs/serial/aistream/2090895.html" target="_blank" rel="noopener">vibe-local でオフライン AI コーディング体験</a>
+        <div class="link-desc">窓の杜 AI Stream 連載</div>
+      </li>
+      <li>
+        <a href="https://github.com/ochyai/vibe-local" target="_blank" rel="noopener">vibe-local (ochyai)</a>
+        <div class="link-desc">落合陽一氏によるオフライン AI コーディング環境</div>
+      </li>
+      <li>
+        <a href="https://aicu.jp" target="_blank" rel="noopener">AICU Japan</a>
+        <div class="link-desc">プロジェクト運営</div>
+      </li>
+      <li>
+        <a href="https://amzn.to/46JRoWE" target="_blank" rel="noopener">Samsung 9100 PRO (Amazon)</a>
+        <div class="link-desc">テスト対象 Gen5 NVMe SSD</div>
+      </li>
+      <li>
+        <a href="https://semiconductor.samsung.com/jp/consumer-storage/internal-ssd/9100-pro/" target="_blank" rel="noopener">Samsung 9100 PRO (公式)</a>
+        <div class="link-desc">製品仕様・技術情報</div>
+      </li>
+    </ul>
 
-<!-- 計測結果 -->
-<section id="results">
-  <div class="container">
-    <h2 class="section-title">計測結果</h2>
-    <div id="results-area">
-      <p style="color: var(--text-secondary);">計測データ読み込み中...</p>
-    </div>
   </div>
-</section>
+</div>
+
+<!-- ====== 謝辞 ====== -->
+<div class="tab-panel" id="credits" role="tabpanel" aria-labelledby="tab-credits">
+  <div class="container">
+    <h2 class="section-title">謝辞</h2>
+    <div style="text-align:center; padding: 40px 0;">
+      <p style="font-size:1.1rem; line-height:2;">
+        本ベンチマークは以下の皆様のご協力により実現しました。
+      </p>
+      <div style="display:grid; grid-template-columns: repeat(2, 1fr); gap:20px; max-width:600px; margin:32px auto;">
+        <div class="exp-card" style="text-align:center; padding:28px;">
+          <h3 style="font-size:1.1rem;">Samsung Japan</h3>
+          <p style="font-size:0.9rem; color:var(--text-secondary); margin-top:8px;">Samsung 9100 PRO 8TB<br>テスト機材ご提供</p>
+          <p style="margin-top:12px;">
+            <a href="https://semiconductor.samsung.com/jp/consumer-storage/internal-ssd/9100-pro/" target="_blank" rel="noopener">製品ページ</a>
+            &nbsp;|&nbsp;
+            <a href="https://amzn.to/46JRoWE" target="_blank" rel="noopener">Amazon</a>
+          </p>
+        </div>
+        <div class="exp-card" style="text-align:center; padding:28px;">
+          <h3 style="font-size:1.1rem;">Impress</h3>
+          <p style="font-size:0.9rem; color:var(--text-secondary); margin-top:8px;">AKIBA PC Hotline!<br>取材協力</p>
+          <p style="margin-top:12px;">
+            <a href="https://akiba-pc.watch.impress.co.jp/" target="_blank" rel="noopener">AKIBA PC Hotline!</a>
+          </p>
+        </div>
+      </div>
+      <p style="font-size:0.95rem; color:var(--text-secondary); margin-top:24px;">
+        プロジェクト運営: <a href="https://aicu.jp" target="_blank" rel="noopener"><strong>AICU Japan</strong></a>
+      </p>
+    </div>
+    <footer style="padding: 20px 0; text-align: center; border-top: 1px solid var(--border); color: var(--text-secondary); font-size: 0.85rem;">
+      <p>&copy; 2025 <a href="https://aicu.jp" target="_blank" rel="noopener" style="color:var(--text-secondary); text-decoration:underline;">AICU Japan</a> &mdash; MIT License</p>
+      <div class="footer-links">
+        <a href="https://github.com/aicuai/AICU-SSD-Bench" target="_blank" rel="noopener" style="color:var(--text-secondary); text-decoration:underline;">GitHub</a>
+        <a href="https://aicu.jp" target="_blank" rel="noopener" style="color:var(--text-secondary); text-decoration:underline; margin-left:20px;">AICU Japan</a>
+      </div>
+    </footer>
+  </div>
+</div>
+
+</main>
 
 <script>
-(function(){
+(function() {
+  // Tab switching
+  var tabButtons = document.querySelectorAll('[role="tab"]');
+  var tabPanels = document.querySelectorAll('.tab-panel');
+  var tabNav = document.querySelector('.tab-nav');
+  var hero = document.querySelector('.hero');
+
+  function updateLayout() {
+    var heroH = hero.offsetHeight;
+    var tabsH = tabNav.offsetHeight;
+    var panels = document.querySelector('.tab-panels');
+    panels.style.height = 'calc(100vh - ' + heroH + 'px - ' + tabsH + 'px)';
+  }
+
+  function switchTab(tabId) {
+    for (var i = 0; i < tabPanels.length; i++) {
+      tabPanels[i].classList.remove('active');
+    }
+    for (var j = 0; j < tabButtons.length; j++) {
+      tabButtons[j].setAttribute('aria-selected', 'false');
+    }
+    var panel = document.getElementById(tabId);
+    if (panel) {
+      panel.classList.add('active');
+      panel.scrollTop = 0;
+    }
+    var tab = document.getElementById('tab-' + tabId);
+    if (tab) {
+      tab.setAttribute('aria-selected', 'true');
+      tab.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    }
+    history.replaceState(null, '', '#' + tabId);
+  }
+
+  for (var i = 0; i < tabButtons.length; i++) {
+    tabButtons[i].addEventListener('click', function() {
+      switchTab(this.getAttribute('data-tab'));
+    });
+  }
+
+  // Hero video auto-rotation
+  (function() {
+    var vid = document.querySelector('.hero-video');
+    if (!vid) return;
+    var sources = JSON.parse(vid.getAttribute('data-sources') || '[]');
+    if (sources.length < 2) return;
+    var idx = 0;
+    vid.addEventListener('ended', function() {
+      idx = (idx + 1) % sources.length;
+      vid.src = sources[idx];
+      vid.play();
+    });
+  })();
+
+  tabNav.addEventListener('keydown', function(e) {
+    if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+    var current = document.querySelector('[role="tab"][aria-selected="true"]');
+    var idx = Array.prototype.indexOf.call(tabButtons, current);
+    if (e.key === 'ArrowLeft') idx = (idx - 1 + tabButtons.length) % tabButtons.length;
+    if (e.key === 'ArrowRight') idx = (idx + 1) % tabButtons.length;
+    tabButtons[idx].focus();
+    switchTab(tabButtons[idx].getAttribute('data-tab'));
+    e.preventDefault();
+  });
+
+  // Touch swipe
+  var touchStartX = 0;
+  var touchStartY = 0;
+  var panelsEl = document.querySelector('.tab-panels');
+
+  panelsEl.addEventListener('touchstart', function(e) {
+    touchStartX = e.changedTouches[0].screenX;
+    touchStartY = e.changedTouches[0].screenY;
+  }, { passive: true });
+
+  panelsEl.addEventListener('touchend', function(e) {
+    var dx = e.changedTouches[0].screenX - touchStartX;
+    var dy = e.changedTouches[0].screenY - touchStartY;
+    if (Math.abs(dx) < 80 || Math.abs(dy) > Math.abs(dx)) return;
+    var current = document.querySelector('[role="tab"][aria-selected="true"]');
+    var idx = Array.prototype.indexOf.call(tabButtons, current);
+    if (dx < 0) idx = Math.min(idx + 1, tabButtons.length - 1);
+    else idx = Math.max(idx - 1, 0);
+    switchTab(tabButtons[idx].getAttribute('data-tab'));
+  }, { passive: true });
+
+  window.addEventListener('hashchange', function() {
+    var h = location.hash.replace('#', '');
+    if (h && document.getElementById(h)) switchTab(h);
+  });
+
+  var initHash = location.hash.replace('#', '');
+  if (initHash && document.getElementById(initHash)) {
+    switchTab(initHash);
+  } else {
+    switchTab('overview');
+  }
+
+  updateLayout();
+  window.addEventListener('resize', updateLayout);
+
+  // Results chart rendering (data.json)
   var LABELS = {
     disk_speed:                   { name: 'シーケンシャル速度', unit: 'MB/s', lower: false, icon: '\uD83D\uDCBE' },
     disk_speed_256MB:             { name: 'シーケンシャル速度 (256MB)', unit: 'MB/s', lower: false, icon: '\uD83D\uDCBE' },
@@ -842,7 +1232,7 @@ cat results\bench_summary.json</code></pre>
   };
 
   function fmtVal(v, decimals) {
-    if (v == null) return '—';
+    if (v == null) return '\u2014';
     if (v >= 60) return (v / 60).toFixed(1) + 'm';
     return v.toFixed(decimals || 2);
   }
@@ -895,12 +1285,12 @@ cat results\bench_summary.json</code></pre>
 
     html += '</div>';
 
-    // tokens/sec サブチャート (codegen)
+    // tokens/sec sub-chart
     var hasTps = vals.some(function(x){ return x.extra && x.extra.avg_tokens_per_sec; });
     if (hasTps) {
       var maxTps = Math.max.apply(null, vals.map(function(x){ return (x.extra && x.extra.avg_tokens_per_sec) || 0; }));
       html += '<div class="chart-sub">';
-      html += '<h4 class="chart-sub-title">トークン生成速度 (tok/s) — 高いほど高速</h4>';
+      html += '<h4 class="chart-sub-title">トークン生成速度 (tok/s) \u2014 高いほど高速</h4>';
       html += '<div class="chart-bars">';
       for (var k = 0; k < vals.length; k++) {
         var it = vals[k];
@@ -917,12 +1307,12 @@ cat results\bench_summary.json</code></pre>
       html += '</div></div>';
     }
 
-    // warm median サブチャート (imggen)
+    // warm median sub-chart
     var hasWarm = vals.some(function(x){ return x.extra && x.extra.warm_median_s; });
     if (hasWarm) {
       var maxW = Math.max.apply(null, vals.map(function(x){ return (x.extra && x.extra.warm_median_s) || 0; }));
       html += '<div class="chart-sub">';
-      html += '<h4 class="chart-sub-title">ウォームスタート (キャッシュ済) — 低いほど高速</h4>';
+      html += '<h4 class="chart-sub-title">ウォームスタート (キャッシュ済) \u2014 低いほど高速</h4>';
       html += '<div class="chart-bars">';
       for (var m = 0; m < vals.length; m++) {
         var iw = vals[m];
@@ -939,15 +1329,14 @@ cat results\bench_summary.json</code></pre>
       html += '</div></div>';
     }
 
-    // read/write MB/s サブチャート (disk-speed)
+    // read/write MB/s sub-chart
     var hasRW = vals.some(function(x){ return x.extra && (x.extra.read_mbs || x.extra.write_mbs); });
     if (hasRW) {
-      // Write speed
       var hasWrite = vals.some(function(x){ return x.extra && x.extra.write_mbs; });
       if (hasWrite) {
         var maxWr = Math.max.apply(null, vals.map(function(x){ return (x.extra && x.extra.write_mbs) || 0; }));
         html += '<div class="chart-sub">';
-        html += '<h4 class="chart-sub-title">シーケンシャルライト (MB/s) — 高いほど高速</h4>';
+        html += '<h4 class="chart-sub-title">シーケンシャルライト (MB/s) \u2014 高いほど高速</h4>';
         html += '<div class="chart-bars">';
         for (var w = 0; w < vals.length; w++) {
           var iwr = vals[w];
@@ -969,402 +1358,52 @@ cat results\bench_summary.json</code></pre>
     return html;
   }
 
-  fetch('data.json').then(function(r){ return r.json(); }).then(function(data){
-    var area = document.getElementById('results-area');
-    if (!data.experiments || Object.keys(data.experiments).length === 0) {
-      area.innerHTML = '<p style="color:var(--text-secondary)">計測データは実験完了後に公開されます。</p>';
-      return;
-    }
+  function loadResults() {
+    fetch('data.json').then(function(r){ return r.json(); }).then(function(data){
+      var area = document.getElementById('results-area');
+      if (!data.experiments || Object.keys(data.experiments).length === 0) {
+        area.innerHTML = '<p style="color:var(--text-secondary)">計測データは実験完了後に公開されます。</p>';
+        return;
+      }
 
-    // データに含まれるドライブだけ凡例に表示
-    var usedDrives = {};
-    for (var ek in data.experiments) {
-      var eo = data.experiments[ek].drive_order || Object.keys(data.experiments[ek].drives);
-      for (var di = 0; di < eo.length; di++) usedDrives[eo[di]] = true;
-    }
-    var html = '<div class="chart-legend">';
-    for (var d in usedDrives) {
-      var dm0 = DRIVE_META[d] || { color: DRIVE_COLORS[Object.keys(usedDrives).indexOf(d) % DRIVE_COLORS.length], type: d };
-      html += '<span class="legend-item"><span class="legend-dot" style="background:' + dm0.color + '"></span>' + d + ': ' + dm0.type + '</span>';
-    }
-    html += '</div>';
+      var usedDrives = {};
+      for (var ek in data.experiments) {
+        var eo = data.experiments[ek].drive_order || Object.keys(data.experiments[ek].drives);
+        for (var di = 0; di < eo.length; di++) usedDrives[eo[di]] = true;
+      }
+      var html = '<div class="chart-legend">';
+      for (var d in usedDrives) {
+        var dm0 = DRIVE_META[d] || { color: DRIVE_COLORS[Object.keys(usedDrives).indexOf(d) % DRIVE_COLORS.length], type: d };
+        html += '<span class="legend-item"><span class="legend-dot" style="background:' + dm0.color + '"></span>' + d + ': ' + dm0.type + '</span>';
+      }
+      html += '</div>';
 
-    // 表示順: 定義済みの順 → それ以外はアルファベット順
-    var prefOrder = ['disk_speed','disk_speed_256MB','disk_speed_512MB','disk_speed_1024MB',
-      'vibe_local_load','vibe_local_load_qwen3_8b','vibe_local_load_qwen3_1_7b',
-      'vibe_local_codegen','vibe_local_codegen_qwen3_8b','vibe_local_codegen_qwen3_1_7b',
-      'comfyui_imggen','comfyui_imggen_sdxl','comfyui_imggen_aicuty_sdxl',
-      'comfyui_ltx','comfyui_video',
-      'comfyui_ltx23_t2v_cold','comfyui_ltx23_ia2v_warm',
-      'qwen3tts','llm_jp_moshi'];
-    var allKeys = Object.keys(data.experiments);
-    var ordered = prefOrder.filter(function(k){ return allKeys.indexOf(k) >= 0; });
-    allKeys.forEach(function(k){ if (ordered.indexOf(k) < 0) ordered.push(k); });
-    for (var i = 0; i < ordered.length; i++) {
-      html += renderChart(ordered[i], data.experiments[ordered[i]]);
-    }
+      var prefOrder = ['disk_speed','disk_speed_256MB','disk_speed_512MB','disk_speed_1024MB',
+        'vibe_local_load','vibe_local_load_qwen3_8b','vibe_local_load_qwen3_1_7b',
+        'vibe_local_codegen','vibe_local_codegen_qwen3_8b','vibe_local_codegen_qwen3_1_7b',
+        'comfyui_imggen','comfyui_imggen_sdxl','comfyui_imggen_aicuty_sdxl',
+        'comfyui_ltx','comfyui_video',
+        'comfyui_ltx23_t2v_cold','comfyui_ltx23_ia2v_warm',
+        'qwen3tts','llm_jp_moshi'];
+      var allKeys = Object.keys(data.experiments);
+      var ordered = prefOrder.filter(function(k){ return allKeys.indexOf(k) >= 0; });
+      allKeys.forEach(function(k){ if (ordered.indexOf(k) < 0) ordered.push(k); });
+      for (var i = 0; i < ordered.length; i++) {
+        html += renderChart(ordered[i], data.experiments[ordered[i]]);
+      }
 
-    if (data.updated) {
-      html += '<p class="chart-updated">Last updated: ' + data.updated + '</p>';
-    }
-    area.innerHTML = html;
-  }).catch(function(){
-    document.getElementById('results-area').innerHTML = '<p style="color:var(--text-secondary)">計測データは実験完了後に公開されます。</p>';
-  });
+      if (data.updated) {
+        html += '<p class="chart-updated">Last updated: ' + data.updated + '</p>';
+      }
+      area.innerHTML = html;
+    }).catch(function(){
+      document.getElementById('results-area').innerHTML = '<p style="color:var(--text-secondary)">計測データは実験完了後に公開されます。</p>';
+    });
+  }
+
+  loadResults();
 })();
 </script>
-
-<!-- 結論 -->
-<section style="background: linear-gradient(135deg, #0d1117 0%, #161b22 100%); border-top: 3px solid #0969da; border-bottom: 3px solid #0969da;">
-  <div class="container">
-    <h2 class="section-title">結論: AI のためには D ドライブこそ Gen5 を</h2>
-
-    <div class="exp-card" style="border-left: 4px solid #1a7f37; margin-bottom:20px;">
-      <h3 style="font-size:1.2rem;">Samsung 9100 PRO (Gen5 NVMe) は AI ワークロードのコールドスタートを最大 7.5 倍高速化する</h3>
-      <p style="margin-top:12px; line-height:1.8;">
-        10 種類の AI ワークロード（LLM ロード・コード生成・画像生成・動画生成・音声合成・音声対話）を
-        4 つのストレージ（Gen5 NVMe / SATA SSD / HDD / Gen5 リムーバブル）で横断計測した結果、
-        <strong>ストレージ速度が最も効くのは「モデルの初回ロード（コールドスタート）」</strong>であることが実証されました。
-      </p>
-    </div>
-
-    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:16px; margin-bottom:24px;">
-      <div class="exp-card" style="text-align:center; padding:24px;">
-        <div style="font-size:2.5rem; font-weight:800; color:#1a7f37;">7.5x</div>
-        <p style="font-size:0.95rem; margin-top:8px;"><strong>コールドスタート高速化</strong><br>
-        <span style="font-size:0.85rem; color:var(--text-secondary);">LTX-Video 2B (15GB)<br>D: 8.1s vs F: 60.9s</span></p>
-      </div>
-      <div class="exp-card" style="text-align:center; padding:24px;">
-        <div style="font-size:2.5rem; font-weight:800; color:#cf222e;">2.9x</div>
-        <p style="font-size:0.95rem; margin-top:8px;"><strong>大型モデルでも差は明確</strong><br>
-        <span style="font-size:0.85rem; color:var(--text-secondary);">LTX 2.3 22B (45GB)<br>D: 98s vs F: 288s</span></p>
-      </div>
-      <div class="exp-card" style="text-align:center; padding:24px;">
-        <div style="font-size:2.5rem; font-weight:800; color:#0969da;">10x</div>
-        <p style="font-size:0.95rem; margin-top:8px;"><strong>書き込み速度</strong><br>
-        <span style="font-size:0.85rem; color:var(--text-secondary);">D: 2,535 MB/s vs F: 250 MB/s<br>(1024MB シーケンシャル)</span></p>
-      </div>
-      <div class="exp-card" style="text-align:center; padding:24px;">
-        <div style="font-size:2.5rem; font-weight:800; color:#bf5700;">0%</div>
-        <p style="font-size:0.95rem; margin-top:8px;"><strong>推論速度への影響</strong><br>
-        <span style="font-size:0.85rem; color:var(--text-secondary);">VRAM ロード後は全ドライブ同一<br>~189 tok/s (qwen3:8b)</span></p>
-      </div>
-    </div>
-
-    <div class="exp-card" style="border-left: 4px solid #0969da;">
-      <h3>なぜ「D ドライブに Gen5」なのか</h3>
-      <ul style="list-style:disc; padding-left:20px; line-height:2; font-size:0.95rem;">
-        <li><strong>OS ドライブ (C:) はバックグラウンド I/O と競合する</strong> &mdash; AI モデルの保存先は専用ドライブに</li>
-        <li><strong>モデル切り替えのたびにコールドスタートが発生</strong> &mdash; AI 開発では 1 日に何十回もモデルを入れ替える</li>
-        <li><strong>モデルは大型化の一途</strong> &mdash; 15GB (LTX-Video 2B) &rarr; 45GB (LTX 2.3 22B)。R4 実測: HDD で 3 分のロード遅延</li>
-        <li><strong>8TB の大容量</strong> &mdash; 全モデルを 1 台に集約、再ダウンロード不要</li>
-        <li><strong>書き込みも高速</strong> &mdash; 生成物保存・モデルダウンロード・学習チェックポイントで圧倒的な差</li>
-      </ul>
-      <p style="margin-top:12px; font-size:0.95rem;">
-        <strong>推論速度はストレージに依存しない</strong>ことも確認済み。
-        つまり「速いストレージは無駄」ではなく、<strong>「待ち時間」を直接削減する最もコスパの高い投資先</strong>が D ドライブの Gen5 NVMe です。
-      </p>
-    </div>
-  </div>
-</section>
-
-<!-- 補足: 予備調査 -->
-<section>
-  <div class="container">
-    <details>
-      <summary style="cursor:pointer; font-size:1.3rem; font-weight:700; margin-bottom:16px;">
-        補足: 予備調査（ノート PC での事前検証）
-      </summary>
-
-      <h3 style="margin-bottom:12px; font-size:1.1rem;">各実験の必要ディスク容量</h3>
-      <p style="margin-bottom:16px; color: var(--text-secondary); font-size: 0.9rem;">
-        G-Tune P6-I7G50 (RTX 4050 6GB / 32GB RAM) で事前調査。
-        VRAM 6GB の制約により SDXL 以上のモデルは動作不可 &mdash; <strong>AI ワークロードには十分な VRAM が必須</strong>。
-        全実験の合計必要容量: ~97GB。8TB の Samsung 9100 PRO なら全モデルを同時保持可能。
-      </p>
-
-      <h3 style="margin-bottom:12px; font-size:1.1rem;">ディスク速度計測の知見</h3>
-      <div class="exp-card" style="border-left: 4px solid #0969da;">
-        <p>
-          NVMe Gen4 環境でのシーケンシャル計測では、カタログ値（3,000〜3,500 MB/s）に対して実測は最高 1,340 MB/s。
-          AI アプリケーションは OS のファイル API 経由でモデルを読むため、<strong>「実効速度」がモデルロード時間を決定</strong>します。
-          OS ドライブはバックグラウンド I/O と競合するため、<strong>AI モデルは専用ドライブに配置すべき</strong>。
-        </p>
-      </div>
-    </details>
-  </div>
-</section>
-
-<!-- 検証結果: ストレージ速度が AI に与える影響 -->
-<section>
-  <div class="container">
-    <h2 class="section-title">検証結果: AI ワークロードとストレージ速度</h2>
-    <p style="margin-bottom:16px; color: var(--text-secondary); font-size: 0.95rem;">
-      RTX PRO 6000 (96GB VRAM) + Samsung 9100 PRO (Gen5 NVMe) を含む 4 ドライブでの実測データに基づく結論。
-    </p>
-
-    <div class="exp-grid">
-      <div class="exp-card" style="border-left: 4px solid #1a7f37;">
-        <h3>検証済み: モデルのコールドスタートはストレージ I/O バウンド</h3>
-        <p>
-          LTX-Video 2B (~15GB) のコールドスタートで <strong>最大 7.5 倍の差</strong>、
-          LTX 2.3 22B (~45GB) で <strong>最大 2.9 倍の差</strong> を実測。
-        </p>
-        <table class="storage-table" style="margin-top:8px;">
-          <thead><tr><th></th><th>D: Gen5 NVMe</th><th>E: SATA SSD</th><th>F: HDD</th><th>G: ICY DOCK</th></tr></thead>
-          <tbody>
-          <tr>
-            <td><strong>LTX 2B (15GB)</strong></td>
-            <td style="color:#1a7f37;"><strong>8.1s</strong></td>
-            <td>37.4s (4.6x)</td>
-            <td style="color:#cf222e;"><strong>60.9s</strong> (7.5x)</td>
-            <td>11.4s (1.4x)</td>
-          </tr>
-          <tr>
-            <td><strong>LTX 2.3 22B (45GB)</strong></td>
-            <td style="color:#1a7f37;"><strong>98.4s</strong></td>
-            <td>180.7s (1.8x)</td>
-            <td style="color:#cf222e;"><strong>288.1s</strong> (2.9x)</td>
-            <td>98.7s (1.0x)</td>
-          </tr>
-          </tbody>
-        </table>
-        <p style="margin-top:8px; font-size:0.9rem;">
-          ウォームスタート時（モデル VRAM 残存）は全ドライブ 95〜103s で差なし。
-          cold - warm の差分から<strong>実効リード速度</strong>を推定: Gen5 NVMe ~13 GB/s、SATA SSD ~542 MB/s、HDD ~246 MB/s。<br>
-          <strong>ストレージ速度が効くのは「初回ロード」の瞬間</strong> &mdash; そしてモデル切り替え・ComfyUI 再起動のたびにコールドスタートが発生します。
-        </p>
-      </div>
-
-      <div class="exp-card" style="border-left: 4px solid #1a7f37;">
-        <h3>検証済み: 推論速度はストレージに依存しない</h3>
-        <p>
-          コード生成速度は全ドライブで <strong>~189 tok/s (qwen3:8b)</strong> / <strong>~445 tok/s (qwen3:1.7b)</strong> とほぼ同一。
-          画像生成のウォームスタートも全ドライブ 0.04s 前後で差なし。
-        </p>
-        <p style="margin-top:8px; font-size:0.9rem;">
-          モデルが VRAM に載った後は GPU 演算能力のみがボトルネック。
-          つまり<strong>ストレージの影響は「モデルロード」に集中</strong>しており、高速ストレージの投資対効果はロード時間短縮に直結します。
-        </p>
-      </div>
-
-      <div class="exp-card" style="border-left: 4px solid #0969da;">
-        <h3>実測: ディスク書き込み速度</h3>
-        <p>
-          1024MB シーケンシャルライト（R3 実測）で Gen5 NVMe は SATA SSD の <strong>約 6 倍</strong>、HDD の <strong>約 10 倍</strong>。
-        </p>
-        <table class="storage-table" style="margin-top:8px;">
-          <thead><tr><th>D: Gen5 NVMe</th><th>E: SATA SSD</th><th>F: HDD</th><th>G: ICY DOCK</th></tr></thead>
-          <tbody><tr>
-            <td style="color:#1a7f37;"><strong>2,535 MB/s</strong></td>
-            <td>434 MB/s</td>
-            <td style="color:#cf222e;">250 MB/s</td>
-            <td>2,530 MB/s</td>
-          </tr></tbody>
-        </table>
-        <p style="margin-top:8px; font-size:0.9rem;">
-          生成物の保存、モデルのダウンロード・変換、学習チェックポイントの書き出しなど、
-          AI ワークフロー全体で書き込み速度も重要です。
-        </p>
-      </div>
-    </div>
-
-    <!-- Samsung 視点 -->
-    <div class="exp-card" style="margin-top:24px; border-left: 4px solid #0969da;">
-      <h3>Samsung 9100 PRO が AI ワークロードに最適な理由</h3>
-      <p>
-        実測データから、<strong>Gen5 NVMe (D:) vs SATA SSD (E:) vs HDD (F:)</strong> の差は
-        コールドスタートで最大 <strong>7.5 倍</strong>、書き込み速度で最大 <strong>10 倍</strong> と確認されました。
-      </p>
-      <p style="margin-top:8px;">
-        AI ワークフローでは 1 日に何度もモデルの切り替えや再起動が発生します。
-        画像生成では Checkpoint + LoRA + VAE で 10GB 超、動画生成では 20GB 超のモデルをロードします。
-        <strong>1 回あたり数十秒の短縮が、1 日の作業で数十分〜数時間の時間節約</strong>につながります。
-      </p>
-      <p style="margin-top:8px;">
-        Samsung 9100 PRO は PCIe Gen5 の帯域幅をフル活用し、シーケンシャルリード <strong>14,800 MB/s</strong>、
-        8TB の大容量で複数の AI モデルを 1 台に集約可能。
-        AI クリエイターにとって「待たない AI 環境」を実現する最適なストレージです。
-      </p>
-    </div>
-
-    <!-- 9100 PRO 公式スペック検証 -->
-    <div style="margin-top:32px;">
-      <h3 style="font-size:1.15rem; margin-bottom:16px;">Samsung 9100 PRO <a href="https://semiconductor.samsung.com/jp/consumer-storage/internal-ssd/9100-pro/" target="_blank" rel="noopener" style="font-size:0.85rem;">公式ページ</a> の主張を検証</h3>
-      <p style="margin-bottom:16px; color:var(--text-secondary); font-size:0.9rem;">
-        公式サイトに記載されている売り文句を、本ベンチマークの知見と照らし合わせて検証します。
-      </p>
-      <table class="storage-table">
-        <thead>
-          <tr><th style="width:30%;">公式の主張</th><th style="width:12%;">評価</th><th>解説</th></tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><strong>最大 14,800/13,400 MB/s</strong><br>シーケンシャル読み出し/書き込み</td>
-            <td style="color:#1a7f37;"><strong>正しい</strong></td>
-            <td>
-              CrystalDiskMark 等の直接 NVMe コマンド計測での値であり、カタログスペックとして正確。
-              ただし OS のファイルシステム経由（AI アプリが使う通常の API）では、この値には到達しません。
-              本実験の R3 実測ではシーケンシャルライト <strong>2,535 MB/s</strong> を記録。
-              カタログ値の 17〜19% ですが、これは OS のファイル API 経由の実効値であり、AI アプリケーションが実際に体感する速度です。
-              それでも SATA SSD (434 MB/s) の <strong>約 6 倍</strong>、HDD (250 MB/s) の <strong>約 10 倍</strong>。
-            </td>
-          </tr>
-          <tr>
-            <td><strong>990 PRO の 2 倍高速</strong></td>
-            <td style="color:#1a7f37;"><strong>概ね正しい</strong></td>
-            <td>
-              PCIe Gen4→Gen5 で理論帯域幅は 2 倍（約 7,000→14,000 MB/s）。
-              カタログスペック比較では正確です。
-              実効速度が線形に 2 倍になるかは、CPU/チップセットの PCIe レーン構成やコントローラ性能にも依存しますが、
-              <strong>大幅な向上は確実</strong>です。本実験でも Write 速度で SATA SSD の約 6 倍を実測。
-            </td>
-          </tr>
-          <tr>
-            <td><strong>最大 2,200K/2,600K IOPS</strong><br>ランダム読み出し/書き込み</td>
-            <td style="color:#1a7f37;"><strong>検証済み</strong></td>
-            <td>
-              ランダム IOPS は多数の小ファイルを並列処理する能力を示す指標。
-              AI モデルファイルは <strong>数 GB の巨大な連続データ</strong>であり、ロード時はシーケンシャルリードが支配的と思われますが、
-              ComfyUI のノード定義・設定ファイルの並列読み込みや、学習データセット（数百万枚の画像ファイル等）の読み込みなど、
-              ランダム IOPS が効く場面もあり得ます。
-              本実験の結果、AI モデルロードは<strong>シーケンシャルリードが支配的</strong>であることを確認。
-            </td>
-          </tr>
-          <tr>
-            <td><strong>AI アプリケーションに即時ロード</strong></td>
-            <td style="color:#1a7f37;"><strong>正しい</strong></td>
-            <td>
-              モデルロードは I/O バウンドであり、高速ストレージは確実に効果があります。
-              本実験で LTX-Video 2B (~15GB) のコールドスタートを実測:
-              <strong>D: 8.1s vs F: 60.9s</strong> &mdash; Gen5 NVMe は HDD の <strong>7.5 倍高速</strong>。
-              さらに LTX 2.3 22B (~45GB) では <strong>D: 98s vs F: 288s</strong> &mdash; HDD より <strong>3 分速い</strong>。
-              ファイルシステム経由でもストレージ速度の優位性は明確に実証されました。
-            </td>
-          </tr>
-          <tr>
-            <td><strong>電力効率 49% 向上</strong><br>990 PRO 比</td>
-            <td style="color:#1a7f37;"><strong>妥当</strong></td>
-            <td>
-              公式データ: 990 PRO = 1,221 MB/s/W → 9100 PRO = 1,822 MB/s/W（2TB モデル）。
-              5nm コントローラにより、速度が 2 倍になっても消費電力は抑制。
-              <strong>ワークステーションでもスモールフォームファクタ PC でも発熱と消費電力の抑制は実用上重要</strong>です。
-              本実験では nvidia-smi で GPU の電力を 10 秒間隔で記録し、SSD 側の発熱影響がないことを確認。
-            </td>
-          </tr>
-          <tr>
-            <td><strong>8TB 大容量</strong></td>
-            <td style="color:#1a7f37;"><strong>事実</strong></td>
-            <td>
-              AI モデルの巨大化が進む中、大容量は実用上の大きなメリット。
-              LLM 70B パラメータモデル（約 40GB）を 200 個、
-              Stable Diffusion の Checkpoint（2〜7GB）なら 1,000 個以上格納可能。
-              <strong>モデルの削除・再ダウンロードの手間が減り、切り替えコストがゼロに近づきます。</strong>
-            </td>
-          </tr>
-          <tr>
-            <td><strong>高度な熱制御</strong><br>サーマルスロットリング抑制</td>
-            <td style="color:#1a7f37;"><strong>確認済み</strong></td>
-            <td>
-              R3 ベンチマークスイート（Ex0〜Ex10 連続実行、約 1 時間の連続負荷）において、
-              Samsung 9100 PRO のサーマルスロットリングは観測されず、安定した性能を維持。
-              <strong>長時間の AI ワークロードでも速度低下なし。</strong>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <!-- 用語集 -->
-    <div style="margin-top:32px;">
-      <h3 style="font-size:1.1rem; margin-bottom:16px;">用語集</h3>
-      <table class="storage-table">
-        <thead>
-          <tr><th style="width:200px;">用語</th><th>解説</th></tr>
-        </thead>
-        <tbody>
-          <tr><td><strong>NVMe Gen5</strong></td><td>PCIe 5.0 接続の SSD 規格。最大転送速度は約 14,800 MB/s（Gen4 の約 2 倍、SATA の約 26 倍）。<a href="https://nvmexpress.org/" target="_blank" rel="noopener">NVM Express 公式</a></td></tr>
-          <tr><td><strong>シーケンシャルリード</strong></td><td>連続したデータを読み出す速度。AI モデルのような巨大ファイルの読み込みに直結。</td></tr>
-          <tr><td><strong>VRAM</strong></td><td>GPU 専用のビデオメモリ。AI モデルの推論にはモデル全体を VRAM に展開する必要がある。<a href="https://developer.nvidia.com/cuda-toolkit" target="_blank" rel="noopener">NVIDIA CUDA Toolkit</a></td></tr>
-          <tr><td><strong>コールドスタート</strong></td><td>モデルがメモリに存在しない状態からの起動。ストレージからの読み込みが必要。</td></tr>
-          <tr><td><strong>ウォームスタート</strong></td><td>モデルが既にメモリにロードされた状態。ストレージアクセスは不要。</td></tr>
-          <tr><td><strong>tok/s (tokens per second)</strong></td><td>LLM の推論速度指標。1 秒あたりに生成されるトークン（単語の断片）の数。</td></tr>
-          <tr><td><strong>GGUF</strong></td><td>LLM モデルの量子化ファイル形式。Ollama が内部で使用。モデルロード時にヘッダーパース＋テンソル展開が必要で、ディスク速度だけでなくデシリアライゼーション処理もボトルネックになる。<a href="https://github.com/ggml-org/ggml/blob/master/docs/gguf.md" target="_blank" rel="noopener">GGUF 仕様</a></td></tr>
-          <tr><td><strong>sec/GiB</strong></td><td>モデルロード時間をモデルサイズ (GiB) で割った正規化メトリクス。異なるサイズのモデル間でロード速度を公平に比較するための指標。本ベンチマーク独自の計測手法。<a href="https://github.com/aicuai/AICU-SSD-Bench/blob/main/scripts/analyze_sec_per_gb.py" target="_blank" rel="noopener">算出スクリプト</a></td></tr>
-          <tr><td><strong>I/O バウンド</strong></td><td>ストレージの読み書き速度が処理全体のボトルネックになっている状態。</td></tr>
-          <tr><td><strong>GPU バウンド</strong></td><td>GPU の演算能力がボトルネックになっている状態。ストレージ速度は影響しない。</td></tr>
-          <tr><td><strong>サーマルスロットリング</strong></td><td>GPU や SSD の温度が閾値を超えた際にクロック周波数を自動的に下げて発熱を抑える保護機構。長時間ベンチマークでの性能低下の主要因。</td></tr>
-          <tr><td><strong>ページファイル / スワップ</strong></td><td>メモリ不足時に OS がストレージ上に確保する仮想メモリ領域。高速 SSD ほど影響が軽微。</td></tr>
-          <tr><td><strong>LLM</strong></td><td>Large Language Model（大規模言語モデル）。ChatGPT、Qwen、Llama 等のテキスト生成 AI。</td></tr>
-          <tr><td><strong>Ollama</strong></td><td>ローカル PC で LLM を実行するためのオープンソースツール。モデル管理・推論 API を提供。<a href="https://ollama.com/" target="_blank" rel="noopener">公式サイト</a> / <a href="https://github.com/ollama/ollama" target="_blank" rel="noopener">GitHub</a></td></tr>
-          <tr><td><strong>ComfyUI</strong></td><td>画像・動画生成 AI のワークフロー構築ツール。ノードベースで柔軟なパイプラインを構成可能。<a href="https://github.com/comfyanonymous/ComfyUI" target="_blank" rel="noopener">GitHub</a></td></tr>
-          <tr><td><strong>LTX-Video</strong></td><td>Lightricks 社の動画生成 AI モデル。ComfyUI で使用。8〜12GB のモデル + T5 エンコーダーを要し、ロード時間にストレージ速度が直結。<a href="https://github.com/Lightricks/LTX-Video" target="_blank" rel="noopener">GitHub</a></td></tr>
-          <tr><td><strong>Qwen3-TTS</strong></td><td>Alibaba Qwen チームの音声合成モデル。テキストから自然な音声を生成。<a href="https://github.com/QwenLM/Qwen3" target="_blank" rel="noopener">GitHub</a></td></tr>
-          <tr><td><strong>nvidia-smi</strong></td><td>NVIDIA GPU の温度・電力・VRAM 使用量等をリアルタイムで取得する CLI ツール。本ベンチマークでは 10 秒間隔の時系列記録に使用。<a href="https://developer.nvidia.com/system-management-interface" target="_blank" rel="noopener">公式ドキュメント</a></td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-</section>
-
-<!-- 関連リンク -->
-<section>
-  <div class="container">
-    <h2 class="section-title">関連リンク</h2>
-    <ul class="links-list">
-      <li>
-        <a href="https://akiba-pc.watch.impress.co.jp/" target="_blank" rel="noopener">Impress AKIBA PC Hotline!</a>
-        <div class="link-desc">取材協力メディア</div>
-      </li>
-      <li>
-        <a href="https://forest.watch.impress.co.jp/docs/serial/aistream/2090895.html" target="_blank" rel="noopener">vibe-local でオフライン AI コーディング体験</a>
-        <div class="link-desc">窓の杜 AI Stream 連載</div>
-      </li>
-      <li>
-        <a href="https://github.com/ochyai/vibe-local" target="_blank" rel="noopener">vibe-local (ochyai)</a>
-        <div class="link-desc">落合陽一氏によるオフライン AI コーディング環境</div>
-      </li>
-      <li>
-        <a href="https://aicu.ai" target="_blank" rel="noopener">AICU Inc.</a>
-        <div class="link-desc">プロジェクト運営</div>
-      </li>
-      <li>
-        <a href="https://amzn.to/46JRoWE" target="_blank" rel="noopener">Samsung 9100 PRO (Amazon)</a>
-        <div class="link-desc">テスト対象 Gen5 NVMe SSD &mdash; AI ワークロードに最適な大容量高速ストレージ</div>
-      </li>
-      <li>
-        <a href="https://semiconductor.samsung.com/jp/consumer-storage/internal-ssd/9100-pro/" target="_blank" rel="noopener">Samsung 9100 PRO (公式)</a>
-        <div class="link-desc">製品仕様・技術情報</div>
-      </li>
-    </ul>
-  </div>
-</section>
-
-<!-- 謝辞 -->
-<section>
-  <div class="container" style="text-align:center; padding: 40px 24px;">
-    <p style="font-size:1rem; color:var(--text-secondary); line-height:1.8;">
-      ベンチマーク協力: <strong>Samsung Japan</strong> 様、<strong>Impress</strong> 様<br>
-      ご協力ありがとうございます。
-    </p>
-    <p style="margin-top:12px;">
-      <a href="https://amzn.to/46JRoWE" target="_blank" rel="noopener" style="font-weight:700;">Samsung 9100 PRO を Amazon で見る</a>
-    </p>
-  </div>
-</section>
-
-</main>
-
-<!-- Footer -->
-<footer>
-  <div class="container">
-    <p>&copy; 2025 AICU Inc. &mdash; MIT License</p>
-    <div class="footer-links">
-      <a href="https://github.com/aicuai/AICU-SSD-Bench" target="_blank" rel="noopener">GitHub</a>
-      <a href="https://aicu.ai" target="_blank" rel="noopener">AICU Inc.</a>
-    </div>
-  </div>
-</footer>
 
 </body>
 </html>
