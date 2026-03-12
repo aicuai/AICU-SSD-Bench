@@ -12,6 +12,14 @@
   <meta property="og:locale" content="ja_JP">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="stylesheet" href="style.css">
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-9Z2S3ZBGEV"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-9Z2S3ZBGEV');
+  </script>
 </head>
 <body>
 
@@ -1131,6 +1139,10 @@ ollama pull qwen3:8b</code></pre>
       tab.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
     }
     history.replaceState(null, '', '#' + tabId);
+    // GA: track tab switch as page view
+    if (typeof gtag === 'function') {
+      gtag('event', 'page_view', { page_path: '/#' + tabId, page_title: tabId });
+    }
   }
 
   for (var i = 0; i < tabButtons.length; i++) {
@@ -1252,7 +1264,7 @@ ollama pull qwen3:8b</code></pre>
     var maxVal = Math.max.apply(null, vals.map(function(x){ return x.val; }));
     var minVal = Math.min.apply(null, vals.map(function(x){ return x.val; }));
 
-    var html = '<div class="chart-section">';
+    var html = '<div class="chart-section" data-chart="' + key + '">';
     html += '<div class="chart-header">';
     html += '<span class="chart-icon">' + meta.icon + '</span>';
     html += '<h3 class="chart-title">' + meta.name + '</h3>';
@@ -1396,12 +1408,41 @@ ollama pull qwen3:8b</code></pre>
         html += '<p class="chart-updated">Last updated: ' + data.updated + '</p>';
       }
       area.innerHTML = html;
+      // Track chart views with IntersectionObserver
+      if (typeof gtag === 'function' && 'IntersectionObserver' in window) {
+        var charts = area.querySelectorAll('[data-chart]');
+        var chartObserver = new IntersectionObserver(function(entries) {
+          entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+              gtag('event', 'view_chart', { chart_name: entry.target.getAttribute('data-chart') });
+              chartObserver.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.3 });
+        charts.forEach(function(el) { chartObserver.observe(el); });
+      }
     }).catch(function(){
       document.getElementById('results-area').innerHTML = '<p style="color:var(--text-secondary)">計測データは実験完了後に公開されます。</p>';
     });
   }
 
   loadResults();
+
+  // Track sample gallery views
+  if (typeof gtag === 'function' && 'IntersectionObserver' in window) {
+    var sampleCards = document.querySelectorAll('#samples .exp-card');
+    var sampleObserver = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          var h3 = entry.target.querySelector('h3');
+          var name = h3 ? h3.textContent.substring(0, 60) : 'unknown';
+          gtag('event', 'view_sample', { sample_name: name });
+          sampleObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.3 });
+    sampleCards.forEach(function(el) { sampleObserver.observe(el); });
+  }
 })();
 </script>
 
